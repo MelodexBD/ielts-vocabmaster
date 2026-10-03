@@ -1,34 +1,59 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Favourites - IELTS Vocab Master</title>
+  <title>Favourites - IELTS VocabMaster PRO</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .locked-card {
+    .fav-header {
+      margin-bottom: 28px;
+    }
+    .fav-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+    }
+    .fav-header p {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-top: 6px;
+    }
+
+    /* Locked state cover */
+    .pro-locked-banner {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 24px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
       position: relative;
-      opacity: 0.7;
-      border: 1px dashed var(--warning) !important;
+      overflow: hidden;
     }
-    .lock-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.75);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
+    .pro-badge-glow {
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      backdrop-filter: blur(2px);
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #d97706;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 16px;
     }
-    /* Modal Styles */
+
+    /* Ultra Modern Modal */
     .modal-overlay {
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
+      background: rgba(9, 13, 22, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -37,126 +62,222 @@
     .modal-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
+      border-radius: 24px;
+      padding: 32px;
       max-width: 520px;
       width: 100%;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+      animation: popIn 0.25s ease-out;
     }
-    .plan-box {
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .modal-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-close {
+      background: var(--bg-primary);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .modal-close:hover {
+      color: var(--text-main);
+      border-color: var(--primary);
+    }
+
+    .plan-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
       margin-bottom: 12px;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: var(--bg-primary);
+      transition: all 0.2s;
     }
-    .plan-box.selected {
-      border-color: var(--accent);
-      background: var(--accent-light);
+    .plan-card:hover {
+      border-color: var(--primary);
     }
+    .plan-card.selected {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.08);
+      box-shadow: 0 0 0 2px var(--primary-glow);
+    }
+
+    /* Payment Gateways */
+    .pay-btn-group {
+      display: flex;
+      gap: 14px;
+      margin: 16px 0 24px 0;
+    }
+    .pay-method-btn {
+      flex: 1;
+      height: 52px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 8px;
+      transition: all 0.2s;
+    }
+    .pay-method-btn svg {
+      height: 28px;
+      width: auto;
+    }
+    .pay-method-btn.selected {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    }
+    .pay-method-btn.bkash.selected { border-color: #d12053; }
+    .pay-method-btn.nagad.selected { border-color: #f7941d; }
   </style>
 </head>
 <body>
 
+  <!-- Top Bar -->
   <header class="navbar">
-    <a href="dashboard.html" class="brand-title">IELTS <span>VocabMaster</span></a>
+    <a href="index.html" class="brand-title">
+      IELTS <span>VocabMaster</span>
+      <span class="brand-badge">PRO</span>
+    </a>
     <div class="nav-actions">
       <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
-      <button onclick="openUpgradeModal()" class="btn btn-primary" style="padding: 6px 14px; font-size: 13px; background: #eab308; color: #000;">⭐ Upgrade</button>
+      <button onclick="openUpgradeModal()" class="btn btn-primary" style="padding: 8px 16px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        ⭐ Get Pro Access
+      </button>
     </div>
   </header>
 
   <div class="app-container">
     <aside class="sidebar">
-  <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
-  <a href="vocabulary.html" class="nav-link">📖 Vocabulary</a>
-  <a href="reading.html" class="nav-link">📑 Reading</a>
-  <a href="listening.html" class="nav-link">🎧 Listening</a>
-  <a href="speaking.html" class="nav-link">🗣️ Speaking</a>
-  <a href="writing.html" class="nav-link">✍️ Writing</a>
-  <a href="favourite.html" class="nav-link active">⭐ Favourites</a>
-</aside>
+      <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+      <a href="vocabulary.html" class="nav-link">📖 Vocabulary</a>
+      <a href="reading.html" class="nav-link">📑 Reading</a>
+      <a href="listening.html" class="nav-link">🎧 Listening</a>
+      <a href="speaking.html" class="nav-link">🗣️ Speaking</a>
+      <a href="writing.html" class="nav-link">✍️ Writing</a>
+      <a href="favourite.html" class="nav-link active">⭐ Favourites</a>
+    </aside>
 
     <main class="main-content">
-      <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 24px; font-weight: 700;">Your Favourite Words & Saved Items</h1>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">রিভিশনের জন্য আপনার সেভ করে রাখা শব্দ ও রিসোর্স।</p>
+      <div class="fav-header">
+        <h1>Your Favourites & Personal Vault</h1>
+        <p>রিভিশন ও স্পেসড রিপিটেশনের জন্য সেভ করা হাই-ব্যান্ড ভোকাবুলারি ও কন্টেন্ট।</p>
       </div>
 
-      <div class="grid-2">
-        <!-- Unlocked Free Item -->
-        <div class="card">
-          <div style="display: flex; justify-content: space-between;">
-            <h3 style="color: var(--accent);">ABUNDANT</h3>
-            <span style="color: #eab308;">★ Saved</span>
-          </div>
-          <p style="margin: 8px 0; font-size: 14px;">প্রচুর / পর্যাপ্তের বেশি</p>
-          <div style="font-size: 13px; color: var(--text-muted);">Cambridge 19, Test 1</div>
-        </div>
-
-        <!-- Locked Premium Item -->
-        <div class="card locked-card">
-          <div class="lock-overlay">
-            <span style="font-size: 24px;">🔒</span>
-            <strong style="color: #fff; font-size: 14px;">Premium Saved Word</strong>
-            <button class="btn btn-primary" style="padding: 6px 16px; font-size: 12px;" onclick="openUpgradeModal()">Unlock Now</button>
-          </div>
-          <h3>METICULOUS</h3>
-          <p>অতি সতর্ক / খুঁতখুঁতে</p>
-        </div>
+      <!-- Locked Pro State -->
+      <div class="pro-locked-banner">
+        <div class="pro-badge-glow">👑 Premium Exclusive Feature</div>
+        <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 10px;">আনলিমিটেড শব্দ বুকমার্ক করুন ও রিভিশন দিন</h2>
+        <p style="color: var(--text-muted); font-size: 15px; max-width: 520px; margin: 0 auto 24px; line-height: 1.6;">
+          ফেভারিটস ও স্পেসড-রিপিটিশন ফিচারটি ব্যবহার করতে প্রিমিয়াম মেম্বারশিপে আপগ্রেড করুন।
+        </p>
+        <button class="btn btn-primary" style="padding: 14px 32px; font-size: 15px;" onclick="openUpgradeModal()">
+          Upgrade to Unlock Favourites →
+        </button>
       </div>
     </main>
   </div>
 
-  <!-- Upgrade Modal -->
+  <!-- Ultra Sleek Upgrade Modal -->
   <div class="modal-overlay" id="upgradeModal">
     <div class="modal-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-        <h2 style="font-size: 20px;">💎 Upgrade to IELTS Vocab Master Pro</h2>
-        <button onclick="closeUpgradeModal()" style="background: none; border: none; font-size: 20px; color: var(--text-muted); cursor: pointer;">✕</button>
+      <div class="modal-header">
+        <div class="modal-title">💎 Upgrade to VocabMaster PRO</div>
+        <button class="modal-close" onclick="closeUpgradeModal()">✕</button>
       </div>
-      <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
-        সবগুলো Cambridge Books (10-19), ফুল অডিও, আনলিমিটেড স্পিকিং ও রাইটিং টাস্ক আনলক করুন।
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.5;">
+        Cambridge 10-19 এর সব টেস্ট, অডিও, ফেভারিটস বুকমার্ক ও ফুল সলিউশন আনলক করুন।
       </p>
 
-      <div class="plan-box selected" onclick="selectPlan(this)">
+      <!-- Plans -->
+      <div class="plan-card" onclick="selectPlan(this)">
         <div>
-          <strong>1 Month Access</strong>
-          <div style="font-size: 12px; color: var(--text-muted);">শুরুর প্রস্তুতির জন্য</div>
+          <strong style="font-size: 15px; display: block;">1 Month Access</strong>
+          <span style="font-size: 12px; color: var(--text-muted);">শুরুর ও দ্রুত প্রস্তুতির জন্য</span>
         </div>
-        <strong style="color: var(--accent);">৳ 350</strong>
+        <span style="font-size: 18px; font-weight: 800; color: var(--primary);">৳ 350</span>
       </div>
 
-      <div class="plan-box" onclick="selectPlan(this)">
+      <div class="plan-card selected" onclick="selectPlan(this)">
         <div>
-          <strong>3 Months Access</strong>
-          <div style="font-size: 12px; color: var(--text-muted);">জনপ্রিয় প্ল্যান (Band 7+ গ্যারান্টিড রুটিন)</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <strong style="font-size: 15px;">3 Months Access</strong>
+            <span style="background: rgba(245,158,11,0.15); color: #d97706; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">MOST POPULAR</span>
+          </div>
+          <span style="font-size: 12px; color: var(--text-muted);">টার্গেট Band 7.5+ রুটিন</span>
         </div>
-        <strong style="color: var(--accent);">৳ 850</strong>
+        <span style="font-size: 18px; font-weight: 800; color: var(--primary);">৳ 850</span>
       </div>
 
-      <div class="plan-box" onclick="selectPlan(this)">
+      <div class="plan-card" onclick="selectPlan(this)">
         <div>
-          <strong>6 Months Access</strong>
-          <div style="font-size: 12px; color: var(--text-muted);">সম্পূর্ণ কোর্স রিভিশনসহ</div>
+          <strong style="font-size: 15px; display: block;">6 Months Access</strong>
+          <span style="font-size: 12px; color: var(--text-muted);">সম্পূর্ণ রিভিশন ও ফুল টেস্ট প্যাকেজ</span>
         </div>
-        <strong style="color: var(--accent);">৳ 1,500</strong>
+        <span style="font-size: 18px; font-weight: 800; color: var(--primary);">৳ 1,500</span>
       </div>
 
-      <div style="margin-top: 20px;">
-        <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">Select Payment Method:</label>
-        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
-          <button class="btn btn-outline" style="flex: 1; border-color: #d12053; color: #d12053; font-weight: 700;">bKash</button>
-          <button class="btn btn-outline" style="flex: 1; border-color: #f7941d; color: #f7941d; font-weight: 700;">Nagad</button>
+      <!-- Payment Gateways with Real SVG Logos -->
+      <div style="margin-top: 18px;">
+        <label style="font-size: 13px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 8px;">
+          Select Instant Payment Method:
+        </label>
+        <div class="pay-btn-group">
+          <!-- bKash Official SVG Logo -->
+          <button type="button" class="pay-method-btn bkash selected" onclick="selectPay(this)">
+            <svg viewBox="0 0 148 57" fill="none">
+              <path fill="#D12053" d="M16.5 0L0 28.5L16.5 57H131.5L148 28.5L131.5 0H16.5Z"/>
+              <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="24">bKash</text>
+            </svg>
+          </button>
+          <!-- Nagad Official SVG Logo -->
+          <button type="button" class="pay-method-btn nagad" onclick="selectPay(this)">
+            <svg viewBox="0 0 148 57" fill="none">
+              <rect width="148" height="57" rx="10" fill="#F7941D"/>
+              <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="24">Nagad</text>
+            </svg>
+          </button>
         </div>
-        <button class="btn btn-primary" style="width: 100%; padding: 12px;" onclick="alert('পেমেন্ট গেটওয়েতে রিডাইরেক্ট করা হচ্ছে...')">Proceed to Pay</button>
+
+        <button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 15px; border-radius: 12px;" onclick="alert('বিকাশ/নগদ পেমেন্ট গেটওয়ে লোড হচ্ছে...')">
+          Proceed with Payment →
+        </button>
       </div>
     </div>
   </div>
 
   <script>
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
     const themeBtn = document.getElementById('themeBtn');
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -164,10 +285,6 @@
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    }
 
     function openUpgradeModal() {
       document.getElementById('upgradeModal').style.display = 'flex';
@@ -176,7 +293,11 @@
       document.getElementById('upgradeModal').style.display = 'none';
     }
     function selectPlan(el) {
-      document.querySelectorAll('.plan-box').forEach(b => b.classList.remove('selected'));
+      document.querySelectorAll('.plan-card').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+    function selectPay(el) {
+      document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
       el.classList.add('selected');
     }
   </script>
