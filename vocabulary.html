@@ -339,12 +339,14 @@
       utterance.lang = accent === 'uk' ? 'en-GB' : 'en-US';
       window.speechSynthesis.speak(utterance);
     }
+
     function checkTestAccess(sel) {
       if (sel.value !== 'test1') {
         openUpgradeModal();
         sel.value = 'test1';
       }
     }
+
     function openUpgradeModal() { document.getElementById('upgradeModal').style.display = 'flex'; }
     function closeUpgradeModal() { document.getElementById('upgradeModal').style.display = 'none'; }
     function selectPlan(el) {
@@ -354,6 +356,30 @@
     function selectPay(el) {
       document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
       el.classList.add('selected');
+    }
+
+    // ==========================================
+    // প্রোফাইল ড্রপডাউন ও লগআউট ফাংশনালিটি
+    // ==========================================
+    function toggleProfileDropdown(e) {
+      e.stopPropagation();
+      const dropdown = document.getElementById('profileDropdown');
+      if (dropdown) dropdown.classList.toggle('show');
+    }
+
+    window.addEventListener('click', function(e) {
+      if (!e.target.closest('.profile-menu-container')) {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown && dropdown.classList.contains('show')) {
+          dropdown.classList.remove('show');
+        }
+      }
+    });
+
+    function handleLogout() {
+      if (confirm("Are you sure you want to log out?")) {
+        window.location.href = "index.html";
+      }
     }
   </script>
 </body>
