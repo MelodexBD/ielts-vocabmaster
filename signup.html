@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,18 +7,18 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .auth-wrapper {
-      min-height: 80vh;
+      min-height: 85vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 24px;
     }
     .auth-box {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 32px;
-      max-width: 420px;
+      max-width: 440px;
       width: 100%;
       box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     }
@@ -35,12 +35,20 @@
       border: none;
       color: var(--text-muted);
       font-weight: 600;
+      font-size: 15px;
       cursor: pointer;
       border-bottom: 2px solid transparent;
     }
     .auth-tab.active {
       color: var(--accent);
       border-bottom-color: var(--accent);
+    }
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: block;
+      margin-bottom: 6px;
     }
     .input-field {
       width: 100%;
@@ -51,16 +59,24 @@
       color: var(--text-main);
       font-size: 14px;
       outline: none;
-      margin-top: 6px;
       margin-bottom: 16px;
+      box-sizing: border-box;
     }
     .input-field:focus {
       border-color: var(--accent);
+    }
+    .error-msg {
+      color: #ef4444;
+      font-size: 12px;
+      margin-top: -10px;
+      margin-bottom: 12px;
+      display: none;
     }
   </style>
 </head>
 <body>
 
+  <!-- Header -->
   <header class="navbar">
     <a href="index.html" class="brand-title">IELTS <span>VocabMaster</span></a>
     <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
@@ -75,31 +91,36 @@
       </div>
 
       <!-- Signup Form -->
-      <form id="signupForm" onsubmit="handleAuth(event)">
+      <form id="signupForm" onsubmit="handleSignup(event)">
         <div>
-          <label style="font-size: 13px; font-weight: 600;">Full Name</label>
-          <input type="text" class="input-field" placeholder="আপনার পুরো নাম" required>
+          <label class="form-label">Full Name</label>
+          <input type="text" id="signupName" class="input-field" placeholder="Enter your full name" required>
         </div>
         <div>
-          <label style="font-size: 13px; font-weight: 600;">Email Address</label>
-          <input type="email" class="input-field" placeholder="name@example.com" required>
+          <label class="form-label">Email Address</label>
+          <input type="email" id="signupEmail" class="input-field" placeholder="name@example.com" required>
         </div>
         <div>
-          <label style="font-size: 13px; font-weight: 600;">Password</label>
-          <input type="password" class="input-field" placeholder="কমপক্ষে ৬ ডিজিটের পাসওয়ার্ড" required>
+          <label class="form-label">Password</label>
+          <input type="password" id="signupPassword" class="input-field" placeholder="Minimum 6 characters" minlength="6" required>
+        </div>
+        <div>
+          <label class="form-label">Confirm Password</label>
+          <input type="password" id="signupConfirmPassword" class="input-field" placeholder="Re-enter your password" minlength="6" required>
+          <div id="passwordError" class="error-msg">Passwords do not match!</div>
         </div>
         <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 15px;">Create Free Account</button>
       </form>
 
-      <!-- Sign In Form (Hidden by default) -->
-      <form id="loginForm" style="display: none;" onsubmit="handleAuth(event)">
+      <!-- Sign In Form -->
+      <form id="loginForm" style="display: none;" onsubmit="handleLogin(event)">
         <div>
-          <label style="font-size: 13px; font-weight: 600;">Email Address</label>
-          <input type="email" class="input-field" placeholder="name@example.com" required>
+          <label class="form-label">Email Address</label>
+          <input type="email" id="loginEmail" class="input-field" placeholder="name@example.com" required>
         </div>
         <div>
-          <label style="font-size: 13px; font-weight: 600;">Password</label>
-          <input type="password" class="input-field" placeholder="আপনার পাসওয়ার্ড লিখুন" required>
+          <label class="form-label">Password</label>
+          <input type="password" id="loginPassword" class="input-field" placeholder="Enter your password" required>
         </div>
         <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 15px;">Sign In to Dashboard</button>
       </form>
@@ -114,6 +135,7 @@
   </div>
 
   <script>
+    // Theme Switcher
     const themeBtn = document.getElementById('themeBtn');
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -121,8 +143,16 @@
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
 
+    // Toggle between Signup and Login Tabs
     function switchAuth(type) {
+      const errorMsg = document.getElementById('passwordError');
+      errorMsg.style.display = 'none';
+
       if(type === 'signup') {
         document.getElementById('signupForm').style.display = 'block';
         document.getElementById('loginForm').style.display = 'none';
@@ -136,9 +166,26 @@
       }
     }
 
-    function handleAuth(e) {
+    // Signup Validation (Password Match Check)
+    function handleSignup(e) {
       e.preventDefault();
-      // সফল সাইন-আপের পর ড্যাশবোর্ডে রিডাইরেক্ট হবে
+      const pass = document.getElementById('signupPassword').value;
+      const confirmPass = document.getElementById('signupConfirmPassword').value;
+      const errorMsg = document.getElementById('passwordError');
+
+      if (pass !== confirmPass) {
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      errorMsg.style.display = 'none';
+      // প্রথমবার সাইন-আপ শেষ হলে সরাসরি Profile Setup পেজে নিয়ে যাবে
+      window.location.href = 'profile-setup.html';
+    }
+
+    // Login Submission
+    function handleLogin(e) {
+      e.preventDefault();
       window.location.href = 'dashboard.html';
     }
   </script>
