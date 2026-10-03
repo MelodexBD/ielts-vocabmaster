@@ -4,140 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IELTS Vocab Master - Prepare Smarter</title>
-  
-  <!-- সিএসএস ফাইল ঠিকমতো লিঙ্ক করার জন্য সরাসরি পথ -->
-  <link rel="stylesheet" href="./style.css">
-
+  <link rel="stylesheet" href="style.css">
   <style>
-    /* বেস ও ফলব্যাক স্টাইল যা নিশ্চিত করবে ডিজাইন কখনো ভাঙবে না */
-    :root {
-      --bg-primary: #0f172a;
-      --bg-card: #1e293b;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent: #2563eb;
-      --accent-hover: #1d4ed8;
-      --accent-light: rgba(37, 99, 235, 0.15);
-      --border: #334155;
-    }
-
-    [data-theme="light"] {
-      --bg-primary: #f8fafc;
-      --bg-card: #ffffff;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --accent: #2563eb;
-      --accent-hover: #1d4ed8;
-      --accent-light: #eff6ff;
-      --border: #e2e8f0;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-primary);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .navbar {
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .brand-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-main);
-      text-decoration: none;
-    }
-
-    .brand-title span {
-      color: var(--accent);
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .theme-toggle {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-main);
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: none;
-      border: none;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #ffffff;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-hover);
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-main);
-    }
-
     .hero-section {
       text-align: center;
       padding: 60px 20px 40px;
       max-width: 800px;
       margin: 0 auto;
     }
-
     .hero-title {
       font-size: 40px;
       font-weight: 800;
       line-height: 1.2;
       margin-bottom: 16px;
     }
-
     .hero-subtitle {
       font-size: 17px;
       color: var(--text-muted);
       margin-bottom: 30px;
       line-height: 1.5;
     }
-
     .search-wrapper {
       max-width: 540px;
       margin: 0 auto 30px auto;
       position: relative;
     }
-
     .search-input {
       width: 100%;
       padding: 14px 20px 14px 44px;
@@ -148,11 +39,7 @@
       font-size: 15px;
       outline: none;
     }
-
-    .search-input:focus {
-      border-color: var(--accent);
-    }
-
+    .search-input:focus { border-color: var(--accent); }
     .search-icon {
       position: absolute;
       left: 16px;
@@ -160,7 +47,6 @@
       transform: translateY(-50%);
       color: var(--text-muted);
     }
-
     .module-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -170,7 +56,6 @@
       padding: 0 20px;
       width: 100%;
     }
-
     .module-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -180,41 +65,26 @@
       color: var(--text-main);
       transition: transform 0.2s, border-color 0.2s;
     }
-
     .module-card:hover {
       transform: translateY(-4px);
       border-color: var(--accent);
     }
-
-    .module-icon {
-      font-size: 32px;
-      margin-bottom: 12px;
-    }
-
-    .module-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .module-desc {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
+    .module-icon { font-size: 32px; margin-bottom: 12px; }
+    .module-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .module-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
   </style>
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
+  <!-- Top Navigation Bar with Clear Sign In and Sign Up -->
   <header class="navbar">
     <a href="index.html" class="brand-title">
       IELTS <span>VocabMaster</span>
     </a>
     <div class="nav-actions">
       <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
-      <a href="dashboard.html" class="btn btn-outline">Dashboard</a>
-      <a href="signup.html" class="btn btn-primary">Get Started</a>
+      <a href="signup.html" class="btn btn-outline" style="padding: 8px 18px;">Sign In</a>
+      <a href="signup.html" class="btn btn-primary" style="padding: 8px 18px;">Sign Up Free</a>
     </div>
   </header>
 
@@ -222,17 +92,21 @@
   <main>
     <section class="hero-section">
       <h1 class="hero-title">Prepare Smarter for <span style="color: var(--accent);">IELTS</span></h1>
-      <p class="hero-subtitle">Build your vocabulary, master reading & listening, and achieve your target band score with Cambridge practice.</p>
+      <p class="hero-subtitle">Cambridge 10-19 এর শব্দভাণ্ডার, রিডিং, লিসেনিং এবং স্পিকিং ও রাইটিং প্র্যাকটিস দিয়ে আপনার টার্গেট ব্যান্ড অর্জন করুন।</p>
 
-      <!-- Global Search -->
       <div class="search-wrapper">
         <span class="search-icon">🔍</span>
         <input type="text" class="search-input" placeholder="Search IELTS Vocabulary, Tests, Topics...">
       </div>
 
-      <a href="vocabulary.html" class="btn btn-primary" style="padding: 12px 32px; font-size: 16px; border-radius: 30px;">
-        Start Learning Now →
-      </a>
+      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+        <a href="signup.html" class="btn btn-primary" style="padding: 12px 28px; font-size: 15px; border-radius: 30px;">
+          Create Free Account →
+        </a>
+        <a href="vocabulary.html" class="btn btn-outline" style="padding: 12px 28px; font-size: 15px; border-radius: 30px;">
+          Explore Demo Words
+        </a>
+      </div>
     </section>
 
     <!-- Learning Modules Grid -->
@@ -240,37 +114,42 @@
       <a href="vocabulary.html" class="module-card">
         <div class="module-icon">📖</div>
         <div class="module-title">Vocabulary</div>
-        <div class="module-desc">Cambridge 10-19 এর গুরুত্বপূর্ণ শব্দ, অর্থ ও UK/US উচ্চারণ।</div>
+        <div class="module-desc">Cambridge 10-19 এর প্রয়োজনীয় শব্দ, অর্থ ও UK/US উচ্চারণ।</div>
       </a>
 
       <a href="reading.html" class="module-card">
         <div class="module-icon">📑</div>
         <div class="module-title">Reading</div>
-        <div class="module-desc">Academic ও General Training প্যাসেজ ও ব্যাখ্যাসহ উত্তর।</div>
+        <div class="module-desc">Academic ও General Training প্যাসেজ ও সঠিক উত্তরের ব্যাখ্যা।</div>
       </a>
 
       <a href="listening.html" class="module-card">
         <div class="module-icon">🎧</div>
         <div class="module-title">Listening</div>
-        <div class="module-desc">ক্যামব্রিজ টেস্টের অডিও প্লেয়ার ও সেকশন প্রশ্ন সমাধান।</div>
+        <div class="module-desc">অডিও প্লেয়ারের সাথে সরাসরি ক্যামব্রিজ টেস্ট সেকশন প্র্যাকটিস।</div>
       </a>
 
-      <a href="speaking-writing.html" class="module-card">
+      <a href="speaking.html" class="module-card">
         <div class="module-icon">🗣️</div>
-        <div class="module-title">Speaking & Writing</div>
-        <div class="module-desc">Cue Card টাইমার, প্রয়োজনীয় শব্দভাণ্ডার ও রাইটিং প্রবন্ধ প্র্যাকটিস।</div>
+        <div class="module-title">Speaking</div>
+        <div class="module-desc">Cue Card প্রস্তুতি টাইমার ও হাই-ব্যান্ড ভোকাবুলারি গাইড।</div>
+      </a>
+
+      <a href="writing.html" class="module-card">
+        <div class="module-icon">✍️</div>
+        <div class="module-title">Writing</div>
+        <div class="module-desc">টাস্ক ২ রচনা প্র্যাকটিস প্লেগ্রাউন্ড ও লাইভ ওয়ার্ড কাউন্টার।</div>
       </a>
 
       <a href="admin.html" class="module-card">
         <div class="module-icon">⚙️</div>
         <div class="module-title">Admin Panel</div>
-        <div class="module-desc">নতুন বই, ভোকাবুলারি ও পেমেন্ট নিয়ন্ত্রণ ড্যাশবোর্ড।</div>
+        <div class="module-desc">বই, টেস্ট, ভোকাবুলারি ও সাবস্ক্রিপশন কন্ট্রোল প্যানেল।</div>
       </a>
     </section>
   </main>
 
   <script>
-    // Theme toggle
     const themeBtn = document.getElementById('themeBtn');
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -278,7 +157,6 @@
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
-
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
       document.documentElement.setAttribute('data-theme', savedTheme);
