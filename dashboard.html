@@ -302,7 +302,7 @@
     </main>
   </div>
 
-  <script>
+ <script>
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
 
@@ -315,23 +315,25 @@
     });
 
     // Profile Dropdown Toggle Logic
-    function toggleProfileDropdown() {
+    function toggleProfileDropdown(e) {
+      if (e) e.stopPropagation();
       const dropdown = document.getElementById('profileDropdown');
-      dropdown.classList.toggle('show');
+      if (dropdown) dropdown.classList.toggle('show');
     }
 
     // Close dropdown when clicked outside
     window.addEventListener('click', function(e) {
       if (!e.target.closest('.profile-menu-container')) {
         const dropdown = document.getElementById('profileDropdown');
-        if (dropdown) dropdown.classList.remove('show');
+        if (dropdown && dropdown.classList.contains('show')) {
+          dropdown.classList.remove('show');
+        }
       }
     });
 
     // Logout Functionality
     function handleLogout() {
       if (confirm("Are you sure you want to log out?")) {
-        // রিডাইরেক্ট করে মূল হোমপেজে পাঠিয়ে দেওয়া হবে
         window.location.href = "index.html";
       }
     }
