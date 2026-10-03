@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - IELTS Vocab Master</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Admin Metric Cards */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .metric-title {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 8px;
+    }
+
+    /* Admin Tabs */
+    .admin-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .tab-item {
+      padding: 10px 18px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+
+    .tab-item.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Form Layout */
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .form-group-full {
+      grid-column: 1 / -1;
+    }
+
+    /* Data Table */
+    .table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--bg-sidebar);
+      padding: 14px 16px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge-free {
+      background: rgba(148, 163, 184, 0.15);
+      color: var(--text-muted);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-premium {
+      background: rgba(234, 179, 8, 0.15);
+      color: #eab308;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <header class="navbar">
+    <a href="admin.html" class="brand-title">
+      IELTS <span>Admin Panel</span>
+    </a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+      <a href="dashboard.html" class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;">View Website</a>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <a href="#" class="nav-link active" onclick="switchAdminTab('vocabTab', this)">📖 Vocab Management</a>
+      <a href="#" class="nav-link" onclick="switchAdminTab('booksTab', this)">📚 Books & Tests</a>
+      <a href="#" class="nav-link" onclick="switchAdminTab('usersTab', this)">👥 Users & Payments</a>
+      <a href="#" class="nav-link" onclick="switchAdminTab('plansTab', this)">💎 Premium Plans</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 24px; font-weight: 700;">System Overview & Controls</h1>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+          ওয়েবসাইটের কন্টেন্ট, সাবস্ক্রিপশন ও ইউজারদের পরিচালনা করুন।
+        </p>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-title">Total Users</div>
+          <div class="metric-value">1,248</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Premium Users</div>
+          <div class="metric-value" style="color: #eab308;">312</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Total Vocabulary</div>
+          <div class="metric-value" style="color: var(--accent);">4,520</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Monthly Revenue</div>
+          <div class="metric-value" style="color: var(--success);">৳ 1,56,000</div>
+        </div>
+      </div>
+
+      <!-- TAB 1: ADD VOCABULARY -->
+      <div id="vocabTab">
+        <div class="card">
+          <h2 style="font-size: 18px; margin-bottom: 16px;">➕ Add New Vocabulary Word</h2>
+          <form onsubmit="handleWordSubmit(event)">
+            <div class="admin-form-grid">
+              
+              <div class="form-group">
+                <label>Book</label>
+                <select class="filter-select" required>
+                  <option>Cambridge 19</option>
+                  <option>Cambridge 18</option>
+                  <option>Cambridge 17</option>
+                  <option>Academic Word List</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Test & Section</label>
+                <input type="text" class="filter-select" placeholder="e.g. Test 1, Passage 2" required>
+              </div>
+
+              <div class="form-group">
+                <label>Word (English)</label>
+                <input type="text" class="filter-select" placeholder="e.g. ABUNDANT" required>
+              </div>
+
+              <div class="form-group">
+                <label>Bengali Meaning</label>
+                <input type="text" class="filter-select" placeholder="e.g. প্রচুর / পর্যাপ্তের বেশি" required>
+              </div>
+
+              <div class="form-group">
+                <label>UK Pronunciation Audio URL / Path</label>
+                <input type="text" class="filter-select" placeholder="storage/audio/word-uk.mp3">
+              </div>
+
+              <div class="form-group">
+                <label>US Pronunciation Audio URL / Path</label>
+                <input type="text" class="filter-select" placeholder="storage/audio/word-us.mp3">
+              </div>
+
+              <div class="form-group">
+                <label>Synonyms (Comma separated)</label>
+                <input type="text" class="filter-select" placeholder="Plentiful, Ample, Copious">
+              </div>
+
+              <div class="form-group">
+                <label>Antonyms (Comma separated)</label>
+                <input type="text" class="filter-select" placeholder="Scarce, Limited">
+              </div>
+
+              <div class="form-group-full">
+                <label>Example Sentence</label>
+                <textarea class="filter-select" style="height: 70px; resize: vertical;" placeholder="The region has an abundant supply of water..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Access Level</label>
+                <select class="filter-select">
+                  <option value="free">Free Access</option>
+                  <option value="premium">Premium Only</option>
+                </select>
+              </div>
+
+            </div>
+
+            <div style="margin-top: 16px;">
+              <button type="submit" class="btn btn-primary" style="padding: 10px 24px;">Publish Vocabulary</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- TAB 2: BOOKS & TESTS (Hidden by default) -->
+      <div id="booksTab" style="display: none;">
+        <div class="card">
+          <h2 style="font-size: 18px; margin-bottom: 16px;">📚 Add Dynamic Book / Category</h2>
+          <div style="display: flex; gap: 12px; max-width: 500px;">
+            <input type="text" class="filter-select" placeholder="e.g. Cambridge 20 or Collocation">
+            <button class="btn btn-primary" style="white-space: nowrap;">Add Book</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: USERS & PAYMENTS (Hidden by default) -->
+      <div id="usersTab" style="display: none;">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Target Band</th>
+                <th>Status</th>
+                <th>Payment Method</th>
+                <th>TrxID</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Saidul Islam<br><span style="font-size: 12px; color: var(--text-muted);">saidul@email.com</span></td>
+                <td>7.5</td>
+                <td><span class="badge-premium">Premium (6 Months)</span></td>
+                <td>bKash</td>
+                <td>9KJ2091SA8</td>
+                <td><button class="btn btn-outline" style="padding: 4px 8px; font-size: 12px;">Edit</button></td>
+              </tr>
+              <tr>
+                <td>Rahim Ahmed<br><span style="font-size: 12px; color: var(--text-muted);">rahim@email.com</span></td>
+                <td>6.5</td>
+                <td><span class="badge-free">Free User</span></td>
+                <td>-</td>
+                <td>-</td>
+                <td><button class="btn btn-outline" style="padding: 4px 8px; font-size: 12px;">Edit</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 4: PLANS (Hidden by default) -->
+      <div id="plansTab" style="display: none;">
+        <div class="card">
+          <h2 style="font-size: 18px; margin-bottom: 16px;">💎 Subscription Pricing Plans</h2>
+          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">
+            প্ল্যানের মেয়াদ ও মূল্য কোড পরিবর্তন না করেই এখান থেকে নিয়ন্ত্রণ করা যাবে।
+          </p>
+          <div class="admin-form-grid">
+            <div class="card" style="margin-bottom: 0;">
+              <h4>1 Month Plan</h4>
+              <p style="margin: 8px 0; font-size: 20px; font-weight: 700; color: var(--accent);">৳ 350</p>
+              <button class="btn btn-outline" style="width: 100%;">Update Price</button>
+            </div>
+            <div class="card" style="margin-bottom: 0;">
+              <h4>6 Months Plan</h4>
+              <p style="margin: 8px 0; font-size: 20px; font-weight: 700; color: var(--accent);">৳ 1,500</p>
+              <button class="btn btn-outline" style="width: 100%;">Update Price</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    // Tab Switcher Logic
+    function switchAdminTab(tabId, el) {
+      document.getElementById('vocabTab').style.display = 'none';
+      document.getElementById('booksTab').style.display = 'none';
+      document.getElementById('usersTab').style.display = 'none';
+      document.getElementById('plansTab').style.display = 'none';
+
+      document.getElementById(tabId).style.display = 'block';
+
+      const navLinks = document.querySelectorAll('.sidebar .nav-link');
+      navLinks.forEach(link => link.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function handleWordSubmit(e) {
+      e.preventDefault();
+      alert('নতুন ভোকাবুলারি সফলভাবে যুক্ত হয়েছে!');
+    }
+  </script>
+</body>
+</html>
