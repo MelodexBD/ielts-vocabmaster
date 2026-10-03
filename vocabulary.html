@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulary - IELTS Vocab Master</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Filter Bar Styles */
+    .filter-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .filter-select:focus {
+      border-color: var(--accent);
+    }
+
+    /* Word Card Grid */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .vocab-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .vocab-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .word-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+    }
+
+    .word-meaning {
+      font-size: 15px;
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .btn-fav {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: transform 0.1s;
+    }
+
+    .btn-fav.active {
+      color: #eab308;
+    }
+
+    /* Pronunciation Buttons */
+    .audio-group {
+      display: flex;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .audio-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-light);
+      border: 1px solid transparent;
+      color: var(--accent);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .audio-btn:hover {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    /* Details Section */
+    .vocab-meta {
+      font-size: 13px;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .vocab-meta strong {
+      color: var(--text-muted);
+      display: inline-block;
+      min-width: 75px;
+    }
+
+    .vocab-example {
+      background: var(--bg-primary);
+      border-left: 3px solid var(--accent);
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--text-muted);
+      margin: 12px 0 16px 0;
+    }
+
+    /* Footer Action */
+    .btn-learn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-learn.learned {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--success);
+      color: var(--success);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="navbar">
+    <a href="dashboard.html" class="brand-title">
+      IELTS <span>VocabMaster</span>
+    </a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+      <div class="user-profile-badge">
+        <div class="avatar">S</div>
+        <div>
+          <div style="font-weight: 600; font-size: 14px;">Saidul</div>
+          <span style="font-size: 11px; color: var(--accent);">Target: 7.5</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+      <a href="vocabulary.html" class="nav-link active">📖 Vocabulary</a>
+      <a href="reading.html" class="nav-link">📑 Reading</a>
+      <a href="listening.html" class="nav-link">🎧 Listening</a>
+      <a href="speaking.html" class="nav-link">🗣️ Speaking</a>
+      <a href="writing.html" class="nav-link">✍️ Writing</a>
+      <a href="favourite.html" class="nav-link">⭐ Favourites</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div style="margin-bottom: 20px;">
+        <h1 style="font-size: 24px; font-weight: 700;">IELTS Vocabulary Vault</h1>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+          Cambridge Books ebong topic-based shob essential vocabulary shikhe felun।
+        </p>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <select class="filter-select" id="bookFilter">
+          <option value="all">All Books</option>
+          <option value="cambridge-19">Cambridge 19</option>
+          <option value="cambridge-18">Cambridge 18</option>
+          <option value="cambridge-17">Cambridge 17</option>
+          <option value="cambridge-16">Cambridge 16</option>
+        </select>
+
+        <select class="filter-select" id="testFilter">
+          <option value="all">All Tests</option>
+          <option value="test-1">Test 1</option>
+          <option value="test-2">Test 2</option>
+          <option value="test-3">Test 3</option>
+          <option value="test-4">Test 4</option>
+        </select>
+
+        <select class="filter-select" id="difficultyFilter">
+          <option value="all">All Levels</option>
+          <option value="band-6">Band 6.0 - 6.5</option>
+          <option value="band-7">Band 7.0 - 7.5</option>
+          <option value="band-8">Band 8.0+</option>
+        </select>
+
+        <select class="filter-select" id="categoryFilter">
+          <option value="all">All Categories</option>
+          <option value="academic">Academic</option>
+          <option value="environment">Environment</option>
+          <option value="technology">Technology</option>
+          <option value="education">Education</option>
+        </select>
+      </div>
+
+      <!-- Word Cards Grid -->
+      <div class="vocab-grid">
+        
+        <!-- Word Card 1: ABUNDANT -->
+        <div class="vocab-card">
+          <div>
+            <div class="vocab-header">
+              <div>
+                <div class="word-title">ABUNDANT</div>
+                <div class="word-meaning">প্রচুর / পর্যাপ্তের বেশি</div>
+              </div>
+              <button class="btn-fav" onclick="toggleFav(this)">★</button>
+            </div>
+
+            <!-- UK/US Pronunciation -->
+            <div class="audio-group">
+              <button class="audio-btn" onclick="playAudio('abundant', 'uk')">🔊 UK</button>
+              <button class="audio-btn" onclick="playAudio('abundant', 'us')">🔊 US</button>
+            </div>
+
+            <div class="vocab-meta">
+              <strong>Synonyms:</strong> Plentiful, Ample, Copious
+            </div>
+            <div class="vocab-meta">
+              <strong>Antonyms:</strong> Scarce, Limited, Rare
+            </div>
+
+            <div class="vocab-example">
+              "The region has an abundant supply of clean freshwater."
+            </div>
+          </div>
+
+          <button class="btn-learn" onclick="toggleLearned(this)">
+            ✓ Mark as Learned
+          </button>
+        </div>
+
+        <!-- Word Card 2: MITIGATE -->
+        <div class="vocab-card">
+          <div>
+            <div class="vocab-header">
+              <div>
+                <div class="word-title">MITIGATE</div>
+                <div class="word-meaning">কমানো / তীব্রতা হ্রাস করা</div>
+              </div>
+              <button class="btn-fav active" onclick="toggleFav(this)">★</button>
+            </div>
+
+            <div class="audio-group">
+              <button class="audio-btn" onclick="playAudio('mitigate', 'uk')">🔊 UK</button>
+              <button class="audio-btn" onclick="playAudio('mitigate', 'us')">🔊 US</button>
+            </div>
+
+            <div class="vocab-meta">
+              <strong>Synonyms:</strong> Alleviate, Reduce, Lessen
+            </div>
+            <div class="vocab-meta">
+              <strong>Antonyms:</strong> Aggravate, Intensify, Worsen
+            </div>
+
+            <div class="vocab-example">
+              "Governments are taking steps to mitigate the effects of global warming."
+            </div>
+          </div>
+
+          <button class="btn-learn learned" onclick="toggleLearned(this)">
+            ✓ Learned
+          </button>
+        </div>
+
+        <!-- Word Card 3: PLAUSIBLE -->
+        <div class="vocab-card">
+          <div>
+            <div class="vocab-header">
+              <div>
+                <div class="word-title">PLAUSIBLE</div>
+                <div class="word-meaning">বিশ্বাসযোগ্য / যুক্তিসঙ্গত</div>
+              </div>
+              <button class="btn-fav" onclick="toggleFav(this)">★</button>
+            </div>
+
+            <div class="audio-group">
+              <button class="audio-btn" onclick="playAudio('plausible', 'uk')">🔊 UK</button>
+              <button class="audio-btn" onclick="playAudio('plausible', 'us')">🔊 US</button>
+            </div>
+
+            <div class="vocab-meta">
+              <strong>Synonyms:</strong> Believable, Reasonable, Credible
+            </div>
+            <div class="vocab-meta">
+              <strong>Antonyms:</strong> Implausible, Unlikely, Doubtful
+            </div>
+
+            <div class="vocab-example">
+              "His explanation sounded entirely plausible to the examiners."
+            </div>
+          </div>
+
+          <button class="btn-learn" onclick="toggleLearned(this)">
+            ✓ Mark as Learned
+          </button>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    // Favourite toggle
+    function toggleFav(btn) {
+      btn.classList.toggle('active');
+    }
+
+    // Learned toggle
+    function toggleLearned(btn) {
+      btn.classList.toggle('learned');
+      if (btn.classList.contains('learned')) {
+        btn.innerHTML = '✓ Learned';
+      } else {
+        btn.innerHTML = '✓ Mark as Learned';
+      }
+    }
+
+    // Pronunciation preview (Browser built-in Web Speech API diye sound test kora jabe)
+    function playAudio(word, accent) {
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = accent === 'uk' ? 'en-GB' : 'en-US';
+      window.speechSynthesis.speak(utterance);
+    }
+  </script>
+</body>
+</html>
