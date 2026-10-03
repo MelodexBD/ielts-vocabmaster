@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speaking Practice - IELTS Vocab Master</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .cue-card {
+      background: var(--bg-card);
+      border: 2px dashed var(--accent);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .cue-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .cue-bullets {
+      margin-left: 20px;
+      margin-bottom: 16px;
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+    .timer-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-primary);
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      width: fit-content;
+      margin-bottom: 20px;
+    }
+    .timer-display {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .vocab-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .pill {
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="dashboard.html" class="brand-title">IELTS <span>VocabMaster</span></a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+      <div class="user-profile-badge">
+        <div class="avatar">S</div>
+        <div>
+          <div style="font-weight: 600; font-size: 14px;">Saidul</div>
+          <span style="font-size: 11px; color: var(--accent);">Target: 7.5</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+      <a href="vocabulary.html" class="nav-link">📖 Vocabulary</a>
+      <a href="reading.html" class="nav-link">📑 Reading</a>
+      <a href="listening.html" class="nav-link">🎧 Listening</a>
+      <a href="speaking.html" class="nav-link active">🗣️ Speaking</a>
+      <a href="writing.html" class="nav-link">✍️ Writing</a>
+      <a href="favourite.html" class="nav-link">⭐ Favourites</a>
+    </aside>
+
+    <main class="main-content">
+      <div style="margin-bottom: 20px;">
+        <h1 style="font-size: 24px; font-weight: 700;">IELTS Speaking Practice</h1>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+          Part 2 Cue Card: ১ মিনিট প্রস্তুতি নিয়ে ২ মিনিট কথা বলার অনুশীলন করুন।
+        </p>
+      </div>
+
+      <div class="timer-box">
+        <span>⏱️ Preparation Timer:</span>
+        <span class="timer-display" id="timer">01:00</span>
+        <button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="startTimer()">Start 1 Min</button>
+      </div>
+
+      <div class="cue-card">
+        <div class="cue-title">Describe an environmental law or rule you would like to see implemented.</div>
+        <ul class="cue-bullets">
+          <li>What this law or rule would be</li>
+          <li>How it would be introduced</li>
+          <li>What kinds of people it would affect</li>
+          <li>And explain why you think this rule is needed</li>
+        </ul>
+
+        <hr style="border: 0; border-top: 1px solid var(--border); margin: 16px 0;">
+
+        <div>
+          <strong style="font-size: 14px; color: var(--text-main);">Useful High-Band Vocabulary:</strong>
+          <div class="vocab-pills">
+            <span class="pill">mitigate degradation</span>
+            <span class="pill">stringent regulations</span>
+            <span class="pill">carbon footprint</span>
+            <span class="pill">renewable alternatives</span>
+            <span class="pill">deterrent effect</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    let timeLeft = 60;
+    let timerId = null;
+    function startTimer() {
+      if (timerId) clearInterval(timerId);
+      timeLeft = 60;
+      document.getElementById('timer').innerText = "01:00";
+      timerId = setInterval(() => {
+        timeLeft--;
+        let seconds = timeLeft < 10 ? '0' + timeLeft : timeLeft;
+        document.getElementById('timer').innerText = `00:${seconds}`;
+        if (timeLeft <= 0) {
+          clearInterval(timerId);
+          alert("১ মিনিট প্রস্তুতির সময় শেষ! এবার কথা বলা শুরু করুন।");
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
