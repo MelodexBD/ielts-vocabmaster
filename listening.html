@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listening Practice - IELTS Vocab Master</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Filter Bar */
+    .filter-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+    }
+
+    /* Audio Player Sticky Box */
+    .audio-player-card {
+      background: var(--bg-card);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+    }
+
+    .audio-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    audio {
+      width: 100%;
+      outline: none;
+      border-radius: 30px;
+    }
+
+    /* Section Tabs */
+    .section-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* Questions Sheet */
+    .question-sheet {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .fill-input {
+      display: inline-block;
+      width: 130px;
+      padding: 4px 10px;
+      margin: 0 4px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .fill-input:focus {
+      border-color: var(--accent);
+    }
+
+    .check-btn {
+      margin-top: 24px;
+      padding: 10px 24px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .result-feedback {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--accent-light);
+      display: none;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <a href="dashboard.html" class="brand-title">
+      IELTS <span>VocabMaster</span>
+    </a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+      <div class="user-profile-badge">
+        <div class="avatar">S</div>
+        <div>
+          <div style="font-weight: 600; font-size: 14px;">Saidul</div>
+          <span style="font-size: 11px; color: var(--accent);">Target: 7.5</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+      <a href="vocabulary.html" class="nav-link">📖 Vocabulary</a>
+      <a href="reading.html" class="nav-link">📑 Reading</a>
+      <a href="listening.html" class="nav-link active">🎧 Listening</a>
+      <a href="speaking.html" class="nav-link">🗣️ Speaking</a>
+      <a href="writing.html" class="nav-link">✍️ Writing</a>
+      <a href="favourite.html" class="nav-link">⭐ Favourites</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div style="margin-bottom: 20px;">
+        <h1 style="font-size: 24px; font-weight: 700;">IELTS Listening Practice</h1>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+          অডিও শুনুন এবং সরাসরি ব্ল্যাঙ্ক বক্সে সঠিক উত্তর টাইপ করুন।
+        </p>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <select class="filter-select">
+          <option>Cambridge 19</option>
+          <option>Cambridge 18</option>
+          <option>Cambridge 17</option>
+        </select>
+        <select class="filter-select">
+          <option>Test 1</option>
+          <option>Test 2</option>
+          <option>Test 3</option>
+          <option>Test 4</option>
+        </select>
+      </div>
+
+      <!-- Audio Player -->
+      <div class="audio-player-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <strong style="font-size: 14px;">🎧 Cambridge 19 - Test 1 Audio</strong>
+          <span style="font-size: 12px; color: var(--text-muted);">Section 1</span>
+        </div>
+        <audio controls>
+          <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+          আপনার ব্রাউজার অডিও সাপোর্ট করে না।
+        </audio>
+      </div>
+
+      <!-- Section Switcher -->
+      <div class="section-tabs">
+        <button class="tab-btn active">Section 1</button>
+        <button class="tab-btn">Section 2</button>
+        <button class="tab-btn">Section 3</button>
+        <button class="tab-btn">Section 4</button>
+      </div>
+
+      <!-- Question Sheet -->
+      <div class="question-sheet">
+        <h3 style="font-size: 18px; margin-bottom: 8px;">Questions 1–4</h3>
+        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
+          <em>Write ONE WORD AND/OR A NUMBER for each answer.</em>
+        </p>
+
+        <div style="background: var(--bg-primary); padding: 16px; border-radius: 8px; border: 1px solid var(--border);">
+          <h4 style="margin-bottom: 12px; color: var(--accent);">Community Center Rental Application</h4>
+          
+          <p>
+            1. Applicant's Surname: 
+            <input type="text" id="q1" class="fill-input" placeholder="Type answer">
+          </p>
+          <br>
+          <p>
+            2. Room required for a: 
+            <input type="text" id="q2" class="fill-input" placeholder="Type answer"> party
+          </p>
+          <br>
+          <p>
+            3. Date of booking: 15th of 
+            <input type="text" id="q3" class="fill-input" placeholder="Type answer">
+          </p>
+          <br>
+          <p>
+            4. Contact phone number: 
+            <input type="text" id="q4" class="fill-input" placeholder="Type answer">
+          </p>
+        </div>
+
+        <button class="check-btn" onclick="checkAnswers()">Check Answers</button>
+
+        <div id="feedback" class="result-feedback">
+          <strong>সঠিক উত্তরসমূহ:</strong><br>
+          1. <b>Mitchell</b> | 2. <b>birthday</b> | 3. <b>October</b> | 4. <b>0171234567</b>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    // Check Answers Logic
+    function checkAnswers() {
+      document.getElementById('feedback').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
