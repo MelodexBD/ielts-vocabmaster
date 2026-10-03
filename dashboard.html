@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - IELTS Vocab Master</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .welcome-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--accent-light);
+      color: var(--accent);
+      margin-top: 4px;
+    }
+    .progress-bar-bg {
+      background: var(--border);
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-bar-fill {
+      background: var(--accent);
+      height: 100%;
+      border-radius: 4px;
+    }
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .task-item:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="navbar">
+    <a href="dashboard.html" class="brand-title">
+      IELTS <span>VocabMaster</span>
+    </a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+      <div class="user-profile-badge">
+        <div class="avatar">S</div>
+        <div>
+          <div style="font-weight: 600; font-size: 14px;">Saidul</div>
+          <span class="badge">Academic</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <a href="dashboard.html" class="nav-link active">📊 Dashboard</a>
+      <a href="vocabulary.html" class="nav-link">📖 Vocabulary</a>
+      <a href="reading.html" class="nav-link">📑 Reading</a>
+      <a href="listening.html" class="nav-link">🎧 Listening</a>
+      <a href="speaking.html" class="nav-link">🗣️ Speaking</a>
+      <a href="writing.html" class="nav-link">✍️ Writing</a>
+      <a href="favourite.html" class="nav-link">⭐ Favourites</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Welcome Section -->
+      <div class="welcome-banner">
+        <div>
+          <h1 style="font-size: 26px;">Good evening, Saidul 👋</h1>
+          <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">চলুন আজকের প্রস্তুতি শুরু করা যাক!</p>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 13px; color: var(--text-muted);">Target Band</div>
+          <div style="font-size: 28px; font-weight: 800; color: var(--accent);">7.5</div>
+        </div>
+      </div>
+
+      <!-- Quick Action: Today's Learning & Revision -->
+      <div class="grid-2">
+        <div class="card" style="border-left: 4px solid var(--accent);">
+          <h2 style="font-size: 18px; margin-bottom: 12px;">🎯 Today's Learning</h2>
+          <div class="task-item">
+            <span>Vocabulary (25 words)</span>
+            <span style="color: var(--accent); font-weight: 600;">Pending</span>
+          </div>
+          <div class="task-item">
+            <span>Reading Test (1 Passage)</span>
+            <span style="color: var(--text-muted);">Not started</span>
+          </div>
+          <div class="task-item">
+            <span>Speaking Practice (5 questions)</span>
+            <span style="color: var(--text-muted);">Not started</span>
+          </div>
+          <div style="margin-top: 16px;">
+            <a href="vocabulary.html" class="btn btn-primary" style="width: 100%;">Start Today's Lesson</a>
+          </div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--warning);">
+          <h2 style="font-size: 18px; margin-bottom: 12px;">🔄 Words to Review</h2>
+          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">
+            Spaced repetition মেথডে আপনার রিভিশন দেওয়ার সময় হয়েছে।
+          </p>
+          <div style="font-size: 24px; font-weight: 700; margin-bottom: 16px;">
+            32 <span style="font-size: 14px; color: var(--text-muted); font-weight: normal;">শব্দ বাকি আছে</span>
+          </div>
+          <button class="btn btn-outline" style="width: 100%;">Start Revision</button>
+        </div>
+      </div>
+
+      <!-- Skills Progress Bars -->
+      <div class="card">
+        <h2 style="font-size: 18px; margin-bottom: 20px;">📈 Your Overall Progress</h2>
+        
+        <div style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; font-size: 14px;">
+            <span>Vocabulary Mastery</span>
+            <span style="font-weight: 600;">68%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 68%;"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; font-size: 14px;">
+            <span>Reading Practice</span>
+            <span style="font-weight: 600;">42%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 42%;"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; font-size: 14px;">
+            <span>Listening Practice</span>
+            <span style="font-weight: 600;">35%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 35%;"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; font-size: 14px;">
+            <span>Speaking Practice</span>
+            <span style="font-weight: 600;">28%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 28%;"></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px;">
+            <span>Writing Practice</span>
+            <span style="font-weight: 600;">20%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 20%;"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // ডার্ক/লাইট মোড টগল করার সহজ স্ক্রিপ্ট
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  </script>
+</body>
+</html>
