@@ -1,85 +1,190 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IELTS Vocab Master - Prepare Smarter</title>
+  <title>IELTS VocabMaster - Master Cambridge & Band 8.0 Skills</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .hero-section {
+    /* Hero Aesthetics */
+    .hero-container {
       text-align: center;
-      padding: 60px 20px 40px;
-      max-width: 800px;
+      padding: 70px 20px 50px;
+      max-width: 860px;
       margin: 0 auto;
     }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      backdrop-filter: blur(8px);
+    }
+
     .hero-title {
-      font-size: 40px;
+      font-size: 48px;
       font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 16px;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 18px;
     }
+
+    .hero-title-gradient {
+      background: linear-gradient(135deg, #6366f1 20%, #a855f7 60%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
     .hero-subtitle {
-      font-size: 17px;
+      font-size: 18px;
       color: var(--text-muted);
-      margin-bottom: 30px;
-      line-height: 1.5;
+      line-height: 1.6;
+      max-width: 660px;
+      margin: 0 auto 36px;
     }
-    .search-wrapper {
-      max-width: 540px;
-      margin: 0 auto 30px auto;
+
+    /* Modern Spotlight Search Bar */
+    .search-box {
+      max-width: 580px;
+      margin: 0 auto 36px;
       position: relative;
     }
-    .search-input {
+
+    .search-box input {
       width: 100%;
-      padding: 14px 20px 14px 44px;
-      border-radius: 30px;
-      border: 1px solid var(--border);
+      padding: 16px 20px 16px 48px;
+      border-radius: 16px;
       background: var(--bg-card);
+      border: 1px solid var(--border);
       color: var(--text-main);
       font-size: 15px;
       outline: none;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
-    .search-input:focus { border-color: var(--accent); }
-    .search-icon {
+
+    .search-box input:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .search-box .icon {
       position: absolute;
-      left: 16px;
+      left: 18px;
       top: 50%;
       transform: translateY(-50%);
+      font-size: 16px;
       color: var(--text-muted);
     }
-    .module-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      max-width: 1100px;
-      margin: 20px auto 60px;
-      padding: 0 20px;
-      width: 100%;
+
+    /* High-End Feature Module Cards */
+    .modules-section {
+      max-width: 1200px;
+      margin: 20px auto 80px;
+      padding: 0 24px;
     }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
     .module-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
+      border-radius: 20px;
+      padding: 28px;
       text-decoration: none;
       color: var(--text-main);
-      transition: transform 0.2s, border-color 0.2s;
+      backdrop-filter: blur(14px);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 200px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
     }
+
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--primary-gradient);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
     .module-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent);
+      transform: translateY(-6px);
+      background: var(--bg-card-hover);
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.22);
     }
-    .module-icon { font-size: 32px; margin-bottom: 12px; }
-    .module-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-    .module-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+
+    .module-card:hover::before {
+      opacity: 1;
+    }
+
+    .module-icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .module-title {
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .module-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .module-arrow {
+      margin-top: 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #818cf8;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @media (max-width: 600px) {
+      .hero-title {
+        font-size: 34px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Top Navigation Bar with Clear Sign In and Sign Up -->
+  <!-- Sleek Navbar -->
   <header class="navbar">
     <a href="index.html" class="brand-title">
       IELTS <span>VocabMaster</span>
+      <span class="brand-badge">PRO</span>
     </a>
     <div class="nav-actions">
       <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
@@ -88,68 +193,103 @@
     </div>
   </header>
 
-  <!-- Hero & Content -->
+  <!-- Hero Section -->
   <main>
-    <section class="hero-section">
-      <h1 class="hero-title">Prepare Smarter for <span style="color: var(--accent);">IELTS</span></h1>
-      <p class="hero-subtitle">Cambridge 10-19 এর শব্দভাণ্ডার, রিডিং, লিসেনিং এবং স্পিকিং ও রাইটিং প্র্যাকটিস দিয়ে আপনার টার্গেট ব্যান্ড অর্জন করুন।</p>
+    <section class="hero-container">
+      <div class="pill-badge">
+        ✨ Powered by Cambridge 10–19 Standards
+      </div>
+      
+      <h1 class="hero-title">
+        Prepare Smarter for <br>
+        <span class="hero-title-gradient">IELTS Academic & GT</span>
+      </h1>
+      
+      <p class="hero-subtitle">
+        IELTS ব্যান্ড ৮.০+ অর্জনের জন্য ক্যামব্রিজ টেস্টভিত্তিক নিখুঁত শব্দভাণ্ডার, রিডিং, লিসেনিং এবং স্পিকিং ও রাইটিং প্র্যাকটিস প্লেগ্রাউন্ড।
+      </p>
 
-      <div class="search-wrapper">
-        <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" placeholder="Search IELTS Vocabulary, Tests, Topics...">
+      <!-- Global Search -->
+      <div class="search-box">
+        <span class="icon">🔍</span>
+        <input type="text" placeholder="Search IELTS Vocabulary, Tests, Reading Topics...">
       </div>
 
+      <!-- Hero Call-To-Actions -->
       <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
-        <a href="signup.html" class="btn btn-primary" style="padding: 12px 28px; font-size: 15px; border-radius: 30px;">
+        <a href="signup.html" class="btn btn-primary" style="padding: 14px 32px; font-size: 15px; border-radius: 12px;">
           Create Free Account →
         </a>
-        <a href="vocabulary.html" class="btn btn-outline" style="padding: 12px 28px; font-size: 15px; border-radius: 30px;">
-          Explore Demo Words
+        <a href="vocabulary.html" class="btn btn-outline" style="padding: 14px 28px; font-size: 15px; border-radius: 12px;">
+          Explore Demo Vault
         </a>
       </div>
     </section>
 
-    <!-- Learning Modules Grid -->
-    <section class="module-grid">
-      <a href="vocabulary.html" class="module-card">
-        <div class="module-icon">📖</div>
-        <div class="module-title">Vocabulary</div>
-        <div class="module-desc">Cambridge 10-19 এর প্রয়োজনীয় শব্দ, অর্থ ও UK/US উচ্চারণ।</div>
-      </a>
+    <!-- Interactive Modules Grid -->
+    <section class="modules-section">
+      <div class="modules-grid">
+        
+        <a href="vocabulary.html" class="module-card">
+          <div>
+            <div class="module-icon-wrap">📖</div>
+            <div class="module-title">Vocabulary Vault</div>
+            <div class="module-desc">Cambridge 10-19 এর প্রতিটি টেস্টের শব্দ, বাংলা অর্থ এবং UK ও US উচ্চারণ অডিও।</div>
+          </div>
+          <div class="module-arrow">Start Vocab →</div>
+        </a>
 
-      <a href="reading.html" class="module-card">
-        <div class="module-icon">📑</div>
-        <div class="module-title">Reading</div>
-        <div class="module-desc">Academic ও General Training প্যাসেজ ও সঠিক উত্তরের ব্যাখ্যা।</div>
-      </a>
+        <a href="reading.html" class="module-card">
+          <div>
+            <div class="module-icon-wrap">📑</div>
+            <div class="module-title">Reading Lab</div>
+            <div class="module-desc">Academic ও GT প্যাসেজ, সরাসরি প্রশ্ন সলভিং এবং নির্ভুল উত্তরের ব্যাখ্যা।</div>
+          </div>
+          <div class="module-arrow">Start Reading →</div>
+        </a>
 
-      <a href="listening.html" class="module-card">
-        <div class="module-icon">🎧</div>
-        <div class="module-title">Listening</div>
-        <div class="module-desc">অডিও প্লেয়ারের সাথে সরাসরি ক্যামব্রিজ টেস্ট সেকশন প্র্যাকটিস।</div>
-      </a>
+        <a href="listening.html" class="module-card">
+          <div>
+            <div class="module-icon-wrap">🎧</div>
+            <div class="module-title">Listening Audio</div>
+            <div class="module-desc">সেকশনভিত্তিক অডিও ট্র্যাক শুনে সরাসরি ব্ল্যাঙ্ক ফর্ম পূরণ ও লাইভ মার্কিং।</div>
+          </div>
+          <div class="module-arrow">Start Listening →</div>
+        </a>
 
-      <a href="speaking.html" class="module-card">
-        <div class="module-icon">🗣️</div>
-        <div class="module-title">Speaking</div>
-        <div class="module-desc">Cue Card প্রস্তুতি টাইমার ও হাই-ব্যান্ড ভোকাবুলারি গাইড।</div>
-      </a>
+        <a href="speaking.html" class="module-card">
+          <div>
+            <div class="module-icon-wrap">🗣️</div>
+            <div class="module-title">Speaking Cue Card</div>
+            <div class="module-desc">১ মিনিট প্রিপারেশন টাইমারসহ কিউ-কার্ড টপিক ও হাই-ব্যান্ড ভোকাব গাইড।</div>
+          </div>
+          <div class="module-arrow">Start Speaking →</div>
+        </a>
 
-      <a href="writing.html" class="module-card">
-        <div class="module-icon">✍️</div>
-        <div class="module-title">Writing</div>
-        <div class="module-desc">টাস্ক ২ রচনা প্র্যাকটিস প্লেগ্রাউন্ড ও লাইভ ওয়ার্ড কাউন্টার।</div>
-      </a>
+        <a href="writing.html" class="module-card">
+          <div>
+            <div class="module-icon-wrap">✍️</div>
+            <div class="module-title">Writing Playground</div>
+            <div class="module-desc">Task 2 রচনার জন্য লাইভ ওয়ার্ড কাউন্টার, স্ট্রাকচার টিপস এবং মডেল রচনা।</div>
+          </div>
+          <div class="module-arrow">Start Writing →</div>
+        </a>
 
-      <a href="admin.html" class="module-card">
-        <div class="module-icon">⚙️</div>
-        <div class="module-title">Admin Panel</div>
-        <div class="module-desc">বই, টেস্ট, ভোকাবুলারি ও সাবস্ক্রিপশন কন্ট্রোল প্যানেল।</div>
-      </a>
+        <a href="admin.html" class="module-card">
+          <div>
+            <div class="module-icon-wrap">⚙️</div>
+            <div class="module-title">Admin Dashboard</div>
+            <div class="module-desc">নতুন বই, শব্দ ও সাবস্ক্রিপশন প্ল্যান কন্ট্রোল করার প্রিমিয়াম ম্যানেজমেন্ট।</div>
+          </div>
+          <div class="module-arrow">Manage System →</div>
+        </a>
+
+      </div>
     </section>
   </main>
 
   <script>
+    // Theme toggle
     const themeBtn = document.getElementById('themeBtn');
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -157,6 +297,7 @@
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
+
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
       document.documentElement.setAttribute('data-theme', savedTheme);
