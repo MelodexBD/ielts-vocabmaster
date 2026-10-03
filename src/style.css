@@ -1,811 +1,212 @@
-import './style.css';
+:root {
+  --bg-primary: #0f172a;
+  --bg-card: #1e293b;
+  --bg-sidebar: #0b1120;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-light: rgba(37, 99, 235, 0.15);
+  --border: #334155;
+  --success: #10b981;
+  --warning: #f59e0b;
+}
 
-const bands = ['5.0', '5.5', '6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0'];
-const words = [
-  { id: 'abundant', word: 'Abundant', meaning: 'প্রচুর / পর্যাপ্তের চেয়ে বেশি', synonyms: ['Plentiful', 'Ample', 'Copious'], antonyms: ['Scarce', 'Limited'], example: 'The region has abundant water resources.', category: 'Academic Vocabulary' },
-  { id: 'coherent', word: 'Coherent', meaning: 'সুসংগত / স্পষ্ট', synonyms: ['Logical', 'Consistent', 'Clear'], antonyms: ['Confused', 'Incoherent'], example: 'A coherent essay is easy to understand.', category: 'Academic Vocabulary' },
-  { id: 'feasible', word: 'Feasible', meaning: 'সম্ভব / বাস্তবসম্মত', synonyms: ['Practical', 'Viable', 'Achievable'], antonyms: ['Impossible', 'Impractical'], example: 'The plan is feasible within the budget.', category: 'Cambridge 19' },
-  { id: 'deteriorate', word: 'Deteriorate', meaning: 'অবনতি হওয়া', synonyms: ['Decline', 'Worsen', 'Degrade'], antonyms: ['Improve', 'Recover'], example: 'The local economy began to deteriorate.', category: 'Essential Vocabulary' },
-  { id: 'inevitable', word: 'Inevitable', meaning: 'অনিবার্য', synonyms: ['Unavoidable', 'Certain', 'Inescapable'], antonyms: ['Avoidable', 'Optional'], example: 'Some change is inevitable in a growing city.', category: 'Cambridge 19' },
-  { id: 'alleviate', word: 'Alleviate', meaning: 'লাঘব করা / কমানো', synonyms: ['Ease', 'Relieve', 'Reduce'], antonyms: ['Worsen', 'Aggravate'], example: 'New policies may alleviate traffic pressure.', category: 'Essential Vocabulary' }
-];
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-sidebar: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-light: #eff6ff;
+  --border: #e2e8f0;
+  --success: #10b981;
+  --warning: #f59e0b;
+}
 
-const demoBooks = ['Cambridge 10', 'Cambridge 11', 'Cambridge 12', 'Cambridge 19'];
-const demoCategories = ['Academic Vocabulary', 'Essential Vocabulary', 'Advanced Vocabulary', 'Cambridge 19'];
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  transition: background-color 0.2s, border-color 0.2s;
+}
 
-const state = {
-  user: JSON.parse(localStorage.getItem('ivm-user') || 'null'),
-  pendingUser: null,
-  theme: localStorage.getItem('ivm-theme') || 'light',
-  favourites: JSON.parse(localStorage.getItem('ivm-favourites') || '[]'),
-  learned: JSON.parse(localStorage.getItem('ivm-learned') || '[]'),
-  books: JSON.parse(localStorage.getItem('ivm-books') || JSON.stringify(demoBooks)),
-  categories: JSON.parse(localStorage.getItem('ivm-categories') || JSON.stringify(demoCategories)),
-  view: 'Dashboard',
-  authView: 'home',
-  query: '',
-  filter: 'All'
-};
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-const app = document.querySelector('#app');
-const persist = (key, value) => localStorage.setItem(`ivm-${key}`, JSON.stringify(value));
-const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
-const getInitials = (name = 'Learner') => (name || 'Learner').trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase() || '').join('') || 'L';
-const getFirstName = (name = 'Learner') => (name || 'Learner').trim().split(/\s+/).filter(Boolean)[0] || 'Learner';
+/* Navbar */
+.navbar {
+  background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 
-function render() {
-  document.documentElement.dataset.theme = state.theme;
+.brand-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
 
-  if (!state.user) {
-    app.innerHTML = state.authView === 'signup' ? renderSignup() : state.authView === 'setup' ? renderSetup() : renderHome();
-    bindEvents();
-    return;
+.brand-title span {
+  color: var(--accent);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-main);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Layout */
+.app-container {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: 240px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.main-content {
+  flex: 1;
+  padding: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Common Components */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-main);
+}
+
+.btn-outline:hover {
+  background: var(--accent-light);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
   }
-
-  app.innerHTML = `
-    ${sidebar()}
-    <main class="workspace">
-      <header class="topbar">
-        <button class="mobile-menu icon-button" data-action="menu" aria-label="Open navigation">☰</button>
-        <label class="searchbox" aria-label="Search">
-          <span>⌕</span>
-          <input id="global-search" type="search" value="${escapeHtml(state.query)}" placeholder="Search IELTS Vocabulary, Tests, Topics..." />
-        </label>
-        <div class="top-actions">
-          <button class="icon-button" type="button" data-action="theme" aria-label="Toggle theme">${state.theme === 'light' ? '☾' : '☀'}</button>
-          <button class="user-chip" type="button" data-view="Profile">
-            <span class="avatar">${escapeHtml(getInitials(state.user.name))}</span>
-            <span>${escapeHtml(getFirstName(state.user.name))}</span>
-          </button>
-        </div>
-      </header>
-      <div class="page">${pageContent()}</div>
-    </main>
-    <div id="toast" class="toast"></div>
-  `;
-
-  bindEvents();
-}
-
-function renderHome() {
-  return `
-    <main class="public-home">
-      <header class="public-header">
-        <div class="brand-block">
-          <span class="brand-mark">i.</span>
-          <span class="brand-text">IELTS <b>VOCAB</b> MASTER</span>
-        </div>
-
-        <div class="header-controls">
-          <label class="header-search" aria-label="Search IELTS vocabulary">
-            <span class="search-icon">⌕</span>
-            <input type="search" value="" placeholder="Search IELTS vocabulary..." />
-          </label>
-          <button class="button button-light" type="button" data-action="open-signup">Create account <span>›</span></button>
-        </div>
-      </header>
-
-      <section class="landing-shell">
-        <div class="eyebrow">A MORE THOUGHTFUL WAY TO PREPARE</div>
-
-        <h1 class="hero-title">Prepare smarter<br>for <em>IELTS.</em></h1>
-
-        <p class="lead">Build your vocabulary, strengthen every skill, and make steady progress toward your target band.</p>
-
-        <div class="cta-row">
-          <button class="button button-dark" type="button" data-action="public-start">Start learning <span>→</span></button>
-        </div>
-
-        <div class="word-of-day">
-          <div class="word-label">WORD OF THE DAY 01 / 25</div>
-          <div class="word-main">Abundant</div>
-          <div class="word-bangla">অভাব নেই / প্রচুর</div>
-          <div class="word-meaning">“The region has abundant natural resources.”</div>
-          <div class="word-variants">PLENTIFUL • AMPLE • COPIOUS</div>
-        </div>
-
-        <div class="info-list">
-          <div class="info-row"><span class="bullet"></span><span>One useful word at a time.</span></div>
-          <div class="info-row"><span class="bullet"></span><span>Vocabulary that sticks</span></div>
-        </div>
-
-        <div class="bottom-copy">
-          <h2>Make every practice count.</h2>
-          <p>Start with a word. Build a habit. Get ready for the test that matters to you.</p>
-        </div>
-
-        <div class="chip-bar">
-          <span class="chip">AzVocabulary</span>
-          <span class="chip">Reading</span>
-          <span class="chip">Listening</span>
-          <span class="chip">Speaking</span>
-          <span class="chip">Writing</span>
-        </div>
-      </section>
-    </main>
-  `;
-}
-
-function renderSignup() {
-  return `
-    <main class="auth-shell">
-      <section class="auth-art">
-        <div class="brand brand-light">
-          <span class="brand-mark">i.</span>
-          <span>IELTS <b>VOCAB</b> MASTER</span>
-        </div>
-        <div class="art-copy">
-          <span class="eyebrow">SMART IELTS PREP</span>
-          <h1>Study smarter, not harder.</h1>
-          <p>Focused vocabulary and exam practice designed around your IELTS goals.</p>
-        </div>
-      </section>
-
-      <section class="auth-form-wrap">
-        <form id="signup-form" class="auth-form">
-          <a class="brand" href="#home"><span class="brand-mark">i.</span><span>IELTS <b>VOCAB</b> MASTER</span></a>
-          <span class="eyebrow">CREATE ACCOUNT</span>
-          <h2>Welcome</h2>
-          <p class="muted">Simple signup for your IELTS journey.</p>
-
-          <label>
-            Full Name
-            <input type="text" name="name" placeholder="Your full name" required />
-          </label>
-          <label>
-            Email
-            <input type="email" name="email" placeholder="you@example.com" required />
-          </label>
-          <label>
-            Password
-            <input type="password" name="password" placeholder="Create password" required />
-          </label>
-          <label>
-            Confirm Password
-            <input type="password" name="confirmPassword" placeholder="Re-enter password" required />
-          </label>
-
-          <button class="button button-primary button-wide" type="submit">Create Account</button>
-          <div class="or-rule">OR</div>
-          <button class="button button-google button-wide" type="button" data-action="google">Continue with Google</button>
-          <p class="auth-note">Already have an account? <button class="text-button" type="button" data-action="demo-login">Demo login</button></p>
-        </form>
-      </section>
-    </main>
-  `;
-}
-
-function renderSetup() {
-  return `
-    <main class="setup-shell">
-      <div class="setup-card">
-        <a class="brand" href="#home"><span class="brand-mark">i.</span><span>IELTS <b>VOCAB</b> MASTER</span></a>
-        <div class="setup-progress">STEP 1 OF 2</div>
-        <h1>Tell us about your IELTS goal</h1>
-        <p class="muted">This helps personalize your dashboard and practice.</p>
-
-        <form id="setup-form">
-          <fieldset>
-            <legend>Which IELTS test are you preparing for?</legend>
-            <label class="choice-card">
-              <input type="radio" name="examType" value="Academic" checked />
-              <span class="choice-dot"></span>
-              <span>
-                <b>Academic</b>
-                <small>For university and professional pathways</small>
-              </span>
-              <span class="choice-check">✓</span>
-            </label>
-            <label class="choice-card">
-              <input type="radio" name="examType" value="General Training" />
-              <span class="choice-dot"></span>
-              <span>
-                <b>General Training</b>
-                <small>For migration and work pathways</small>
-              </span>
-              <span class="choice-check">✓</span>
-            </label>
-          </fieldset>
-
-          <label class="band-label">
-            <span>Your target band</span>
-            <select name="targetBand">
-              ${bands.map((band) => `<option value="${band}" ${band === '7.5' ? 'selected' : ''}>${band}</option>`).join('')}
-            </select>
-          </label>
-
-          <button class="button button-primary button-wide" type="submit">Continue</button>
-        </form>
-      </div>
-    </main>
-  `;
-}
-
-function sidebar() {
-  const items = ['Dashboard', 'Vocabulary', 'Reading', 'Listening', 'Speaking', 'Writing', 'Favourites', 'Profile', 'Admin'];
-  const nav = items.map((item) => {
-    const icons = { Dashboard: '◫', Vocabulary: '▤', Reading: '▧', Listening: '◖', Speaking: '◉', Writing: '≋', Favourites: '♡', Profile: '◎', Admin: '⌘' };
-    const badge = item === 'Favourites' && state.favourites.length ? `<small>${state.favourites.length}</small>` : '';
-    return `<button class="nav-link ${state.view === item ? 'active' : ''}" type="button" data-view="${item}"><span class="nav-icon">${icons[item]}</span><span>${item}</span>${badge}</button>`;
-  }).join('');
-
-  return `
-    <aside class="sidebar">
-      <a class="brand" href="#home" data-view="Dashboard">
-        <span class="brand-mark">i.</span>
-        <span>IELTS <b>VOCAB</b><small>MASTER</small></span>
-      </a>
-      <div class="nav-caption">MAIN MENU</div>
-      <div class="side-nav">${nav}</div>
-      <div class="sidebar-bottom">
-        <div class="streak">
-          <span class="streak-icon">🔥</span>
-          <div>
-            <b>7 day streak</b>
-            <small>Keep the momentum going</small>
-          </div>
-        </div>
-        <button class="sidebar-profile" type="button" data-view="Profile">
-          <span class="avatar">${escapeHtml(getInitials(state.user.name))}</span>
-          <span class="profile-copy">
-            <b>${escapeHtml(getFirstName(state.user.name))}</b>
-            <small>${escapeHtml(state.user.examType || 'Academic')} · Target ${state.user.targetBand || '7.5'}</small>
-          </span>
-        </button>
-        <button class="sign-out-button" type="button" data-action="sign-out">Log out</button>
-      </div>
-    </aside>
-  `;
-}
-
-function pageContent() {
-  const pages = {
-    Dashboard: dashboard,
-    Vocabulary: vocabularyPage,
-    Reading: () => skillPage('Reading'),
-    Listening: () => skillPage('Listening'),
-    Speaking: () => skillPage('Speaking'),
-    Writing: () => skillPage('Writing'),
-    Favourites: favouritesPage,
-    Profile: profilePage,
-    Admin: adminPage
-  };
-
-  return (pages[state.view] || dashboard)();
-}
-
-function dashboard() {
-  const firstName = escapeHtml(getFirstName(state.user.name));
-  const progress = state.user.progress || { Vocabulary: 68, Reading: 42, Listening: 35, Speaking: 28, Writing: 20 };
-
-  return `
-    <section class="welcome-row">
-      <div>
-        <span class="eyebrow">${new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).format(new Date()).toUpperCase()}</span>
-        <h1>Good ${new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, ${firstName}<span class="wave">👋</span></h1>
-      </div>
-      <button class="button button-primary" type="button" data-action="start-learning">Start Learning</button>
-    </section>
-
-    <section class="dashboard-top">
-      <article class="target-panel">
-        <div>
-          <span class="eyebrow">TARGET BAND</span>
-          <h2>${state.user.targetBand || '7.5'}</h2>
-          <p>${state.user.examType || 'Academic'}</p>
-        </div>
-        <div class="target-glow">🎯</div>
-      </article>
-
-      <article class="review-panel">
-        <div class="review-icon">↺</div>
-        <div>
-          <span class="eyebrow">WORDS TO REVIEW</span>
-          <h3>You have 32 words to revise today.</h3>
-          <button class="button button-soft" type="button" data-view="Vocabulary">Start Revision</button>
-        </div>
-      </article>
-    </section>
-
-    <section class="progress-section">
-      <div class="section-heading">
-        <span class="eyebrow">YOUR PROGRESS</span>
-        <h2>Learning snapshot</h2>
-      </div>
-      <div class="progress-grid">
-        ${Object.entries(progress).map(([label, value]) => `
-          <article class="mini-progress-card">
-            <div class="progress-label-row">
-              <span>${label}</span>
-              <strong>${value}%</strong>
-            </div>
-            <div class="progress-bar"><span style="width:${value}%"></span></div>
-          </article>
-        `).join('')}
-      </div>
-    </section>
-  `;
-}
-
-function vocabularyPage() {
-  const selectedCategory = state.filter === 'Learned' ? 'Learned' : state.filter;
-  const filtered = words.filter((word) => {
-    const query = state.query.trim().toLowerCase();
-    const matchesQuery = !query || [word.word, word.meaning, word.category, ...word.synonyms, ...word.antonyms].join(' ').toLowerCase().includes(query);
-    const matchesCategory = selectedCategory === 'All' || selectedCategory === 'Learned' ? true : word.category === selectedCategory;
-    const matchesLearned = selectedCategory !== 'Learned' || state.learned.includes(word.id);
-    return matchesQuery && matchesCategory && matchesLearned;
-  });
-
-  return `
-    <section class="page-title-row">
-      <div>
-        <span class="eyebrow">YOUR WORD BANK</span>
-        <h1>Vocabulary</h1>
-        <p class="muted">Collect useful words. Make them yours.</p>
-      </div>
-      <span class="saved-count">${state.learned.length} learned</span>
-    </section>
-
-    <div class="filterbar">
-      <label>
-        <span>Book</span>
-        <select>
-          <option>All Books</option>
-          ${state.books.map((book) => `<option>${escapeHtml(book)}</option>`).join('')}
-        </select>
-      </label>
-      <label>
-        <span>Difficulty</span>
-        <select>
-          <option>All</option>
-          <option>Easy</option>
-          <option>Medium</option>
-          <option>Hard</option>
-        </select>
-      </label>
-      <label>
-        <span>Category</span>
-        <select id="category-filter">
-          <option value="All" ${selectedCategory === 'All' ? 'selected' : ''}>All</option>
-          ${state.categories.map((category) => `<option value="${escapeHtml(category)}" ${selectedCategory === category ? 'selected' : ''}>${escapeHtml(category)}</option>`).join('')}
-          <option value="Learned" ${selectedCategory === 'Learned' ? 'selected' : ''}>Learned</option>
-        </select>
-      </label>
-      <label>
-        <span>Test</span>
-        <select>
-          <option>All Tests</option>
-          <option>Academic</option>
-          <option>General Training</option>
-        </select>
-      </label>
-    </div>
-
-    <div class="word-grid">
-      ${filtered.length ? filtered.map(wordCard).join('') : `<div class="empty-state"><h3>No words found</h3><p>Try another search or switch filters.</p></div>`}
-    </div>
-  `;
-}
-
-function wordCard(word) {
-  const favourite = state.favourites.includes(word.id);
-  const learned = state.learned.includes(word.id);
-
-  return `
-    <article class="word-card">
-      <div class="word-card-top">
-        <button class="icon-button favorite-button ${favourite ? 'is-favourite' : ''}" type="button" data-word-action="favorite" data-id="${word.id}" aria-label="Toggle favourite">${favourite ? '♥' : '♡'}</button>
-        <div class="word-card-actions">
-          <button class="chip" type="button" data-word-action="speak-uk" data-id="${word.id}">🔊 UK</button>
-          <button class="chip" type="button" data-word-action="speak-us" data-id="${word.id}">🔊 US</button>
-        </div>
-      </div>
-
-      <h3 class="word-title">${escapeHtml(word.word)}</h3>
-      <p class="word-meaning">${escapeHtml(word.meaning)}</p>
-
-      <div class="meta-block">
-        <span class="meta-label">Synonyms</span>
-        <p>${word.synonyms.map((item) => escapeHtml(item)).join(' • ')}</p>
-      </div>
-
-      <div class="meta-block">
-        <span class="meta-label">Antonyms</span>
-        <p>${word.antonyms.map((item) => escapeHtml(item)).join(' • ')}</p>
-      </div>
-
-      <div class="meta-block">
-        <span class="meta-label">Example</span>
-        <p>${escapeHtml(word.example)}</p>
-      </div>
-
-      <button class="button button-soft button-wide ${learned ? 'is-learned' : ''}" type="button" data-word-action="learned" data-id="${word.id}">
-        ${learned ? '✓ Learned' : 'Mark as Learned'}
-      </button>
-    </article>
-  `;
-}
-
-function favouritesPage() {
-  const favWords = words.filter((word) => state.favourites.includes(word.id));
-  return `
-    <section class="page-title-row">
-      <div>
-        <span class="eyebrow">SAVED FOR LATER</span>
-        <h1>Favourites</h1>
-        <p class="muted">Your favourite IELTS words.</p>
-      </div>
-      <span class="saved-count">${favWords.length} saved</span>
-    </section>
-
-    <div class="word-grid">
-      ${favWords.length ? favWords.map(wordCard).join('') : `<div class="empty-state"><h3>No favourites yet</h3><p>Tap the heart on a word card to save it here.</p></div>`}
-    </div>
-  `;
-}
-
-function profilePage() {
-  const user = state.user;
-  return `
-    <section class="page-title-row">
-      <div>
-        <span class="eyebrow">YOUR ACCOUNT</span>
-        <h1>Profile & settings</h1>
-        <p class="muted">Keep your goals and preferences current.</p>
-      </div>
-    </section>
-
-    <form id="profile-form" class="settings-form">
-      <div class="settings-block">
-        <label>
-          Full name
-          <input type="text" name="name" value="${escapeHtml(user.name || '')}" required />
-        </label>
-        <label>
-          Email
-          <input type="email" name="email" value="${escapeHtml(user.email || '')}" required />
-        </label>
-      </div>
-
-      <div class="settings-block">
-        <label>
-          Exam type
-          <select name="examType">
-            <option value="Academic" ${user.examType === 'Academic' ? 'selected' : ''}>Academic</option>
-            <option value="General Training" ${user.examType === 'General Training' ? 'selected' : ''}>General Training</option>
-          </select>
-        </label>
-        <label>
-          Target band
-          <select name="targetBand">
-            ${bands.map((band) => `<option value="${band}" ${String(user.targetBand || '7.5') === band ? 'selected' : ''}>${band}</option>`).join('')}
-          </select>
-        </label>
-      </div>
-
-      <button class="button button-primary" type="submit">Save changes</button>
-    </form>
-  `;
-}
-
-function skillPage(skill) {
-  const list = {
-    Reading: [
-      { title: 'Academic Reading - Cambridge 19', meta: 'Passage 1 · Questions 13', badge: 'New' },
-      { title: 'General Training Reading', meta: 'Passage 2 · Matching Headings', badge: 'Popular' }
-    ],
-    Listening: [
-      { title: 'Section 1 Practice', meta: 'Note completion · Audio based', badge: 'Audio' },
-      { title: 'Listening Review', meta: 'Accents and gist', badge: 'Review' }
-    ],
-    Speaking: [
-      { title: 'Part 1: Daily Life', meta: 'Hometown, study, routine', badge: 'Warmup' },
-      { title: 'Part 2: Cue Card', meta: 'Describe a memorable event', badge: 'Core' }
-    ],
-    Writing: [
-      { title: 'Academic Task 1', meta: 'Describe a graph or process', badge: 'Graph' },
-      { title: 'General Training Task 2', meta: 'Discuss a social issue', badge: 'Essay' }
-    ]
-  }[skill] || [];
-
-  const tabs = ['Reading', 'Listening', 'Speaking', 'Writing'];
-
-  return `
-    <section class="page-title-row">
-      <div>
-        <span class="eyebrow">PRACTICE YOUR SKILLS</span>
-        <h1>${skill}</h1>
-        <p class="muted">Focus on high-impact IELTS practice blocks.</p>
-      </div>
-    </section>
-
-    <div class="skill-tabs">
-      ${tabs.map((tab) => `<button class="skill-tab ${tab === skill ? 'active' : ''}" type="button" data-action="skill-tab" data-tab="${tab}">${tab}</button>`).join('')}
-    </div>
-
-    <div class="resource-list">
-      ${list.map((item) => `
-        <article class="resource-card">
-          <div class="resource-header">
-            <span class="resource-badge">${escapeHtml(item.badge)}</span>
-            <h3>${escapeHtml(item.title)}</h3>
-          </div>
-          <p>${escapeHtml(item.meta)}</p>
-          <button class="button button-soft" type="button">Open</button>
-        </article>
-      `).join('')}
-    </div>
-  `;
-}
-
-function adminPage() {
-  return `
-    <section class="page-title-row">
-      <div>
-        <span class="eyebrow">CONTENT WORKSPACE</span>
-        <h1>Admin overview</h1>
-        <p class="muted">Manage books, categories, and content access.</p>
-      </div>
-    </section>
-
-    <div class="admin-grid">
-      <article class="admin-panel">
-        <div class="section-heading">
-          <span class="eyebrow">BOOKS</span>
-          <h2>Manage books</h2>
-        </div>
-        <form id="book-form" class="compact-form">
-          <input type="text" name="book" placeholder="Add new book" required />
-          <button class="button button-primary" type="submit">Add</button>
-        </form>
-        <div class="tag-list">
-          ${state.books.map((book) => `<span class="tag">${escapeHtml(book)} <button type="button" data-remove-book="${escapeHtml(book)}">×</button></span>`).join('')}
-        </div>
-      </article>
-
-      <article class="admin-panel">
-        <div class="section-heading">
-          <span class="eyebrow">CATEGORIES</span>
-          <h2>Manage categories</h2>
-        </div>
-        <form id="category-form" class="compact-form">
-          <input type="text" name="category" placeholder="Add category" required />
-          <button class="button button-primary" type="submit">Add</button>
-        </form>
-        <div class="tag-list">
-          ${state.categories.map((category) => `<span class="tag">${escapeHtml(category)} <button type="button" data-remove-category="${escapeHtml(category)}">×</button></span>`).join('')}
-        </div>
-      </article>
-    </div>
-  `;
-}
-
-function toast(message) {
-  const element = document.querySelector('#toast');
-  if (!element) return;
-  element.textContent = message;
-  element.classList.add('show');
-  clearTimeout(toast.timer);
-  toast.timer = setTimeout(() => element.classList.remove('show'), 2200);
-}
-
-function bindEvents() {
-  document.querySelectorAll('[data-action="open-signup"], [data-action="public-start"]').forEach((button) => {
-    button.addEventListener('click', () => {
-      state.authView = 'signup';
-      render();
-    });
-  });
-
-  document.querySelector('[data-action="demo-login"]')?.addEventListener('click', () => {
-    state.user = {
-      name: 'Saidul Islam',
-      email: 'saidul@example.com',
-      examType: 'Academic',
-      targetBand: '7.5',
-      progress: { Vocabulary: 68, Reading: 42, Listening: 35, Speaking: 28, Writing: 20 }
-    };
-    persist('user', state.user);
-    state.authView = 'home';
-    state.view = 'Dashboard';
-    render();
-  });
-
-  document.querySelector('[data-action="google"]')?.addEventListener('click', () => {
-    toast('Google sign-in is ready for Firebase setup.');
-  });
-
-  document.querySelector('[data-action="theme"]')?.addEventListener('click', () => {
-    state.theme = state.theme === 'light' ? 'dark' : 'light';
-    localStorage.setItem('ivm-theme', state.theme);
-    render();
-  });
-
-  document.querySelector('[data-action="menu"]')?.addEventListener('click', () => {
-    document.querySelector('.sidebar')?.classList.toggle('open');
-  });
-
-  document.querySelector('[data-action="start-learning"]')?.addEventListener('click', () => {
-    state.view = 'Vocabulary';
-    render();
-  });
-
-  document.querySelector('[data-action="sign-out"]')?.addEventListener('click', () => {
-    localStorage.removeItem('ivm-user');
-    state.user = null;
-    state.authView = 'home';
-    state.view = 'Dashboard';
-    render();
-  });
-
-  document.querySelectorAll('[data-view]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const nextView = button.dataset.view;
-      if (!nextView) return;
-      state.view = nextView;
-      state.query = '';
-      render();
-    });
-  });
-
-  document.querySelector('#global-search')?.addEventListener('input', (event) => {
-    state.query = event.target.value;
-    if (state.query && state.view !== 'Vocabulary') state.view = 'Vocabulary';
-    render();
-  });
-
-  document.querySelector('#category-filter')?.addEventListener('change', (event) => {
-    state.filter = event.target.value;
-    render();
-  });
-
-  document.querySelectorAll('[data-action="skill-tab"]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const skill = button.dataset.tab;
-      if (!skill) return;
-      state.view = skill;
-      render();
-    });
-  });
-
-  document.querySelectorAll('[data-word-action]').forEach((button) => {
-    button.addEventListener('click', () => handleWordAction(button.dataset.wordAction, button.dataset.id));
-  });
-
-  document.querySelector('#signup-form')?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const name = String(form.get('name') || '').trim();
-    const email = String(form.get('email') || '').trim();
-    const password = String(form.get('password') || '');
-    const confirmPassword = String(form.get('confirmPassword') || '');
-
-    if (!name || !email || password.length < 6) {
-      toast('Please complete all fields with a valid password.');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      toast('Passwords do not match.');
-      return;
-    }
-
-    state.pendingUser = { name, email };
-    state.authView = 'setup';
-    render();
-  });
-
-  document.querySelector('#setup-form')?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    state.user = {
-      ...(state.pendingUser || { name: 'Learner', email: 'learner@example.com' }),
-      examType: String(form.get('examType') || 'Academic'),
-      targetBand: String(form.get('targetBand') || '7.5'),
-      progress: { Vocabulary: 68, Reading: 42, Listening: 35, Speaking: 28, Writing: 20 }
-    };
-    persist('user', state.user);
-    state.authView = 'home';
-    state.view = 'Dashboard';
-    render();
-  });
-
-  document.querySelector('#profile-form')?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    state.user = {
-      ...state.user,
-      name: String(form.get('name') || state.user.name),
-      email: String(form.get('email') || state.user.email),
-      examType: String(form.get('examType') || state.user.examType),
-      targetBand: String(form.get('targetBand') || state.user.targetBand)
-    };
-    persist('user', state.user);
-    render();
-  });
-
-  document.querySelector('#book-form')?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const value = String(form.get('book') || '').trim();
-    if (!value) return;
-    if (!state.books.includes(value)) {
-      state.books = [...state.books, value];
-      persist('books', state.books);
-      render();
-    }
-  });
-
-  document.querySelector('#category-form')?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const value = String(form.get('category') || '').trim();
-    if (!value) return;
-    if (!state.categories.includes(value)) {
-      state.categories = [...state.categories, value];
-      persist('categories', state.categories);
-      render();
-    }
-  });
-
-  document.querySelectorAll('[data-remove-book]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const book = button.dataset.removeBook;
-      state.books = state.books.filter((item) => item !== book);
-      persist('books', state.books);
-      render();
-    });
-  });
-
-  document.querySelectorAll('[data-remove-category]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const category = button.dataset.removeCategory;
-      state.categories = state.categories.filter((item) => item !== category);
-      persist('categories', state.categories);
-      render();
-    });
-  });
-}
-
-function handleWordAction(action, id) {
-  if (!id) return;
-
-  if (action === 'favorite') {
-    state.favourites = state.favourites.includes(id) ? state.favourites.filter((item) => item !== id) : [...state.favourites, id];
-    persist('favourites', state.favourites);
-    render();
-    return;
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px;
   }
-
-  if (action === 'learned') {
-    state.learned = state.learned.includes(id) ? state.learned.filter((item) => item !== id) : [...state.learned, id];
-    persist('learned', state.learned);
-    render();
-    return;
-  }
-
-  const word = words.find((item) => item.id === id);
-  if (!word) return;
-
-  if (typeof SpeechSynthesis !== 'undefined') {
-    const utterance = new SpeechSynthesisUtterance(word.word);
-    utterance.lang = action === 'speak-us' ? 'en-US' : 'en-GB';
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-    toast(`${word.word} pronunciation ready.`);
-  } else {
-    toast('Audio is not available in this browser.');
+  .main-content {
+    padding: 16px;
   }
 }
-
-window.addEventListener('keydown', (event) => {
-  if (event.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName || '')) {
-    event.preventDefault();
-    document.querySelector('#global-search')?.focus();
-  }
-});
-
-render();
-export {};
-
