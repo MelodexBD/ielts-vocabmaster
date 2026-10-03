@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Speaking Practice - IELTS Vocab Master</title>
+  <title>Speaking Practice - IELTS VocabMaster PRO</title>
   <link rel="stylesheet" href="style.css">
   <style>
     .cue-card {
       background: var(--bg-card);
-      border: 2px dashed var(--accent);
-      border-radius: 12px;
-      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
       margin-bottom: 24px;
+      box-shadow: var(--card-shadow);
     }
     .cue-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--accent);
-      margin-bottom: 12px;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 14px;
     }
     .cue-bullets {
       margin-left: 20px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
       line-height: 1.8;
       color: var(--text-main);
     }
@@ -29,47 +30,92 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      background: var(--bg-primary);
-      padding: 12px 18px;
-      border-radius: 8px;
+      background: var(--bg-card);
+      padding: 14px 20px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       width: fit-content;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--card-shadow);
     }
     .timer-display {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 800;
-      color: var(--accent);
+      color: var(--primary);
     }
     .vocab-pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 10px;
+      margin-top: 14px;
     }
     .pill {
-      background: var(--accent-light);
-      color: var(--accent);
-      padding: 4px 10px;
+      background: rgba(79, 70, 229, 0.08);
+      color: var(--primary);
+      border: 1px solid rgba(79, 70, 229, 0.2);
+      padding: 6px 12px;
       border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
     }
+
+    /* Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(9, 13, 22, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .modal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+    }
+    .plan-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-primary);
+    }
+    .plan-card.selected {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.08);
+    }
+    .pay-btn-group { display: flex; gap: 14px; margin: 16px 0 24px; }
+    .pay-method-btn {
+      flex: 1; height: 52px; border-radius: 12px; border: 1px solid var(--border);
+      background: var(--bg-primary); display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .pay-method-btn.selected { border-color: var(--primary); background: #fff; }
+    .pay-method-btn svg { height: 28px; width: auto; }
   </style>
 </head>
 <body>
 
   <header class="navbar">
-    <a href="dashboard.html" class="brand-title">IELTS <span>VocabMaster</span></a>
+    <a href="index.html" class="brand-title">
+      IELTS <span>VocabMaster</span>
+      <span class="brand-badge">PRO</span>
+    </a>
     <div class="nav-actions">
       <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
-      <div class="user-profile-badge">
-        <div class="avatar">S</div>
-        <div>
-          <div style="font-weight: 600; font-size: 14px;">Saidul</div>
-          <span style="font-size: 11px; color: var(--accent);">Target: 7.5</span>
-        </div>
-      </div>
+      <button onclick="openUpgradeModal()" class="btn btn-primary" style="padding: 8px 16px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        ⭐ Upgrade to Pro
+      </button>
     </div>
   </header>
 
@@ -85,45 +131,88 @@
     </aside>
 
     <main class="main-content">
-      <div style="margin-bottom: 20px;">
-        <h1 style="font-size: 24px; font-weight: 700;">IELTS Speaking Practice</h1>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
-          Part 2 Cue Card: ১ মিনিট প্রস্তুতি নিয়ে ২ মিনিট কথা বলার অনুশীলন করুন।
-        </p>
+      <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 28px; font-weight: 800;">Speaking Part 2: Cue Card Lab</h1>
+        <p style="color: var(--text-muted); font-size: 15px; margin-top: 4px;">১ মিনিট প্রিপারেশন টাইমারসহ স্পিকিং টপিক ও হাই-ব্যান্ড ভোকাবুলারি।</p>
       </div>
 
       <div class="timer-box">
         <span>⏱️ Preparation Timer:</span>
         <span class="timer-display" id="timer">01:00</span>
-        <button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="startTimer()">Start 1 Min</button>
+        <button class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;" onclick="startTimer()">Start 1 Min</button>
       </div>
 
       <div class="cue-card">
         <div class="cue-title">Describe an environmental law or rule you would like to see implemented.</div>
         <ul class="cue-bullets">
           <li>What this law or rule would be</li>
-          <li>How it would be introduced</li>
+          <li>How it would be introduced and managed</li>
           <li>What kinds of people it would affect</li>
           <li>And explain why you think this rule is needed</li>
         </ul>
 
-        <hr style="border: 0; border-top: 1px solid var(--border); margin: 16px 0;">
+        <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
 
         <div>
-          <strong style="font-size: 14px; color: var(--text-main);">Useful High-Band Vocabulary:</strong>
+          <strong style="font-size: 14px; color: var(--text-main);">Suggested Band 8.0+ Vocabulary:</strong>
           <div class="vocab-pills">
             <span class="pill">mitigate degradation</span>
             <span class="pill">stringent regulations</span>
             <span class="pill">carbon footprint</span>
-            <span class="pill">renewable alternatives</span>
             <span class="pill">deterrent effect</span>
           </div>
         </div>
       </div>
+
+      <button class="btn btn-outline" style="width: 100%; border-radius: 12px; padding: 14px;" onclick="openUpgradeModal()">
+        🔒 Unlock Part 1, Part 3 & 100+ Cambridge Cue Cards (PRO)
+      </button>
     </main>
   </div>
 
+  <!-- Upgrade Modal -->
+  <div class="modal-overlay" id="upgradeModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 style="font-size: 20px; font-weight: 800;">💎 Unlock Complete Speaking Vault</h2>
+        <button style="border:none; background:none; font-size: 20px; cursor:pointer;" onclick="closeUpgradeModal()">✕</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 18px;">
+        Cambridge Speaking এর সব কিউ-কার্ড, মডেল অ্যানসার ও এক্সামিনার সলিউশন আনলক করুন।
+      </p>
+
+      <div class="plan-card" onclick="selectPlan(this)">
+        <div><strong>1 Month Access</strong><div style="font-size: 12px; color: var(--text-muted);">শুরুর প্রস্তুতি</div></div>
+        <strong style="color: var(--primary);">৳ 350</strong>
+      </div>
+      <div class="plan-card selected" onclick="selectPlan(this)">
+        <div><strong>3 Months Access</strong><div style="font-size: 12px; color: var(--text-muted);">বেস্ট ভ্যালু প্যাক</div></div>
+        <strong style="color: var(--primary);">৳ 850</strong>
+      </div>
+      <div class="plan-card" onclick="selectPlan(this)">
+        <div><strong>6 Months Access</strong><div style="font-size: 12px; color: var(--text-muted);">ফুল প্যাকেজ</div></div>
+        <strong style="color: var(--primary);">৳ 1,500</strong>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 8px;">Select Payment Method:</label>
+        <div class="pay-btn-group">
+          <button type="button" class="pay-method-btn bkash selected" onclick="selectPay(this)">
+            <svg viewBox="0 0 148 57" fill="none"><path fill="#D12053" d="M16.5 0L0 28.5L16.5 57H131.5L148 28.5L131.5 0H16.5Z"/><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="24">bKash</text></svg>
+          </button>
+          <button type="button" class="pay-method-btn nagad" onclick="selectPay(this)">
+            <svg viewBox="0 0 148 57" fill="none"><rect width="148" height="57" rx="10" fill="#F7941D"/><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="24">Nagad</text></svg>
+          </button>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 13px;" onclick="alert('বিকাশ/নগদ পেমেন্ট সিস্টেমে রিডাইরেক্ট করা হচ্ছে...')">Proceed to Pay →</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
     const themeBtn = document.getElementById('themeBtn');
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -131,10 +220,6 @@
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    }
 
     let timeLeft = 60;
     let timerId = null;
@@ -148,9 +233,20 @@
         document.getElementById('timer').innerText = `00:${seconds}`;
         if (timeLeft <= 0) {
           clearInterval(timerId);
-          alert("১ মিনিট প্রস্তুতির সময় শেষ! এবার কথা বলা শুরু করুন।");
+          alert("১ মিনিট শেষ! কথা বলা শুরু করুন।");
         }
       }, 1000);
+    }
+
+    function openUpgradeModal() { document.getElementById('upgradeModal').style.display = 'flex'; }
+    function closeUpgradeModal() { document.getElementById('upgradeModal').style.display = 'none'; }
+    function selectPlan(el) {
+      document.querySelectorAll('.plan-card').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+    function selectPay(el) {
+      document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
     }
   </script>
 </body>
