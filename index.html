@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IELTS VocabMaster - Master Cambridge & Band 8.0 Skills</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Hero Aesthetics */
+    /* Hero Section */
     .hero-container {
       text-align: center;
-      padding: 70px 20px 50px;
+      padding: 60px 20px 40px;
       max-width: 860px;
       margin: 0 auto;
     }
@@ -20,38 +20,39 @@
       gap: 8px;
       padding: 6px 16px;
       border-radius: 30px;
-      background: rgba(99, 102, 241, 0.12);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      color: #818cf8;
+      background: rgba(79, 70, 229, 0.08);
+      border: 1px solid rgba(79, 70, 229, 0.25);
+      color: var(--primary);
       font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      backdrop-filter: blur(8px);
+      font-weight: 700;
+      margin-bottom: 20px;
     }
 
     .hero-title {
-      font-size: 48px;
+      font-size: 46px;
       font-weight: 800;
-      line-height: 1.15;
+      line-height: 1.18;
       letter-spacing: -1px;
       margin-bottom: 18px;
+      color: var(--text-main);
     }
 
     .hero-title-gradient {
-      background: linear-gradient(135deg, #6366f1 20%, #a855f7 60%, #ec4899 100%);
+      background: linear-gradient(135deg, #4f46e5 20%, #7c3aed 60%, #db2777 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .hero-subtitle {
-      font-size: 18px;
+      font-size: 17px;
       color: var(--text-muted);
-      line-height: 1.6;
-      max-width: 660px;
-      margin: 0 auto 36px;
+      line-height: 1.65;
+      max-width: 680px;
+      margin: 0 auto 32px;
+      font-weight: 500;
     }
 
-    /* Modern Spotlight Search Bar */
+    /* Search Bar */
     .search-box {
       max-width: 580px;
       margin: 0 auto 36px;
@@ -61,18 +62,18 @@
     .search-box input {
       width: 100%;
       padding: 16px 20px 16px 48px;
-      border-radius: 16px;
+      border-radius: 14px;
       background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-main);
       font-size: 15px;
+      font-weight: 500;
       outline: none;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
     }
 
     .search-box input:focus {
-      border-color: #6366f1;
+      border-color: var(--primary);
       box-shadow: 0 0 0 3px var(--primary-glow);
     }
 
@@ -82,13 +83,13 @@
       top: 50%;
       transform: translateY(-50%);
       font-size: 16px;
-      color: var(--text-muted);
+      color: var(--text-subtle);
     }
 
-    /* High-End Feature Module Cards */
+    /* Feature Module Cards */
     .modules-section {
       max-width: 1200px;
-      margin: 20px auto 80px;
+      margin: 10px auto 80px;
       padding: 0 24px;
     }
 
@@ -101,71 +102,57 @@
     .module-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 18px;
       padding: 28px;
       text-decoration: none;
       color: var(--text-main);
-      backdrop-filter: blur(14px);
-      position: relative;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 200px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-    }
-
-    .module-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 3px;
-      background: var(--primary-gradient);
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      min-height: 210px;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
     }
 
     .module-card:hover {
-      transform: translateY(-6px);
-      background: var(--bg-card-hover);
-      border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.22);
-    }
-
-    .module-card:hover::before {
-      opacity: 1;
+      transform: translateY(-5px);
+      box-shadow: var(--card-shadow-hover);
+      border-color: rgba(79, 70, 229, 0.35);
     }
 
     .module-icon-wrap {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      background: rgba(99, 102, 241, 0.12);
-      border: 1px solid rgba(99, 102, 241, 0.25);
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: rgba(79, 70, 229, 0.08);
+      border: 1px solid rgba(79, 70, 229, 0.15);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 24px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .module-title {
       font-size: 19px;
       font-weight: 700;
       margin-bottom: 8px;
-      letter-spacing: -0.3px;
+      color: var(--text-main);
     }
 
     .module-desc {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.55;
+      font-weight: 500;
     }
 
     .module-arrow {
       margin-top: 18px;
       font-size: 13px;
-      font-weight: 600;
-      color: #818cf8;
+      font-weight: 700;
+      color: var(--primary);
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -173,14 +160,14 @@
 
     @media (max-width: 600px) {
       .hero-title {
-        font-size: 34px;
+        font-size: 32px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Sleek Navbar -->
+  <!-- Top Bar -->
   <header class="navbar">
     <a href="index.html" class="brand-title">
       IELTS <span>VocabMaster</span>
@@ -197,7 +184,7 @@
   <main>
     <section class="hero-container">
       <div class="pill-badge">
-        ✨ Powered by Cambridge 10–19 Standards
+        ✨ Cambridge 10–19 Exam Standard
       </div>
       
       <h1 class="hero-title">
@@ -215,12 +202,11 @@
         <input type="text" placeholder="Search IELTS Vocabulary, Tests, Reading Topics...">
       </div>
 
-      <!-- Hero Call-To-Actions -->
       <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
-        <a href="signup.html" class="btn btn-primary" style="padding: 14px 32px; font-size: 15px; border-radius: 12px;">
+        <a href="signup.html" class="btn btn-primary" style="padding: 13px 28px; font-size: 15px; border-radius: 12px;">
           Create Free Account →
         </a>
-        <a href="vocabulary.html" class="btn btn-outline" style="padding: 14px 28px; font-size: 15px; border-radius: 12px;">
+        <a href="vocabulary.html" class="btn btn-outline" style="padding: 13px 28px; font-size: 15px; border-radius: 12px;">
           Explore Demo Vault
         </a>
       </div>
@@ -289,7 +275,10 @@
   </main>
 
   <script>
-    // Theme toggle
+    // বাই ডিফল্ট লাইট মোড চালু থাকবে
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
     const themeBtn = document.getElementById('themeBtn');
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -297,11 +286,6 @@
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
-
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    }
   </script>
 </body>
 </html>
