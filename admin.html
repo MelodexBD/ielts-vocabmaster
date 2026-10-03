@@ -6,21 +6,18 @@
   <title>Admin Dashboard - IELTS Vocab Master</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Admin Metric Cards */
     .metric-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
       margin-bottom: 28px;
     }
-
     .metric-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 20px;
     }
-
     .metric-title {
       font-size: 13px;
       color: var(--text-muted);
@@ -28,100 +25,31 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-
     .metric-value {
       font-size: 28px;
       font-weight: 800;
       color: var(--text-main);
       margin-top: 8px;
     }
-
-    /* Admin Tabs */
-    .admin-tabs {
-      display: flex;
-      gap: 8px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 24px;
-      overflow-x: auto;
-    }
-
-    .tab-item {
-      padding: 10px 18px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      white-space: nowrap;
-    }
-
-    .tab-item.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-
-    /* Form Layout */
     .admin-form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 16px;
     }
-
-    .form-group-full {
-      grid-column: 1 / -1;
-    }
-
-    /* Data Table */
+    .form-group-full { grid-column: 1 / -1; }
+    
     .table-container {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow-x: auto;
+      margin-top: 16px;
     }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 14px;
-    }
-
-    th {
-      background: var(--bg-sidebar);
-      padding: 14px 16px;
-      font-weight: 600;
-      color: var(--text-muted);
-      border-bottom: 1px solid var(--border);
-    }
-
-    td {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    .badge-free {
-      background: rgba(148, 163, 184, 0.15);
-      color: var(--text-muted);
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .badge-premium {
-      background: rgba(234, 179, 8, 0.15);
-      color: #eab308;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: 600;
-    }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+    th { background: var(--bg-secondary); padding: 14px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+    td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    .banner-thumb { width: 70px; height: 42px; border-radius: 6px; object-fit: cover; }
   </style>
 </head>
 <body>
@@ -133,25 +61,25 @@
     </a>
     <div class="nav-actions">
       <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
-      <a href="dashboard.html" class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;">View Website</a>
+      <a href="index.html" class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;">View Website</a>
     </div>
   </header>
 
   <div class="app-container">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <a href="#" class="nav-link active" onclick="switchAdminTab('vocabTab', this)">📖 Vocab Management</a>
+      <a href="#" class="nav-link active" onclick="switchAdminTab('bannersTab', this)">🖼️ Banner Slider</a>
+      <a href="#" class="nav-link" onclick="switchAdminTab('vocabTab', this)">📖 Vocab Management</a>
       <a href="#" class="nav-link" onclick="switchAdminTab('booksTab', this)">📚 Books & Tests</a>
       <a href="#" class="nav-link" onclick="switchAdminTab('usersTab', this)">👥 Users & Payments</a>
       <a href="#" class="nav-link" onclick="switchAdminTab('plansTab', this)">💎 Premium Plans</a>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
       <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 24px; font-weight: 700;">System Overview & Controls</h1>
+        <h1 style="font-size: 24px; font-weight: 700;">Admin Management Control</h1>
         <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
-          ওয়েবসাইটের কন্টেন্ট, সাবস্ক্রিপশন ও ইউজারদের পরিচালনা করুন।
+          ওয়েবসাইটের ব্যানার স্লাইডার, ভোকাবুলারি এবং ইউজার ম্যানেজমেন্ট কন্ট্রোল করুন।
         </p>
       </div>
 
@@ -170,151 +98,91 @@
           <div class="metric-value" style="color: var(--accent);">4,520</div>
         </div>
         <div class="metric-card">
-          <div class="metric-title">Monthly Revenue</div>
-          <div class="metric-value" style="color: var(--success);">৳ 1,56,000</div>
+          <div class="metric-title">Active Banners</div>
+          <div class="metric-value" id="totalBannersCount" style="color: var(--success);">3</div>
         </div>
       </div>
 
-      <!-- TAB 1: ADD VOCABULARY -->
-      <div id="vocabTab">
+      <!-- TAB 1: BANNER SLIDER MANAGEMENT -->
+      <div id="bannersTab">
         <div class="card">
-          <h2 style="font-size: 18px; margin-bottom: 16px;">➕ Add New Vocabulary Word</h2>
-          <form onsubmit="handleWordSubmit(event)">
+          <h2 style="font-size: 18px; margin-bottom: 16px;">➕ Add New Slide Banner</h2>
+          <form onsubmit="handleBannerAdd(event)">
             <div class="admin-form-grid">
-              
               <div class="form-group">
-                <label>Book</label>
-                <select class="filter-select" required>
-                  <option>Cambridge 19</option>
-                  <option>Cambridge 18</option>
-                  <option>Cambridge 17</option>
-                  <option>Academic Word List</option>
-                </select>
+                <label style="font-size: 13px; font-weight: 600;">Badge Title</label>
+                <input type="text" id="bBadge" class="filter-select" placeholder="e.g. Masterclass or New Book" required>
               </div>
-
               <div class="form-group">
-                <label>Test & Section</label>
-                <input type="text" class="filter-select" placeholder="e.g. Test 1, Passage 2" required>
+                <label style="font-size: 13px; font-weight: 600;">Slide Heading</label>
+                <input type="text" id="bTitle" class="filter-select" placeholder="e.g. Cambridge 20 Released" required>
               </div>
-
-              <div class="form-group">
-                <label>Word (English)</label>
-                <input type="text" class="filter-select" placeholder="e.g. ABUNDANT" required>
-              </div>
-
-              <div class="form-group">
-                <label>Bengali Meaning</label>
-                <input type="text" class="filter-select" placeholder="e.g. প্রচুর / পর্যাপ্তের বেশি" required>
-              </div>
-
-              <div class="form-group">
-                <label>UK Pronunciation Audio URL / Path</label>
-                <input type="text" class="filter-select" placeholder="storage/audio/word-uk.mp3">
-              </div>
-
-              <div class="form-group">
-                <label>US Pronunciation Audio URL / Path</label>
-                <input type="text" class="filter-select" placeholder="storage/audio/word-us.mp3">
-              </div>
-
-              <div class="form-group">
-                <label>Synonyms (Comma separated)</label>
-                <input type="text" class="filter-select" placeholder="Plentiful, Ample, Copious">
-              </div>
-
-              <div class="form-group">
-                <label>Antonyms (Comma separated)</label>
-                <input type="text" class="filter-select" placeholder="Scarce, Limited">
-              </div>
-
               <div class="form-group-full">
-                <label>Example Sentence</label>
-                <textarea class="filter-select" style="height: 70px; resize: vertical;" placeholder="The region has an abundant supply of water..."></textarea>
+                <label style="font-size: 13px; font-weight: 600;">Image URL</label>
+                <input type="url" id="bImage" class="filter-select" placeholder="https://example.com/banner.jpg" required>
               </div>
-
-              <div class="form-group">
-                <label>Access Level</label>
-                <select class="filter-select">
-                  <option value="free">Free Access</option>
-                  <option value="premium">Premium Only</option>
-                </select>
+              <div class="form-group-full">
+                <label style="font-size: 13px; font-weight: 600;">Short Description</label>
+                <textarea id="bDesc" class="filter-select" style="height: 60px;" placeholder="ব্যানারের সংক্ষিপ্ত বর্ণনা..."></textarea>
               </div>
-
             </div>
-
-            <div style="margin-top: 16px;">
-              <button type="submit" class="btn btn-primary" style="padding: 10px 24px;">Publish Vocabulary</button>
-            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 16px;">Add Slide Banner</button>
           </form>
         </div>
+
+        <div class="card">
+          <h2 style="font-size: 18px; margin-bottom: 12px;">Active Slides List</h2>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Preview</th>
+                  <th>Badge</th>
+                  <th>Title</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="bannerTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
-      <!-- TAB 2: BOOKS & TESTS (Hidden by default) -->
+      <!-- TAB 2: VOCABULARY MANAGEMENT -->
+      <div id="vocabTab" style="display: none;">
+        <div class="card">
+          <h2 style="font-size: 18px; margin-bottom: 16px;">➕ Add Vocabulary Word</h2>
+          <div class="admin-form-grid">
+            <div class="form-group"><input type="text" class="filter-select" placeholder="Word (e.g. MITIGATE)"></div>
+            <div class="form-group"><input type="text" class="filter-select" placeholder="Meaning in Bengali"></div>
+          </div>
+          <button class="btn btn-primary" style="margin-top: 14px;">Publish Vocabulary</button>
+        </div>
+      </div>
+
+      <!-- TAB 3: BOOKS (Placeholder) -->
       <div id="booksTab" style="display: none;">
         <div class="card">
-          <h2 style="font-size: 18px; margin-bottom: 16px;">📚 Add Dynamic Book / Category</h2>
-          <div style="display: flex; gap: 12px; max-width: 500px;">
-            <input type="text" class="filter-select" placeholder="e.g. Cambridge 20 or Collocation">
-            <button class="btn btn-primary" style="white-space: nowrap;">Add Book</button>
-          </div>
+          <h2>📚 Books Configuration</h2>
+          <p style="color: var(--text-muted); margin-top: 6px;">Cambridge 10-19 Books Management</p>
         </div>
       </div>
 
-      <!-- TAB 3: USERS & PAYMENTS (Hidden by default) -->
+      <!-- TAB 4: USERS (Placeholder) -->
       <div id="usersTab" style="display: none;">
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Target Band</th>
-                <th>Status</th>
-                <th>Payment Method</th>
-                <th>TrxID</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Saidul Islam<br><span style="font-size: 12px; color: var(--text-muted);">saidul@email.com</span></td>
-                <td>7.5</td>
-                <td><span class="badge-premium">Premium (6 Months)</span></td>
-                <td>bKash</td>
-                <td>9KJ2091SA8</td>
-                <td><button class="btn btn-outline" style="padding: 4px 8px; font-size: 12px;">Edit</button></td>
-              </tr>
-              <tr>
-                <td>Rahim Ahmed<br><span style="font-size: 12px; color: var(--text-muted);">rahim@email.com</span></td>
-                <td>6.5</td>
-                <td><span class="badge-free">Free User</span></td>
-                <td>-</td>
-                <td>-</td>
-                <td><button class="btn btn-outline" style="padding: 4px 8px; font-size: 12px;">Edit</button></td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="card">
+          <h2>👥 Subscriptions & Payments</h2>
+          <p style="color: var(--text-muted); margin-top: 6px;">Manage bKash/Nagad transactions.</p>
         </div>
       </div>
 
-      <!-- TAB 4: PLANS (Hidden by default) -->
+      <!-- TAB 5: PLANS (Placeholder) -->
       <div id="plansTab" style="display: none;">
         <div class="card">
-          <h2 style="font-size: 18px; margin-bottom: 16px;">💎 Subscription Pricing Plans</h2>
-          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">
-            প্ল্যানের মেয়াদ ও মূল্য কোড পরিবর্তন না করেই এখান থেকে নিয়ন্ত্রণ করা যাবে।
-          </p>
-          <div class="admin-form-grid">
-            <div class="card" style="margin-bottom: 0;">
-              <h4>1 Month Plan</h4>
-              <p style="margin: 8px 0; font-size: 20px; font-weight: 700; color: var(--accent);">৳ 350</p>
-              <button class="btn btn-outline" style="width: 100%;">Update Price</button>
-            </div>
-            <div class="card" style="margin-bottom: 0;">
-              <h4>6 Months Plan</h4>
-              <p style="margin: 8px 0; font-size: 20px; font-weight: 700; color: var(--accent);">৳ 1,500</p>
-              <button class="btn btn-outline" style="width: 100%;">Update Price</button>
-            </div>
-          </div>
+          <h2>💎 Premium Plans</h2>
+          <p style="color: var(--text-muted); margin-top: 6px;">Update pricing plans.</p>
         </div>
       </div>
 
@@ -331,29 +199,85 @@
       localStorage.setItem('theme', newTheme);
     });
 
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    }
-
-    // Tab Switcher Logic
+    // Tab switcher
     function switchAdminTab(tabId, el) {
-      document.getElementById('vocabTab').style.display = 'none';
-      document.getElementById('booksTab').style.display = 'none';
-      document.getElementById('usersTab').style.display = 'none';
-      document.getElementById('plansTab').style.display = 'none';
-
+      document.querySelectorAll('#bannersTab, #vocabTab, #booksTab, #usersTab, #plansTab').forEach(tab => tab.style.display = 'none');
       document.getElementById(tabId).style.display = 'block';
-
-      const navLinks = document.querySelectorAll('.sidebar .nav-link');
-      navLinks.forEach(link => link.classList.remove('active'));
+      document.querySelectorAll('.sidebar .nav-link').forEach(link => link.classList.remove('active'));
       el.classList.add('active');
     }
 
-    function handleWordSubmit(e) {
-      e.preventDefault();
-      alert('নতুন ভোকাবুলারি সফলভাবে যুক্ত হয়েছে!');
+    // Default banners
+    const defaultSlides = [
+      {
+        id: 1,
+        badge: "Special Masterclass",
+        title: "Cambridge 10–19 Vocabulary & High-Band Solutions",
+        desc: "প্রতিটি টেস্টের গুরুত্বপূর্ণ সিনোনিম, অ্যান্টনিম ও এক্সপ্ল্যানেশনসহ রিভিশন করুন।",
+        image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: 2,
+        badge: "Band 8.0 Strategy",
+        title: "Target Band 8.0: Intensive Reading & Listening Practice",
+        desc: "আসল পরীক্ষার মতো টাইমড প্র্যাকটিস ও অডিও ট্র্যাক প্লেয়ার নিয়ে প্রস্তুতি নিন।",
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: 3,
+        badge: "Speaking & Writing Vault",
+        title: "Latest Cue Cards & Task 2 Essay Outlines",
+        desc: "স্মার্ট ভোকাবুলারি পিল ও মডেল উত্তরের মাধ্যমে আপনার রাইটিং স্কিল বাড়ান।",
+        image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1200&q=80"
+      }
+    ];
+
+    let currentBanners = JSON.parse(localStorage.getItem('hero_banners')) || defaultSlides;
+
+    function renderBannerTable() {
+      const tbody = document.getElementById('bannerTableBody');
+      tbody.innerHTML = '';
+      document.getElementById('totalBannersCount').innerText = currentBanners.length;
+
+      currentBanners.forEach((b, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><img src="${b.image}" class="banner-thumb"></td>
+          <td><span class="badge">${b.badge}</span></td>
+          <td><strong>${b.title}</strong></td>
+          <td>
+            <button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px; color: #ef4444; border-color: #ef4444;" onclick="deleteBanner(${i})">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
+
+    function handleBannerAdd(e) {
+      e.preventDefault();
+      const newSlide = {
+        id: Date.now(),
+        badge: document.getElementById('bBadge').value,
+        title: document.getElementById('bTitle').value,
+        image: document.getElementById('bImage').value,
+        desc: document.getElementById('bDesc').value
+      };
+      currentBanners.push(newSlide);
+      localStorage.setItem('hero_banners', JSON.stringify(currentBanners));
+      renderBannerTable();
+      e.target.reset();
+      alert('নতুন ব্যানার সফলভাবে হোমপেজে যুক্ত হয়েছে!');
+    }
+
+    function deleteBanner(index) {
+      if (confirm('আপনি কি এই স্লাইডটি ডিলিট করতে চান?')) {
+        currentBanners.splice(index, 1);
+        localStorage.setItem('hero_banners', JSON.stringify(currentBanners));
+        renderBannerTable();
+      }
+    }
+
+    renderBannerTable();
   </script>
 </body>
 </html>
