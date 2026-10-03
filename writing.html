@@ -221,6 +221,7 @@
       const words = text ? text.split(/\s+/).length : 0;
       document.getElementById('wordCount').innerText = words;
     }
+
     function openUpgradeModal() { document.getElementById('upgradeModal').style.display = 'flex'; }
     function closeUpgradeModal() { document.getElementById('upgradeModal').style.display = 'none'; }
     function selectPlan(el) {
@@ -230,6 +231,30 @@
     function selectPay(el) {
       document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
       el.classList.add('selected');
+    }
+
+    // ==========================================
+    // ৩ নম্বরের কোড (প্রোফাইল ড্রপডাউন ও লগআউট)
+    // ==========================================
+    function toggleProfileDropdown(e) {
+      e.stopPropagation();
+      const dropdown = document.getElementById('profileDropdown');
+      if (dropdown) dropdown.classList.toggle('show');
+    }
+
+    window.addEventListener('click', function(e) {
+      if (!e.target.closest('.profile-menu-container')) {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown && dropdown.classList.contains('show')) {
+          dropdown.classList.remove('show');
+        }
+      }
+    });
+
+    function handleLogout() {
+      if (confirm("Are you sure you want to log out?")) {
+        window.location.href = "index.html";
+      }
     }
   </script>
 </body>
