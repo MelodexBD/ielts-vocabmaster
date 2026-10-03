@@ -6,7 +6,8 @@ const words = [
   { id: 'coherent', word: 'Coherent', meaning: 'সুসংগত / স্পষ্ট', synonyms: ['Logical', 'Consistent', 'Clear'], antonyms: ['Confused', 'Incoherent'], example: 'A coherent essay is easy to understand.', category: 'Academic Vocabulary' },
   { id: 'feasible', word: 'Feasible', meaning: 'সম্ভব / বাস্তবসম্মত', synonyms: ['Practical', 'Viable', 'Achievable'], antonyms: ['Impossible', 'Impractical'], example: 'The plan is feasible within the budget.', category: 'Cambridge 19' },
   { id: 'deteriorate', word: 'Deteriorate', meaning: 'অবনতি হওয়া', synonyms: ['Decline', 'Worsen', 'Degrade'], antonyms: ['Improve', 'Recover'], example: 'The local economy began to deteriorate.', category: 'Essential Vocabulary' },
-  { id: 'inevitable', word: 'Inevitable', meaning: 'অনিবার্য', synonyms: ['Unavoidable', 'Certain', 'Inescapable'], antonyms: ['Avoidable', 'Optional'], example: 'Some change is inevitable in a growing city.', category: 'Cambridge 19' }
+  { id: 'inevitable', word: 'Inevitable', meaning: 'অনিবার্য', synonyms: ['Unavoidable', 'Certain', 'Inescapable'], antonyms: ['Avoidable', 'Optional'], example: 'Some change is inevitable in a growing city.', category: 'Cambridge 19' },
+  { id: 'alleviate', word: 'Alleviate', meaning: 'লাঘব করা / কমানো', synonyms: ['Ease', 'Relieve', 'Reduce'], antonyms: ['Worsen', 'Aggravate'], example: 'New policies may alleviate traffic pressure.', category: 'Essential Vocabulary' }
 ];
 
 const demoBooks = ['Cambridge 10', 'Cambridge 11', 'Cambridge 12', 'Cambridge 19'];
@@ -14,6 +15,7 @@ const demoCategories = ['Academic Vocabulary', 'Essential Vocabulary', 'Advanced
 
 const initialState = {
   user: JSON.parse(localStorage.getItem('ivm-user') || 'null'),
+  pendingUser: null,
   theme: localStorage.getItem('ivm-theme') || 'light',
   favourites: JSON.parse(localStorage.getItem('ivm-favourites') || '[]'),
   learned: JSON.parse(localStorage.getItem('ivm-learned') || '[]'),
@@ -30,18 +32,14 @@ const app = document.querySelector('#app');
 
 const persist = (key, value) => localStorage.setItem(`ivm-${key}`, JSON.stringify(value));
 const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+const getInitials = (name = 'Learner') => (name || 'Learner').trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase() || '').join('') || 'L';
+const getFirstName = (name = 'Learner') => (name || 'Learner').trim().split(/\s+/).filter(Boolean)[0] || 'Learner';
 
 function render() {
   document.documentElement.dataset.theme = state.theme;
 
   if (!state.user) {
-    if (state.authView === 'signup') {
-      app.innerHTML = renderSignup();
-    } else if (state.authView === 'setup') {
-      app.innerHTML = renderSetup();
-    } else {
-      app.innerHTML = renderHome();
-    }
+    app.innerHTML = state.authView === 'signup' ? renderSignup() : state.authView === 'setup' ? renderSetup() : renderHome();
     bindEvents();
     return;
   }
@@ -58,8 +56,8 @@ function render() {
         <div class="top-actions">
           <button class="icon-button" type="button" data-action="theme" aria-label="Toggle theme">${state.theme === 'light' ? '☾' : '☀'}</button>
           <button class="user-chip" type="button" data-view="Profile">
-            <span class="avatar">${escapeHtml((state.user.name || 'L').trim().charAt(0).toUpperCase())}</span>
-            <span>${escapeHtml((state.user.name || 'Learner').trim().split(/\s+/)[0])}</span>
+            <span class="avatar">${escapeHtml(getInitials(state.user.name))}</span>
+            <span>${escapeHtml(getFirstName(state.user.name))}</span>
           </button>
         </div>
       </header>
@@ -88,18 +86,24 @@ function renderHome() {
       <section class="public-hero">
         <div class="hero-copy">
           <span class="eyebrow">PREPARE SMARTER FOR IELTS</span>
-          <h1>Improve your vocabulary and IELTS skills.</h1>
-          <p class="muted">Focused learning, strong daily habits, and a clean dashboard built for Bangladeshi learners.</p>
+          <h1>Grow your vocabulary and IELTS confidence.</h1>
+          <p class="muted">Daily vocabulary, skill practice, smart tracking, and a clean study routine built around real IELTS goals.</p>
           <div class="hero-actions">
             <button class="button button-primary" type="button" data-action="public-start">Start Learning</button>
             <button class="button button-soft" type="button" data-action="open-signup">Create Account</button>
           </div>
+          <div class="hero-mini-stats">
+            <div><strong>25+</strong><span>daily words</span></div>
+            <div><strong>4</strong><span>skill tracks</span></div>
+            <div><strong>7.5</strong><span>target band</span></div>
+          </div>
         </div>
+
         <div class="hero-visual">
           <div class="visual-orbit"></div>
           <div class="glass-card">
             <span class="eyebrow">TODAY'S FOCUS</span>
-            <h3>Vocabulary</h3>
+            <h3>Academic words</h3>
             <ul>
               <li>Abundant</li>
               <li>Coherent</li>
@@ -232,12 +236,13 @@ function sidebar() {
           </div>
         </div>
         <button class="sidebar-profile" type="button" data-view="Profile">
-          <span class="avatar">${escapeHtml((state.user.name || 'L').trim().charAt(0).toUpperCase())}</span>
-          <span>
-            <b>${escapeHtml((state.user.name || 'Learner').trim().split(/\s+/)[0])}</b>
+          <span class="avatar">${escapeHtml(getInitials(state.user.name))}</span>
+          <span class="profile-copy">
+            <b>${escapeHtml(getFirstName(state.user.name))}</b>
             <small>${escapeHtml(state.user.examType || 'Academic')} · Target ${state.user.targetBand || '7.5'}</small>
           </span>
         </button>
+        <button class="sign-out-button" type="button" data-action="sign-out">Log out</button>
       </div>
     </aside>
   `;
@@ -260,7 +265,7 @@ function pageContent() {
 }
 
 function dashboard() {
-  const firstName = escapeHtml((state.user.name || 'Learner').trim().split(/\s+/)[0]);
+  const firstName = escapeHtml(getFirstName(state.user.name));
   const progress = state.user.progress || { Vocabulary: 68, Reading: 42, Listening: 35, Speaking: 28, Writing: 20 };
 
   return `
@@ -380,7 +385,7 @@ function wordCard(word) {
   return `
     <article class="word-card">
       <div class="word-card-top">
-        <button class="icon-button favorite-button ${favourite ? 'is-favourite' : ''}" type="button" data-word-action="favorite" data-id="${word.id}">${favourite ? '♥' : '♡'}</button>
+        <button class="icon-button favorite-button ${favourite ? 'is-favourite' : ''}" type="button" data-word-action="favorite" data-id="${word.id}" aria-label="Toggle favourite">${favourite ? '♥' : '♡'}</button>
         <div class="word-card-actions">
           <button class="chip" type="button" data-word-action="speak-uk" data-id="${word.id}">🔊 UK</button>
           <button class="chip" type="button" data-word-action="speak-us" data-id="${word.id}">🔊 US</button>
@@ -613,6 +618,14 @@ function bindEvents() {
 
   document.querySelector('[data-action="start-learning"]')?.addEventListener('click', () => {
     state.view = 'Vocabulary';
+    render();
+  });
+
+  document.querySelector('[data-action="sign-out"]')?.addEventListener('click', () => {
+    localStorage.removeItem('ivm-user');
+    state.user = null;
+    state.authView = 'home';
+    state.view = 'Dashboard';
     render();
   });
 
