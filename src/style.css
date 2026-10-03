@@ -13,7 +13,7 @@ const words = [
 const demoBooks = ['Cambridge 10', 'Cambridge 11', 'Cambridge 12', 'Cambridge 19'];
 const demoCategories = ['Academic Vocabulary', 'Essential Vocabulary', 'Advanced Vocabulary', 'Cambridge 19'];
 
-const initialState = {
+const state = {
   user: JSON.parse(localStorage.getItem('ivm-user') || 'null'),
   pendingUser: null,
   theme: localStorage.getItem('ivm-theme') || 'light',
@@ -27,9 +27,7 @@ const initialState = {
   filter: 'All'
 };
 
-const state = initialState;
 const app = document.querySelector('#app');
-
 const persist = (key, value) => localStorage.setItem(`ivm-${key}`, JSON.stringify(value));
 const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
 const getInitials = (name = 'Learner') => (name || 'Learner').trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase() || '').join('') || 'L';
@@ -73,43 +71,55 @@ function renderHome() {
   return `
     <main class="public-home">
       <header class="public-header">
-        <a class="brand" href="#home">
+        <div class="brand-block">
           <span class="brand-mark">i.</span>
-          <span>IELTS <b>VOCAB</b> MASTER</span>
-        </a>
-        <div class="public-header-actions">
-          <button class="button button-soft" type="button" data-action="open-signup">Create Account</button>
-          <button class="button button-primary" type="button" data-action="public-start">Start Learning</button>
+          <span class="brand-text">IELTS <b>VOCAB</b> MASTER</span>
+        </div>
+
+        <div class="header-controls">
+          <label class="header-search" aria-label="Search IELTS vocabulary">
+            <span class="search-icon">⌕</span>
+            <input type="search" value="" placeholder="Search IELTS vocabulary..." />
+          </label>
+          <button class="button button-light" type="button" data-action="open-signup">Create account <span>›</span></button>
         </div>
       </header>
 
-      <section class="public-hero">
-        <div class="hero-copy">
-          <span class="eyebrow">PREPARE SMARTER FOR IELTS</span>
-          <h1>Grow your vocabulary and IELTS confidence.</h1>
-          <p class="muted">Daily vocabulary, skill practice, smart tracking, and a clean study routine built around real IELTS goals.</p>
-          <div class="hero-actions">
-            <button class="button button-primary" type="button" data-action="public-start">Start Learning</button>
-            <button class="button button-soft" type="button" data-action="open-signup">Create Account</button>
-          </div>
-          <div class="hero-mini-stats">
-            <div><strong>25+</strong><span>daily words</span></div>
-            <div><strong>4</strong><span>skill tracks</span></div>
-            <div><strong>7.5</strong><span>target band</span></div>
-          </div>
+      <section class="landing-shell">
+        <div class="eyebrow">A MORE THOUGHTFUL WAY TO PREPARE</div>
+
+        <h1 class="hero-title">Prepare smarter<br>for <em>IELTS.</em></h1>
+
+        <p class="lead">Build your vocabulary, strengthen every skill, and make steady progress toward your target band.</p>
+
+        <div class="cta-row">
+          <button class="button button-dark" type="button" data-action="public-start">Start learning <span>→</span></button>
         </div>
 
-        <div class="hero-visual">
-          <div class="visual-orbit"></div>
-          <div class="glass-card">
-            <span class="eyebrow">TODAY'S FOCUS</span>
-            <h3>Academic words</h3>
-            <ul>
-              <li>Abundant</li>
-              <li>Coherent</li>
-              <li>Feasible</li>
-            </ul>
-          </div>
+        <div class="word-of-day">
+          <div class="word-label">WORD OF THE DAY 01 / 25</div>
+          <div class="word-main">Abundant</div>
+          <div class="word-bangla">অভাব নেই / প্রচুর</div>
+          <div class="word-meaning">“The region has abundant natural resources.”</div>
+          <div class="word-variants">PLENTIFUL • AMPLE • COPIOUS</div>
+        </div>
+
+        <div class="info-list">
+          <div class="info-row"><span class="bullet"></span><span>One useful word at a time.</span></div>
+          <div class="info-row"><span class="bullet"></span><span>Vocabulary that sticks</span></div>
+        </div>
+
+        <div class="bottom-copy">
+          <h2>Make every practice count.</h2>
+          <p>Start with a word. Build a habit. Get ready for the test that matters to you.</p>
+        </div>
+
+        <div class="chip-bar">
+          <span class="chip">AzVocabulary</span>
+          <span class="chip">Reading</span>
+          <span class="chip">Listening</span>
+          <span class="chip">Speaking</span>
+          <span class="chip">Writing</span>
         </div>
       </section>
     </main>
@@ -797,6 +807,5 @@ window.addEventListener('keydown', (event) => {
 });
 
 render();
-
 export {};
 
