@@ -1,45 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Ultra Premium Dark Theme (Default) */
+  /* Crisp Luxury Light Theme (DEFAULT) */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-input: #ffffff;
+  --border: #e2e8f0;
+  --border-focus: #6366f1;
+  
+  /* টেক্সট কালার অনেক বেশি স্পষ্ট ও গাঢ় করা হয়েছে */
+  --text-main: #0f172a;       /* মূল শিরোনামের জন্য ডিপ ব্ল্যাক */
+  --text-muted: #334155;      /* ছোট ও সাবটাইটেল লেখার জন্য গাঢ় স্লেট রঙ */
+  --text-subtle: #475569;     /* মেটা তথ্যের জন্য */
+  
+  --primary: #4f46e5;
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --primary-glow: rgba(79, 70, 229, 0.2);
+  --accent-gold: #d97706;
+  --success: #059669;
+  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  --card-shadow-hover: 0 12px 28px -4px rgba(79, 70, 229, 0.12);
+}
+
+[data-theme="dark"] {
+  /* Ultra Premium Dark Theme */
   --bg-primary: #090d16;
   --bg-secondary: #0f172a;
-  --bg-card: rgba(18, 26, 47, 0.7);
-  --bg-card-hover: rgba(28, 40, 72, 0.85);
-  --bg-input: rgba(15, 23, 42, 0.6);
-  --border: rgba(255, 255, 255, 0.08);
-  --border-focus: rgba(99, 102, 241, 0.5);
+  --bg-card: rgba(18, 26, 47, 0.75);
+  --bg-card-hover: rgba(28, 40, 72, 0.9);
+  --bg-input: rgba(15, 23, 42, 0.8);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-focus: rgba(99, 102, 241, 0.6);
   
   --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --text-subtle: #64748b;
+  --text-muted: #cbd5e1;      /* ডার্ক মোডেও সাবটাইটেল পরিষ্কার পড়ার উপযোগী */
+  --text-subtle: #94a3b8;
   
   --primary: #6366f1;
   --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
   --primary-glow: rgba(99, 102, 241, 0.35);
   --accent-gold: #f59e0b;
   --success: #10b981;
-}
-
-[data-theme="light"] {
-  /* Crisp Luxury Light Theme */
-  --bg-primary: #f8fafc;
-  --bg-secondary: #ffffff;
-  --bg-card: rgba(255, 255, 255, 0.9);
-  --bg-card-hover: #ffffff;
-  --bg-input: #ffffff;
-  --border: rgba(226, 232, 240, 0.9);
-  --border-focus: rgba(99, 102, 241, 0.4);
-  
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --text-subtle: #94a3b8;
-  
-  --primary: #4f46e5;
-  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
-  --primary-glow: rgba(79, 70, 229, 0.2);
-  --accent-gold: #d97706;
-  --success: #059669;
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  --card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -47,7 +52,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.2s ease, box-shadow 0.25s ease;
 }
 
 body {
@@ -58,14 +63,14 @@ body {
   flex-direction: column;
   overflow-x: hidden;
   background-image: 
-    radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 85% 60%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+    radial-gradient(circle at 10% 15%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 60%, rgba(168, 85, 247, 0.06) 0%, transparent 40%);
   background-attachment: fixed;
 }
 
 /* Navbar */
 .navbar {
-  background: var(--bg-card);
+  background: var(--bg-secondary);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
@@ -106,7 +111,7 @@ body {
 }
 
 .theme-toggle {
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   border: 1px solid var(--border);
   color: var(--text-main);
   padding: 8px 14px;
@@ -140,12 +145,12 @@ body {
 .btn-primary {
   background: var(--primary-gradient);
   color: #ffffff;
-  box-shadow: 0 4px 18px var(--primary-glow);
+  box-shadow: 0 4px 14px var(--primary-glow);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px var(--primary-glow);
+  box-shadow: 0 6px 20px var(--primary-glow);
 }
 
 .btn-outline {
@@ -160,7 +165,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* Layout */
+/* Layout & Sidebar */
 .app-container {
   display: flex;
   flex: 1;
@@ -205,13 +210,11 @@ body {
 /* Cards */
 .card {
   background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--card-shadow);
 }
 
 .grid-2 {
