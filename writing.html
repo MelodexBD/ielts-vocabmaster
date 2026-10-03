@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Writing Practice - IELTS Vocab Master</title>
+  <title>Writing Lab - IELTS VocabMaster PRO</title>
   <link rel="stylesheet" href="style.css">
   <style>
     .writing-area {
@@ -14,51 +14,92 @@
     .prompt-box {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: var(--card-shadow);
     }
     .text-editor {
       width: 100%;
       height: 380px;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
+      border-radius: 18px;
+      padding: 20px;
       color: var(--text-main);
-      font-size: 14px;
-      line-height: 1.6;
+      font-size: 15px;
+      line-height: 1.65;
       resize: vertical;
       outline: none;
+      box-shadow: var(--card-shadow);
     }
-    .text-editor:focus {
-      border-color: var(--accent);
-    }
+    .text-editor:focus { border-color: var(--primary); }
     .word-counter {
-      margin-top: 8px;
-      font-size: 13px;
+      margin-top: 10px;
+      font-size: 14px;
       color: var(--text-muted);
       text-align: right;
     }
     @media (max-width: 850px) {
-      .writing-area {
-        grid-template-columns: 1fr;
-      }
+      .writing-area { grid-template-columns: 1fr; }
     }
+
+    /* Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(9, 13, 22, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .modal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+    }
+    .plan-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-primary);
+    }
+    .plan-card.selected {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.08);
+    }
+    .pay-btn-group { display: flex; gap: 14px; margin: 16px 0 24px; }
+    .pay-method-btn {
+      flex: 1; height: 52px; border-radius: 12px; border: 1px solid var(--border);
+      background: var(--bg-primary); display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .pay-method-btn.selected { border-color: var(--primary); background: #fff; }
+    .pay-method-btn svg { height: 28px; width: auto; }
   </style>
 </head>
 <body>
 
   <header class="navbar">
-    <a href="dashboard.html" class="brand-title">IELTS <span>VocabMaster</span></a>
+    <a href="index.html" class="brand-title">
+      IELTS <span>VocabMaster</span>
+      <span class="brand-badge">PRO</span>
+    </a>
     <div class="nav-actions">
       <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
-      <div class="user-profile-badge">
-        <div class="avatar">S</div>
-        <div>
-          <div style="font-weight: 600; font-size: 14px;">Saidul</div>
-          <span style="font-size: 11px; color: var(--accent);">Target: 7.5</span>
-        </div>
-      </div>
+      <button onclick="openUpgradeModal()" class="btn btn-primary" style="padding: 8px 16px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        ⭐ Upgrade to Pro
+      </button>
     </div>
   </header>
 
@@ -74,42 +115,75 @@
     </aside>
 
     <main class="main-content">
-      <div style="margin-bottom: 20px;">
-        <h1 style="font-size: 24px; font-weight: 700;">IELTS Writing Task 2</h1>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
-          কমপক্ষে ২৫০ শব্দের প্রবন্ধ লিখুন এবং সরাসরি ওয়ার্ড কাউন্ট দেখে নিন।
-        </p>
+      <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 28px; font-weight: 800;">IELTS Writing Task 2 Lab</h1>
+        <p style="color: var(--text-muted); font-size: 15px; margin-top: 4px;">কমপক্ষে ২৫০ শব্দের প্রবন্ধ লিখুন এবং লাইভ ওয়ার্ড কাউন্টার দিয়ে পরীক্ষা করুন।</p>
       </div>
 
       <div class="writing-area">
         <div class="prompt-box">
-          <span class="badge" style="margin-bottom: 12px; display: inline-block;">Academic & GT Essay</span>
-          <h3 style="font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+          <span style="background:rgba(79,70,229,0.1); color:var(--primary); font-size:12px; font-weight:700; padding:4px 10px; border-radius:20px; display:inline-block; margin-bottom:12px;">Task 2 Essay</span>
+          <h3 style="font-size: 17px; line-height: 1.6; margin-bottom: 16px;">
             Some people believe that technological developments lead to the loss of traditional cultures. Others think that technology helps preserve them. 
             <br><br>
             <strong>Discuss both views and give your own opinion.</strong>
           </h3>
-          
-          <strong style="font-size: 13px; color: var(--text-muted);">Essay Outline & Tips:</strong>
-          <ul style="font-size: 13px; margin: 10px 0 0 18px; color: var(--text-muted); line-height: 1.6;">
-            <li>Introduction: Paraphrase topic + Opinion</li>
-            <li>Body 1: Threats of modernization on cultural heritage</li>
-            <li>Body 2: Digital preservation and archiving advantages</li>
-            <li>Conclusion: Final balance and future outlook</li>
-          </ul>
+          <button class="btn btn-outline" style="width: 100%; margin-top: 10px;" onclick="openUpgradeModal()">🔒 Unlock Band 8.5 Model Answer (PRO)</button>
         </div>
 
         <div>
-          <textarea class="text-editor" id="essayText" placeholder="Start typing your essay here..." oninput="updateWordCount()"></textarea>
+          <textarea class="text-editor" id="essayText" placeholder="Start drafting your IELTS essay here..." oninput="updateWordCount()"></textarea>
           <div class="word-counter">
-            Word Count: <span id="wordCount" style="font-weight: 700; color: var(--accent);">0</span> / 250 words
+            Word Count: <span id="wordCount" style="font-weight: 800; color: var(--primary);">0</span> / 250 words
           </div>
         </div>
       </div>
     </main>
   </div>
 
+  <!-- Upgrade Modal -->
+  <div class="modal-overlay" id="upgradeModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 style="font-size: 20px; font-weight: 800;">💎 Unlock Model Essays & Feedback</h2>
+        <button style="border:none; background:none; font-size: 20px; cursor:pointer;" onclick="closeUpgradeModal()">✕</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 18px;">
+        Task 1 ও Task 2 এর ব্যান্ড ৯.০ মডেল রচনা এবং AI ইভ্যালুয়েশন সুবিধা আনলক করুন।
+      </p>
+
+      <div class="plan-card" onclick="selectPlan(this)">
+        <div><strong>1 Month Access</strong><div style="font-size: 12px; color: var(--text-muted);">শুরুর প্রস্তুতি</div></div>
+        <strong style="color: var(--primary);">৳ 350</strong>
+      </div>
+      <div class="plan-card selected" onclick="selectPlan(this)">
+        <div><strong>3 Months Access</strong><div style="font-size: 12px; color: var(--text-muted);">বেস্ট ভ্যালু প্যাক</div></div>
+        <strong style="color: var(--primary);">৳ 850</strong>
+      </div>
+      <div class="plan-card" onclick="selectPlan(this)">
+        <div><strong>6 Months Access</strong><div style="font-size: 12px; color: var(--text-muted);">ফুল প্যাকেজ</div></div>
+        <strong style="color: var(--primary);">৳ 1,500</strong>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 8px;">Select Payment Method:</label>
+        <div class="pay-btn-group">
+          <button type="button" class="pay-method-btn bkash selected" onclick="selectPay(this)">
+            <svg viewBox="0 0 148 57" fill="none"><path fill="#D12053" d="M16.5 0L0 28.5L16.5 57H131.5L148 28.5L131.5 0H16.5Z"/><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="24">bKash</text></svg>
+          </button>
+          <button type="button" class="pay-method-btn nagad" onclick="selectPay(this)">
+            <svg viewBox="0 0 148 57" fill="none"><rect width="148" height="57" rx="10" fill="#F7941D"/><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="24">Nagad</text></svg>
+          </button>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 13px;" onclick="alert('বিকাশ/নগদ পেমেন্ট সিস্টেমে রিডাইরেক্ট করা হচ্ছে...')">Proceed to Pay →</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
     const themeBtn = document.getElementById('themeBtn');
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -117,15 +191,21 @@
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    }
 
     function updateWordCount() {
       const text = document.getElementById('essayText').value.trim();
       const words = text ? text.split(/\s+/).length : 0;
       document.getElementById('wordCount').innerText = words;
+    }
+    function openUpgradeModal() { document.getElementById('upgradeModal').style.display = 'flex'; }
+    function closeUpgradeModal() { document.getElementById('upgradeModal').style.display = 'none'; }
+    function selectPlan(el) {
+      document.querySelectorAll('.plan-card').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+    function selectPay(el) {
+      document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
     }
   </script>
 </body>
