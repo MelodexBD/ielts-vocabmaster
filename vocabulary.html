@@ -1,182 +1,164 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vocabulary - IELTS Vocab Master</title>
+  <title>Vocabulary Vault - IELTS VocabMaster PRO</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Filter Bar Styles */
     .filter-bar {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 12px;
       margin-bottom: 24px;
     }
-
     .filter-select {
       width: 100%;
-      padding: 10px 14px;
-      border-radius: 8px;
+      padding: 12px 14px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       background: var(--bg-card);
       color: var(--text-main);
       font-size: 14px;
+      font-weight: 600;
       outline: none;
-      cursor: pointer;
     }
-
-    .filter-select:focus {
-      border-color: var(--accent);
-    }
-
-    /* Word Card Grid */
     .vocab-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 20px;
+      gap: 24px;
     }
-
     .vocab-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px;
+      border-radius: 18px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
+      box-shadow: var(--card-shadow);
+      transition: all 0.25s ease;
     }
-
-    .vocab-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
+    .vocab-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--card-shadow-hover);
+      border-color: rgba(79, 70, 229, 0.3);
     }
-
     .word-title {
       font-size: 22px;
       font-weight: 800;
-      letter-spacing: 0.5px;
       color: var(--text-main);
     }
-
     .word-meaning {
       font-size: 15px;
-      color: var(--accent);
-      font-weight: 600;
+      color: var(--primary);
+      font-weight: 700;
       margin-top: 4px;
     }
-
-    .btn-fav {
-      background: transparent;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      color: var(--text-muted);
-      transition: transform 0.1s;
-    }
-
-    .btn-fav.active {
-      color: #eab308;
-    }
-
-    /* Pronunciation Buttons */
     .audio-group {
       display: flex;
       gap: 8px;
-      margin: 12px 0;
+      margin: 14px 0;
     }
-
     .audio-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: var(--accent-light);
-      border: 1px solid transparent;
-      color: var(--accent);
-      padding: 6px 12px;
-      border-radius: 6px;
+      background: rgba(79, 70, 229, 0.08);
+      border: 1px solid rgba(79, 70, 229, 0.2);
+      color: var(--primary);
+      padding: 6px 14px;
+      border-radius: 8px;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
     }
-
     .audio-btn:hover {
-      background: var(--accent);
-      color: #ffffff;
+      background: var(--primary);
+      color: #fff;
     }
-
-    /* Details Section */
     .vocab-meta {
       font-size: 13px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       line-height: 1.5;
     }
-
     .vocab-meta strong {
-      color: var(--text-muted);
+      color: var(--text-subtle);
       display: inline-block;
       min-width: 75px;
     }
-
     .vocab-example {
       background: var(--bg-primary);
-      border-left: 3px solid var(--accent);
-      padding: 10px 12px;
-      border-radius: 4px;
+      border-left: 3px solid var(--primary);
+      padding: 10px 14px;
+      border-radius: 6px;
       font-size: 13px;
       font-style: italic;
       color: var(--text-muted);
-      margin: 12px 0 16px 0;
+      margin: 12px 0 16px;
     }
 
-    /* Footer Action */
-    .btn-learn {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
+    /* Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(9, 13, 22, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
       justify-content: center;
-      gap: 6px;
+      align-items: center;
+      padding: 16px;
     }
-
-    .btn-learn.learned {
-      background: rgba(16, 185, 129, 0.15);
-      border-color: var(--success);
-      color: var(--success);
+    .modal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
     }
+    .plan-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-primary);
+    }
+    .plan-card.selected {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.08);
+    }
+    .pay-btn-group { display: flex; gap: 14px; margin: 16px 0 24px; }
+    .pay-method-btn {
+      flex: 1; height: 52px; border-radius: 12px; border: 1px solid var(--border);
+      background: var(--bg-primary); display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .pay-method-btn.selected { border-color: var(--primary); background: #fff; }
+    .pay-method-btn svg { height: 28px; width: auto; }
   </style>
 </head>
 <body>
 
-  <!-- Top Navigation -->
   <header class="navbar">
-    <a href="dashboard.html" class="brand-title">
+    <a href="index.html" class="brand-title">
       IELTS <span>VocabMaster</span>
+      <span class="brand-badge">PRO</span>
     </a>
     <div class="nav-actions">
       <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
-      <div class="user-profile-badge">
-        <div class="avatar">S</div>
-        <div>
-          <div style="font-weight: 600; font-size: 14px;">Saidul</div>
-          <span style="font-size: 11px; color: var(--accent);">Target: 7.5</span>
-        </div>
-      </div>
+      <button onclick="openUpgradeModal()" class="btn btn-primary" style="padding: 8px 16px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+        ⭐ Upgrade to Pro
+      </button>
     </div>
   </header>
 
   <div class="app-container">
-    <!-- Sidebar -->
     <aside class="sidebar">
       <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
       <a href="vocabulary.html" class="nav-link active">📖 Vocabulary</a>
@@ -187,158 +169,139 @@
       <a href="favourite.html" class="nav-link">⭐ Favourites</a>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
-      <div style="margin-bottom: 20px;">
-        <h1 style="font-size: 24px; font-weight: 700;">IELTS Vocabulary Vault</h1>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
-          Cambridge Books ebong topic-based shob essential vocabulary shikhe felun।
-        </p>
+      <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 28px; font-weight: 800;">Cambridge Vocabulary Vault</h1>
+        <p style="color: var(--text-muted); font-size: 15px; margin-top: 4px;">ক্যামব্রিজ বই ও টেস্টভিত্তিক শব্দভাণ্ডার, অর্থ এবং অডিও উচ্চারণ।</p>
       </div>
 
-      <!-- Filters -->
       <div class="filter-bar">
-        <select class="filter-select" id="bookFilter">
-          <option value="all">All Books</option>
-          <option value="cambridge-19">Cambridge 19</option>
-          <option value="cambridge-18">Cambridge 18</option>
-          <option value="cambridge-17">Cambridge 17</option>
-          <option value="cambridge-16">Cambridge 16</option>
+        <select class="filter-select">
+          <option>Cambridge 19</option>
+          <option>Cambridge 18 (PRO 🔒)</option>
+          <option>Cambridge 17 (PRO 🔒)</option>
         </select>
-
-        <select class="filter-select" id="testFilter">
-          <option value="all">All Tests</option>
-          <option value="test-1">Test 1</option>
-          <option value="test-2">Test 2</option>
-          <option value="test-3">Test 3</option>
-          <option value="test-4">Test 4</option>
+        <select class="filter-select" id="testSelect" onchange="checkTestAccess(this)">
+          <option value="test1">Test 1 (Free Demo)</option>
+          <option value="test2">Test 2 (PRO 🔒)</option>
+          <option value="test3">Test 3 (PRO 🔒)</option>
+          <option value="test4">Test 4 (PRO 🔒)</option>
         </select>
-
-        <select class="filter-select" id="difficultyFilter">
-          <option value="all">All Levels</option>
-          <option value="band-6">Band 6.0 - 6.5</option>
-          <option value="band-7">Band 7.0 - 7.5</option>
-          <option value="band-8">Band 8.0+</option>
-        </select>
-
-        <select class="filter-select" id="categoryFilter">
-          <option value="all">All Categories</option>
-          <option value="academic">Academic</option>
-          <option value="environment">Environment</option>
-          <option value="technology">Technology</option>
-          <option value="education">Education</option>
+        <select class="filter-select">
+          <option>All Bands (6.0 - 8.5)</option>
         </select>
       </div>
 
-      <!-- Word Cards Grid -->
       <div class="vocab-grid">
-        
-        <!-- Word Card 1: ABUNDANT -->
+        <!-- Word 1 -->
         <div class="vocab-card">
           <div>
-            <div class="vocab-header">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
               <div>
                 <div class="word-title">ABUNDANT</div>
-                <div class="word-meaning">প্রচুর / পর্যাপ্তের বেশি</div>
+                <div class="word-meaning">প্রচুর / পর্যাপ্তের চেয়ে বেশি</div>
               </div>
-              <button class="btn-fav" onclick="toggleFav(this)">★</button>
+              <button onclick="openUpgradeModal()" title="Save to Favourites" style="background:none; border:none; font-size:22px; cursor:pointer; color:#94a3b8;">★</button>
             </div>
-
-            <!-- UK/US Pronunciation -->
             <div class="audio-group">
               <button class="audio-btn" onclick="playAudio('abundant', 'uk')">🔊 UK</button>
               <button class="audio-btn" onclick="playAudio('abundant', 'us')">🔊 US</button>
             </div>
-
-            <div class="vocab-meta">
-              <strong>Synonyms:</strong> Plentiful, Ample, Copious
-            </div>
-            <div class="vocab-meta">
-              <strong>Antonyms:</strong> Scarce, Limited, Rare
-            </div>
-
-            <div class="vocab-example">
-              "The region has an abundant supply of clean freshwater."
-            </div>
+            <div class="vocab-meta"><strong>Synonyms:</strong> Plentiful, Copious, Ample</div>
+            <div class="vocab-meta"><strong>Antonyms:</strong> Scarce, Deficient, Rare</div>
+            <div class="vocab-example">"The region possesses an abundant supply of clean water."</div>
           </div>
-
-          <button class="btn-learn" onclick="toggleLearned(this)">
-            ✓ Mark as Learned
-          </button>
+          <button class="btn btn-outline" style="width: 100%; border-radius: 8px;" onclick="openUpgradeModal()">🔒 Mark as Learned (PRO)</button>
         </div>
 
-        <!-- Word Card 2: MITIGATE -->
+        <!-- Word 2 -->
         <div class="vocab-card">
           <div>
-            <div class="vocab-header">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
               <div>
                 <div class="word-title">MITIGATE</div>
-                <div class="word-meaning">কমানো / তীব্রতা হ্রাস করা</div>
+                <div class="word-meaning">তীব্রতা কমানো / প্রশমিত করা</div>
               </div>
-              <button class="btn-fav active" onclick="toggleFav(this)">★</button>
+              <button onclick="openUpgradeModal()" title="Save to Favourites" style="background:none; border:none; font-size:22px; cursor:pointer; color:#94a3b8;">★</button>
             </div>
-
             <div class="audio-group">
               <button class="audio-btn" onclick="playAudio('mitigate', 'uk')">🔊 UK</button>
               <button class="audio-btn" onclick="playAudio('mitigate', 'us')">🔊 US</button>
             </div>
-
-            <div class="vocab-meta">
-              <strong>Synonyms:</strong> Alleviate, Reduce, Lessen
-            </div>
-            <div class="vocab-meta">
-              <strong>Antonyms:</strong> Aggravate, Intensify, Worsen
-            </div>
-
-            <div class="vocab-example">
-              "Governments are taking steps to mitigate the effects of global warming."
-            </div>
+            <div class="vocab-meta"><strong>Synonyms:</strong> Alleviate, Lessen, Ease</div>
+            <div class="vocab-meta"><strong>Antonyms:</strong> Aggravate, Intensify</div>
+            <div class="vocab-example">"Urgent measures are required to mitigate the climate crisis."</div>
           </div>
-
-          <button class="btn-learn learned" onclick="toggleLearned(this)">
-            ✓ Learned
-          </button>
+          <button class="btn btn-outline" style="width: 100%; border-radius: 8px;" onclick="openUpgradeModal()">🔒 Mark as Learned (PRO)</button>
         </div>
 
-        <!-- Word Card 3: PLAUSIBLE -->
+        <!-- Word 3 -->
         <div class="vocab-card">
           <div>
-            <div class="vocab-header">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
               <div>
                 <div class="word-title">PLAUSIBLE</div>
                 <div class="word-meaning">বিশ্বাসযোগ্য / যুক্তিসঙ্গত</div>
               </div>
-              <button class="btn-fav" onclick="toggleFav(this)">★</button>
+              <button onclick="openUpgradeModal()" title="Save to Favourites" style="background:none; border:none; font-size:22px; cursor:pointer; color:#94a3b8;">★</button>
             </div>
-
             <div class="audio-group">
               <button class="audio-btn" onclick="playAudio('plausible', 'uk')">🔊 UK</button>
               <button class="audio-btn" onclick="playAudio('plausible', 'us')">🔊 US</button>
             </div>
-
-            <div class="vocab-meta">
-              <strong>Synonyms:</strong> Believable, Reasonable, Credible
-            </div>
-            <div class="vocab-meta">
-              <strong>Antonyms:</strong> Implausible, Unlikely, Doubtful
-            </div>
-
-            <div class="vocab-example">
-              "His explanation sounded entirely plausible to the examiners."
-            </div>
+            <div class="vocab-meta"><strong>Synonyms:</strong> Credible, Believable, Feasible</div>
+            <div class="vocab-meta"><strong>Antonyms:</strong> Implausible, Doubtful</div>
+            <div class="vocab-example">"Her explanation seemed entirely plausible to the examiners."</div>
           </div>
-
-          <button class="btn-learn" onclick="toggleLearned(this)">
-            ✓ Mark as Learned
-          </button>
+          <button class="btn btn-outline" style="width: 100%; border-radius: 8px;" onclick="openUpgradeModal()">🔒 Mark as Learned (PRO)</button>
         </div>
-
       </div>
     </main>
   </div>
 
+  <!-- Upgrade Modal -->
+  <div class="modal-overlay" id="upgradeModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 style="font-size: 20px; font-weight: 800;">💎 Unlock Full Vocab Vault</h2>
+        <button style="border:none; background:none; font-size: 20px; cursor:pointer;" onclick="closeUpgradeModal()">✕</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 18px;">
+        সবগুলো Cambridge Books (10-19) এবং ৪,৫০০+ প্রিমিয়াম শব্দভাণ্ডার আনলক করতে প্রো মেম্বারশিপ নিন।
+      </p>
+
+      <div class="plan-card" onclick="selectPlan(this)">
+        <div><strong>1 Month Access</strong><div style="font-size: 12px; color: var(--text-muted);">শুরুর প্রস্তুতি</div></div>
+        <strong style="color: var(--primary);">৳ 350</strong>
+      </div>
+      <div class="plan-card selected" onclick="selectPlan(this)">
+        <div><strong>3 Months Access</strong><div style="font-size: 12px; color: var(--text-muted);">বেস্ট ভ্যালু প্যাক</div></div>
+        <strong style="color: var(--primary);">৳ 850</strong>
+      </div>
+      <div class="plan-card" onclick="selectPlan(this)">
+        <div><strong>6 Months Access</strong><div style="font-size: 12px; color: var(--text-muted);">ফুল প্যাকেজ</div></div>
+        <strong style="color: var(--primary);">৳ 1,500</strong>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 8px;">Select Payment Method:</label>
+        <div class="pay-btn-group">
+          <button type="button" class="pay-method-btn bkash selected" onclick="selectPay(this)">
+            <svg viewBox="0 0 148 57" fill="none"><path fill="#D12053" d="M16.5 0L0 28.5L16.5 57H131.5L148 28.5L131.5 0H16.5Z"/><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="24">bKash</text></svg>
+          </button>
+          <button type="button" class="pay-method-btn nagad" onclick="selectPay(this)">
+            <svg viewBox="0 0 148 57" fill="none"><rect width="148" height="57" rx="10" fill="#F7941D"/><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="24">Nagad</text></svg>
+          </button>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 13px;" onclick="alert('বিকাশ/নগদ পেমেন্ট সিস্টেমে রিডাইরেক্ট করা হচ্ছে...')">Proceed to Pay →</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Theme toggle
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
     const themeBtn = document.getElementById('themeBtn');
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -347,31 +310,26 @@
       localStorage.setItem('theme', newTheme);
     });
 
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    }
-
-    // Favourite toggle
-    function toggleFav(btn) {
-      btn.classList.toggle('active');
-    }
-
-    // Learned toggle
-    function toggleLearned(btn) {
-      btn.classList.toggle('learned');
-      if (btn.classList.contains('learned')) {
-        btn.innerHTML = '✓ Learned';
-      } else {
-        btn.innerHTML = '✓ Mark as Learned';
-      }
-    }
-
-    // Pronunciation preview (Browser built-in Web Speech API diye sound test kora jabe)
     function playAudio(word, accent) {
       const utterance = new SpeechSynthesisUtterance(word);
       utterance.lang = accent === 'uk' ? 'en-GB' : 'en-US';
       window.speechSynthesis.speak(utterance);
+    }
+    function checkTestAccess(sel) {
+      if (sel.value !== 'test1') {
+        openUpgradeModal();
+        sel.value = 'test1';
+      }
+    }
+    function openUpgradeModal() { document.getElementById('upgradeModal').style.display = 'flex'; }
+    function closeUpgradeModal() { document.getElementById('upgradeModal').style.display = 'none'; }
+    function selectPlan(el) {
+      document.querySelectorAll('.plan-card').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+    function selectPay(el) {
+      document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
     }
   </script>
 </body>
