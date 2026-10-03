@@ -91,17 +91,41 @@
 <body>
 
   <header class="navbar">
-    <a href="index.html" class="brand-title">
-      IELTS <span>VocabMaster</span>
-      <span class="brand-badge">PRO</span>
-    </a>
-    <div class="nav-actions">
-      <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
-      <button onclick="openUpgradeModal()" class="btn btn-primary" style="padding: 8px 16px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-        ⭐ Upgrade to Pro
-      </button>
+  <a href="dashboard.html" class="brand-title">
+    IELTS <span>VocabMaster</span>
+    <span class="brand-badge">PRO</span>
+  </a>
+  <div class="nav-actions">
+    <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+    <button onclick="openUpgradeModal()" class="btn btn-primary" style="padding: 6px 14px; font-size: 12px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+      ⭐ Upgrade
+    </button>
+    
+    <!-- Profile Menu Container -->
+    <div class="profile-menu-container">
+      <div class="profile-pill-btn" onclick="toggleProfileDropdown(event)">
+        <div class="avatar-circle">S</div>
+        <div style="text-align: left; line-height: 1.2;">
+          <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Saidul Islam</div>
+          <span style="font-size: 11px; color: var(--text-muted);">Academic</span>
+        </div>
+        <span style="font-size: 11px; color: var(--text-muted); margin-left: 4px;">▼</span>
+      </div>
+
+      <!-- Dropdown Popup -->
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="dropdown-user-info">
+          <strong style="font-size: 14px; color: var(--text-main); display: block;">Saidul Islam</strong>
+          <span style="font-size: 11px; color: var(--text-muted);">Target Band: 7.5</span>
+        </div>
+        <a href="dashboard.html" class="dropdown-item">📊 My Dashboard</a>
+        <a href="favourite.html" class="dropdown-item">⭐ Favourites</a>
+        <button type="button" class="dropdown-item" onclick="openUpgradeModal()">💎 Upgrade Plan</button>
+        <button type="button" class="dropdown-item logout" onclick="handleLogout()">🚪 Log Out</button>
+      </div>
     </div>
-  </header>
+  </div>
+</header>
 
   <div class="app-container">
     <aside class="sidebar">
