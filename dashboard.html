@@ -1,189 +1,205 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - IELTS Vocab Master</title>
+  <title>User Dashboard - IELTS VocabMaster PRO</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .welcome-banner {
+    /* Profile Summary Header */
+    .dashboard-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 30px;
       flex-wrap: wrap;
       gap: 16px;
-      margin-bottom: 24px;
     }
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      background: var(--accent-light);
-      color: var(--accent);
+    .welcome-text h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+    }
+    .welcome-text p {
+      color: var(--text-muted);
+      font-size: 15px;
       margin-top: 4px;
     }
-    .progress-bar-bg {
-      background: var(--border);
-      height: 8px;
-      border-radius: 4px;
+
+    .band-target-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--card-shadow);
+    }
+    .band-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    /* Progress Bar */
+    .progress-bar-wrap {
+      width: 100%;
+      height: 10px;
+      background: var(--bg-primary);
+      border-radius: 10px;
+      margin-top: 12px;
       overflow: hidden;
-      margin-top: 8px;
+      border: 1px solid var(--border);
     }
-    .progress-bar-fill {
-      background: var(--accent);
+    .progress-fill {
       height: 100%;
-      border-radius: 4px;
+      width: 68%;
+      background: var(--primary-gradient);
+      border-radius: 10px;
     }
-    .task-item {
+
+    .learning-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 0;
       border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      font-weight: 600;
     }
-    .task-item:last-child {
-      border-bottom: none;
+    .learning-item:last-child { border-bottom: none; }
+    
+    .status-badge {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(148, 163, 184, 0.15);
+      color: var(--text-muted);
+    }
+    .status-badge.pending {
+      background: rgba(245, 158, 11, 0.12);
+      color: #d97706;
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Navigation -->
+  <!-- Top Navbar with Logged-In User Profile -->
   <header class="navbar">
     <a href="dashboard.html" class="brand-title">
       IELTS <span>VocabMaster</span>
+      <span class="brand-badge">PRO</span>
     </a>
     <div class="nav-actions">
       <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
-      <div class="user-profile-badge">
-        <div class="avatar">S</div>
-        <div>
-          <div style="font-weight: 600; font-size: 14px;">Saidul</div>
-          <span class="badge">Academic</span>
+      
+      <!-- Profile Badge & Dropdown trigger -->
+      <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--border); padding: 6px 14px; border-radius: 30px;">
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-gradient); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">
+          S
         </div>
+        <div style="text-align: left; line-height: 1.2;">
+          <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Saidul Islam</div>
+          <span style="font-size: 11px; color: var(--text-muted);">Academic</span>
+        </div>
+        <a href="index.html" title="Log Out" style="margin-left: 6px; color: var(--text-muted); text-decoration: none; font-size: 14px;">🚪</a>
       </div>
     </div>
   </header>
 
   <div class="app-container">
-    <!-- Sidebar -->
+    <!-- Updated Sidebar Links -->
     <aside class="sidebar">
-  <a href="dashboard.html" class="nav-link active">📊 Dashboard</a>
-  <a href="vocabulary.html" class="nav-link">📖 Vocabulary</a>
-  <a href="reading.html" class="nav-link">📑 Reading</a>
-  <a href="listening.html" class="nav-link">🎧 Listening</a>
-  <a href="speaking-writing.html" class="nav-link">🗣️ Speaking & Writing</a>
-  <a href="favourite.html" class="nav-link">⭐ Favourites</a>
-</aside>
+      <a href="dashboard.html" class="nav-link active">📊 Dashboard</a>
+      <a href="vocabulary.html" class="nav-link">📖 Vocabulary</a>
+      <a href="reading.html" class="nav-link">📑 Reading</a>
+      <a href="listening.html" class="nav-link">🎧 Listening</a>
+      <a href="speaking.html" class="nav-link">🗣️ Speaking</a>
+      <a href="writing.html" class="nav-link">✍️ Writing</a>
+      <a href="favourite.html" class="nav-link">⭐ Favourites</a>
+    </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
-      <!-- Welcome Section -->
-      <div class="welcome-banner">
-        <div>
-          <h1 style="font-size: 26px;">Good evening, Saidul 👋</h1>
-          <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">চলুন আজকের প্রস্তুতি শুরু করা যাক!</p>
+      <!-- Dashboard Top Summary -->
+      <div class="dashboard-header">
+        <div class="welcome-text">
+          <h1>Good day, Saidul 👋</h1>
+          <p>চলুন আজকের নির্ধারিত আইইএলটিএস প্রস্তুতি শুরু করা যাক!</p>
         </div>
-        <div style="text-align: right;">
-          <div style="font-size: 13px; color: var(--text-muted);">Target Band</div>
-          <div style="font-size: 28px; font-weight: 800; color: var(--accent);">7.5</div>
+
+        <div class="band-target-box">
+          <div>
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Target Band</div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--text-main);">Academic Exam</div>
+          </div>
+          <div class="band-number">7.5</div>
         </div>
       </div>
 
-      <!-- Quick Action: Today's Learning & Revision -->
+      <!-- Quick Action Cards -->
       <div class="grid-2">
-        <div class="card" style="border-left: 4px solid var(--accent);">
-          <h2 style="font-size: 18px; margin-bottom: 12px;">🎯 Today's Learning</h2>
-          <div class="task-item">
-            <span>Vocabulary (25 words)</span>
-            <span style="color: var(--accent); font-weight: 600;">Pending</span>
+        <!-- Today's Routine -->
+        <div class="card">
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main);">🎯 Today's Goals</h3>
+          
+          <div class="learning-item">
+            <span>Vocabulary (25 Words)</span>
+            <span class="status-badge pending">Pending</span>
           </div>
-          <div class="task-item">
-            <span>Reading Test (1 Passage)</span>
-            <span style="color: var(--text-muted);">Not started</span>
+          <div class="learning-item">
+            <span>Reading Test 1 (Passage 1)</span>
+            <span class="status-badge">Not started</span>
           </div>
-          <div class="task-item">
-            <span>Speaking Practice (5 questions)</span>
-            <span style="color: var(--text-muted);">Not started</span>
+          <div class="learning-item">
+            <span>Speaking Practice (Cue Card 1)</span>
+            <span class="status-badge">Not started</span>
           </div>
-          <div style="margin-top: 16px;">
-            <a href="vocabulary.html" class="btn btn-primary" style="width: 100%;">Start Today's Lesson</a>
-          </div>
+
+          <a href="vocabulary.html" class="btn btn-primary" style="width: 100%; margin-top: 20px; border-radius: 10px;">
+            Start Today's Lesson →
+          </a>
         </div>
 
-        <div class="card" style="border-left: 4px solid var(--warning);">
-          <h2 style="font-size: 18px; margin-bottom: 12px;">🔄 Words to Review</h2>
-          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">
-            Spaced repetition মেথডে আপনার রিভিশন দেওয়ার সময় হয়েছে।
+        <!-- Spaced Repetition / Review -->
+        <div class="card">
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);">🔁 Words to Review</h3>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">
+            স্পেসড রিপিটেশন অ্যালগরিদম অনুযায়ী আজ আপনার রিভিশন দেওয়ার সময় হয়েছে।
           </p>
-          <div style="font-size: 24px; font-weight: 700; margin-bottom: 16px;">
-            32 <span style="font-size: 14px; color: var(--text-muted); font-weight: normal;">শব্দ বাকি আছে</span>
+          
+          <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 16px;">
+            <span style="font-size: 32px; font-weight: 800; color: var(--primary);">32</span>
+            <span style="font-size: 14px; color: var(--text-muted);">শব্দ রিভিশনের অপেক্ষায়</span>
           </div>
-          <button class="btn btn-outline" style="width: 100%;">Start Revision</button>
+
+          <a href="favourite.html" class="btn btn-outline" style="width: 100%; border-radius: 10px;">
+            Start Spaced Revision
+          </a>
         </div>
       </div>
 
-      <!-- Skills Progress Bars -->
-      <div class="card">
-        <h2 style="font-size: 18px; margin-bottom: 20px;">📈 Your Overall Progress</h2>
-        
-        <div style="margin-bottom: 16px;">
-          <div style="display: flex; justify-content: space-between; font-size: 14px;">
-            <span>Vocabulary Mastery</span>
-            <span style="font-weight: 600;">68%</span>
+      <!-- Overall Progress -->
+      <div class="card" style="margin-top: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h3 style="font-size: 18px; font-weight: 700; color: var(--text-main);">📈 Overall Preparation Progress</h3>
+            <span style="font-size: 13px; color: var(--text-muted);">ক্যামব্রিজ ১০-১৯ ভোকাবুলারি মাস্টারি</span>
           </div>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: 68%;"></div>
-          </div>
+          <strong style="font-size: 18px; color: var(--primary);">68%</strong>
         </div>
-
-        <div style="margin-bottom: 16px;">
-          <div style="display: flex; justify-content: space-between; font-size: 14px;">
-            <span>Reading Practice</span>
-            <span style="font-weight: 600;">42%</span>
-          </div>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: 42%;"></div>
-          </div>
-        </div>
-
-        <div style="margin-bottom: 16px;">
-          <div style="display: flex; justify-content: space-between; font-size: 14px;">
-            <span>Listening Practice</span>
-            <span style="font-weight: 600;">35%</span>
-          </div>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: 35%;"></div>
-          </div>
-        </div>
-
-        <div style="margin-bottom: 16px;">
-          <div style="display: flex; justify-content: space-between; font-size: 14px;">
-            <span>Speaking Practice</span>
-            <span style="font-weight: 600;">28%</span>
-          </div>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: 28%;"></div>
-          </div>
-        </div>
-
-        <div>
-          <div style="display: flex; justify-content: space-between; font-size: 14px;">
-            <span>Writing Practice</span>
-            <span style="font-weight: 600;">20%</span>
-          </div>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: 20%;"></div>
-          </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-fill"></div>
         </div>
       </div>
     </main>
   </div>
 
   <script>
-    // ডার্ক/লাইট মোড টগল করার সহজ স্ক্রিপ্ট
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
     const themeBtn = document.getElementById('themeBtn');
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -191,11 +207,6 @@
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
-
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    }
   </script>
 </body>
 </html>
