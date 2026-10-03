@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Favourites - IELTS Vocab Master</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .locked-card {
+      position: relative;
+      opacity: 0.7;
+      border: 1px dashed var(--warning) !important;
+    }
+    .lock-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      backdrop-filter: blur(2px);
+    }
+    /* Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .modal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 520px;
+      width: 100%;
+    }
+    .plan-box {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .plan-box.selected {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="dashboard.html" class="brand-title">IELTS <span>VocabMaster</span></a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+      <button onclick="openUpgradeModal()" class="btn btn-primary" style="padding: 6px 14px; font-size: 13px; background: #eab308; color: #000;">⭐ Upgrade</button>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+      <a href="vocabulary.html" class="nav-link">📖 Vocabulary</a>
+      <a href="reading.html" class="nav-link">📑 Reading</a>
+      <a href="listening.html" class="nav-link">🎧 Listening</a>
+      <a href="speaking-writing.html" class="nav-link">🗣️ Speaking & Writing</a>
+      <a href="favourite.html" class="nav-link active">⭐ Favourites</a>
+    </aside>
+
+    <main class="main-content">
+      <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 24px; font-weight: 700;">Your Favourite Words & Saved Items</h1>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">রিভিশনের জন্য আপনার সেভ করে রাখা শব্দ ও রিসোর্স।</p>
+      </div>
+
+      <div class="grid-2">
+        <!-- Unlocked Free Item -->
+        <div class="card">
+          <div style="display: flex; justify-content: space-between;">
+            <h3 style="color: var(--accent);">ABUNDANT</h3>
+            <span style="color: #eab308;">★ Saved</span>
+          </div>
+          <p style="margin: 8px 0; font-size: 14px;">প্রচুর / পর্যাপ্তের বেশি</p>
+          <div style="font-size: 13px; color: var(--text-muted);">Cambridge 19, Test 1</div>
+        </div>
+
+        <!-- Locked Premium Item -->
+        <div class="card locked-card">
+          <div class="lock-overlay">
+            <span style="font-size: 24px;">🔒</span>
+            <strong style="color: #fff; font-size: 14px;">Premium Saved Word</strong>
+            <button class="btn btn-primary" style="padding: 6px 16px; font-size: 12px;" onclick="openUpgradeModal()">Unlock Now</button>
+          </div>
+          <h3>METICULOUS</h3>
+          <p>অতি সতর্ক / খুঁতখুঁতে</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Upgrade Modal -->
+  <div class="modal-overlay" id="upgradeModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h2 style="font-size: 20px;">💎 Upgrade to IELTS Vocab Master Pro</h2>
+        <button onclick="closeUpgradeModal()" style="background: none; border: none; font-size: 20px; color: var(--text-muted); cursor: pointer;">✕</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
+        সবগুলো Cambridge Books (10-19), ফুল অডিও, আনলিমিটেড স্পিকিং ও রাইটিং টাস্ক আনলক করুন।
+      </p>
+
+      <div class="plan-box selected" onclick="selectPlan(this)">
+        <div>
+          <strong>1 Month Access</strong>
+          <div style="font-size: 12px; color: var(--text-muted);">শুরুর প্রস্তুতির জন্য</div>
+        </div>
+        <strong style="color: var(--accent);">৳ 350</strong>
+      </div>
+
+      <div class="plan-box" onclick="selectPlan(this)">
+        <div>
+          <strong>3 Months Access</strong>
+          <div style="font-size: 12px; color: var(--text-muted);">জনপ্রিয় প্ল্যান (Band 7+ গ্যারান্টিড রুটিন)</div>
+        </div>
+        <strong style="color: var(--accent);">৳ 850</strong>
+      </div>
+
+      <div class="plan-box" onclick="selectPlan(this)">
+        <div>
+          <strong>6 Months Access</strong>
+          <div style="font-size: 12px; color: var(--text-muted);">সম্পূর্ণ কোর্স রিভিশনসহ</div>
+        </div>
+        <strong style="color: var(--accent);">৳ 1,500</strong>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px;">Select Payment Method:</label>
+        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+          <button class="btn btn-outline" style="flex: 1; border-color: #d12053; color: #d12053; font-weight: 700;">bKash</button>
+          <button class="btn btn-outline" style="flex: 1; border-color: #f7941d; color: #f7941d; font-weight: 700;">Nagad</button>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 12px;" onclick="alert('পেমেন্ট গেটওয়েতে রিডাইরেক্ট করা হচ্ছে...')">Proceed to Pay</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    function openUpgradeModal() {
+      document.getElementById('upgradeModal').style.display = 'flex';
+    }
+    function closeUpgradeModal() {
+      document.getElementById('upgradeModal').style.display = 'none';
+    }
+    function selectPlan(el) {
+      document.querySelectorAll('.plan-box').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+  </script>
+</body>
+</html>
