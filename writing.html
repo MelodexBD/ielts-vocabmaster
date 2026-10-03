@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing Practice - IELTS Vocab Master</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .writing-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .prompt-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .text-editor {
+      width: 100%;
+      height: 380px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      color: var(--text-main);
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+    }
+    .text-editor:focus {
+      border-color: var(--accent);
+    }
+    .word-counter {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+    @media (max-width: 850px) {
+      .writing-area {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="dashboard.html" class="brand-title">IELTS <span>VocabMaster</span></a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+      <div class="user-profile-badge">
+        <div class="avatar">S</div>
+        <div>
+          <div style="font-weight: 600; font-size: 14px;">Saidul</div>
+          <span style="font-size: 11px; color: var(--accent);">Target: 7.5</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+      <a href="vocabulary.html" class="nav-link">📖 Vocabulary</a>
+      <a href="reading.html" class="nav-link">📑 Reading</a>
+      <a href="listening.html" class="nav-link">🎧 Listening</a>
+      <a href="speaking.html" class="nav-link">🗣️ Speaking</a>
+      <a href="writing.html" class="nav-link active">✍️ Writing</a>
+      <a href="favourite.html" class="nav-link">⭐ Favourites</a>
+    </aside>
+
+    <main class="main-content">
+      <div style="margin-bottom: 20px;">
+        <h1 style="font-size: 24px; font-weight: 700;">IELTS Writing Task 2</h1>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+          কমপক্ষে ২৫০ শব্দের প্রবন্ধ লিখুন এবং সরাসরি ওয়ার্ড কাউন্ট দেখে নিন।
+        </p>
+      </div>
+
+      <div class="writing-area">
+        <div class="prompt-box">
+          <span class="badge" style="margin-bottom: 12px; display: inline-block;">Academic & GT Essay</span>
+          <h3 style="font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+            Some people believe that technological developments lead to the loss of traditional cultures. Others think that technology helps preserve them. 
+            <br><br>
+            <strong>Discuss both views and give your own opinion.</strong>
+          </h3>
+          
+          <strong style="font-size: 13px; color: var(--text-muted);">Essay Outline & Tips:</strong>
+          <ul style="font-size: 13px; margin: 10px 0 0 18px; color: var(--text-muted); line-height: 1.6;">
+            <li>Introduction: Paraphrase topic + Opinion</li>
+            <li>Body 1: Threats of modernization on cultural heritage</li>
+            <li>Body 2: Digital preservation and archiving advantages</li>
+            <li>Conclusion: Final balance and future outlook</li>
+          </ul>
+        </div>
+
+        <div>
+          <textarea class="text-editor" id="essayText" placeholder="Start typing your essay here..." oninput="updateWordCount()"></textarea>
+          <div class="word-counter">
+            Word Count: <span id="wordCount" style="font-weight: 700; color: var(--accent);">0</span> / 250 words
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    function updateWordCount() {
+      const text = document.getElementById('essayText').value.trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      document.getElementById('wordCount').innerText = words;
+    }
+  </script>
+</body>
+</html>
