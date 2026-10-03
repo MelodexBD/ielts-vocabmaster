@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IELTS Vocab Master - Prepare Smarter</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .hero-section {
+      text-align: center;
+      padding: 60px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-title {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    /* Global Search Bar */
+    .search-wrapper {
+      max-width: 580px;
+      margin: 0 auto 36px auto;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 20px 14px 44px;
+      border-radius: 30px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 15px;
+      outline: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+
+    /* Module Grid */
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+      text-align: left;
+    }
+
+    .module-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: transform 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .module-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    .module-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .module-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .module-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <a href="index.html" class="brand-title">
+      IELTS <span>VocabMaster</span>
+    </a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+      <a href="signup.html" class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;">Sign In</a>
+      <a href="signup.html" class="btn btn-primary" style="padding: 6px 14px; font-size: 13px;">Get Started</a>
+    </div>
+  </header>
+
+  <!-- Hero & Main Content -->
+  <main class="main-content">
+    <section class="hero-section">
+      <h1 class="hero-title">Prepare Smarter for <span style="color: var(--accent);">IELTS</span></h1>
+      <p class="hero-subtitle">Improve your Vocabulary & IELTS Skills for Academic and General Training</p>
+
+      <!-- Global Search -->
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" placeholder="Search IELTS Vocabulary, Tests, Topics...">
+      </div>
+
+      <a href="signup.html" class="btn btn-primary" style="padding: 12px 32px; font-size: 16px; border-radius: 30px;">
+        Start Learning
+      </a>
+    </section>
+
+    <!-- Main Learning Modules -->
+    <section>
+      <div class="module-grid">
+        <a href="vocabulary.html" class="module-card">
+          <div>
+            <div class="module-icon">📖</div>
+            <div class="module-title">Vocabulary</div>
+            <div class="module-desc">Cambridge 10-19 এর গুরুত্বপূর্ণ শব্দ, অর্থ ও অডিও উচ্চারণ।</div>
+          </div>
+        </a>
+
+        <a href="reading.html" class="module-card">
+          <div>
+            <div class="module-icon">📑</div>
+            <div class="module-title">Reading</div>
+            <div class="module-desc">Academic ও General Training প্যাসেজ, প্রশ্ন ও ব্যাখ্যা।</div>
+          </div>
+        </a>
+
+        <a href="listening.html" class="module-card">
+          <div>
+            <div class="module-icon">🎧</div>
+            <div class="module-title">Listening</div>
+            <div class="module-desc">Cambridge টেস্টভিত্তিক অডিও ট্র্যাক এবং সেকশন প্র্যাকটিস।</div>
+          </div>
+        </a>
+
+        <a href="speaking.html" class="module-card">
+          <div>
+            <div class="module-icon">🗣️</div>
+            <div class="module-title">Speaking</div>
+            <div class="module-desc">Part 1, 2 (Cue Cards) ও Part 3 এর প্রস্তুতি ও শব্দভাণ্ডার।</div>
+          </div>
+        </a>
+
+        <a href="writing.html" class="module-card">
+          <div>
+            <div class="module-icon">✍️</div>
+            <div class="module-title">Writing</div>
+            <div class="module-desc">Task 1 ও Task 2 এর ফরম্যাট, মডেল উত্তর ও দরকারি ভোকাবুলারি।</div>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Theme toggle logic
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  </script>
+</body>
+</html>
