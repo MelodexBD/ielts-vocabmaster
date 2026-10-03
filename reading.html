@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reading Practice - IELTS Vocab Master</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Filter Bar */
+    .filter-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+    }
+
+    /* Passage & Question Two Column Layout */
+    .reading-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 10px;
+    }
+
+    .passage-box, .question-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+
+    .passage-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .passage-text {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-main);
+    }
+
+    .passage-text p {
+      margin-bottom: 16px;
+    }
+
+    /* Questions */
+    .question-item {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .q-number {
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .explanation-box {
+      margin-top: 12px;
+      padding: 10px;
+      background: var(--accent-light);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      font-size: 13px;
+      display: none;
+    }
+
+    .btn-toggle-ans {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--accent);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .reading-container {
+        grid-template-columns: 1fr;
+      }
+      .passage-box, .question-box {
+        max-height: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <a href="dashboard.html" class="brand-title">
+      IELTS <span>VocabMaster</span>
+    </a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
+      <div class="user-profile-badge">
+        <div class="avatar">S</div>
+        <div>
+          <div style="font-weight: 600; font-size: 14px;">Saidul</div>
+          <span style="font-size: 11px; color: var(--accent);">Target: 7.5</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+      <a href="vocabulary.html" class="nav-link">📖 Vocabulary</a>
+      <a href="reading.html" class="nav-link active">📑 Reading</a>
+      <a href="listening.html" class="nav-link">🎧 Listening</a>
+      <a href="speaking.html" class="nav-link">🗣️ Speaking</a>
+      <a href="writing.html" class="nav-link">✍️ Writing</a>
+      <a href="favourite.html" class="nav-link">⭐ Favourites</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div style="margin-bottom: 20px;">
+        <h1 style="font-size: 24px; font-weight: 700;">IELTS Reading Practice</h1>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+          প্যাসেজ পড়ে সরাসরি প্রশ্নের উত্তর দিন এবং সঠিক উত্তর ও ব্যাখ্যা মিলিয়ে নিন।
+        </p>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <select class="filter-select">
+          <option>Academic</option>
+          <option>General Training</option>
+        </select>
+        <select class="filter-select">
+          <option>Cambridge 19</option>
+          <option>Cambridge 18</option>
+          <option>Cambridge 17</option>
+        </select>
+        <select class="filter-select">
+          <option>Test 1</option>
+          <option>Test 2</option>
+        </select>
+        <select class="filter-select">
+          <option>Passage 1</option>
+          <option>Passage 2</option>
+          <option>Passage 3</option>
+        </select>
+      </div>
+
+      <!-- 2-Column Split: Passage vs Questions -->
+      <div class="reading-container">
+        <!-- Left: Passage Box -->
+        <div class="passage-box">
+          <h2 class="passage-title">Urban Agriculture: The Future of Cities</h2>
+          <div class="passage-text">
+            <p>
+              As the global urban population continues to swell, city planners and environmentalists are turning their attention to innovative methods of food production. Urban farming, which encompasses everything from small community gardens to high-tech vertical farms, is fast becoming a crucial element in sustainable city living.
+            </p>
+            <p>
+              Vertical agriculture utilizes controlled environmental conditions where crops are grown in stacked layers without natural soil. By carefully managing light, humidity, and nutrient distribution through advanced hydroponic systems, vertical farms can achieve up to ten times the yield of conventional rural farming per square meter.
+            </p>
+            <p>
+              However, high startup expenses and continuous electricity consumption remain considerable hurdles. Critics argue that until renewable energy powers these installations completely, their environmental footprint might undermine the benefits of reduced food transportation miles.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Questions Box -->
+        <div class="question-box">
+          <h3 style="font-size: 18px; margin-bottom: 16px;">Questions 1–3: True / False / Not Given</h3>
+
+          <!-- Q1 -->
+          <div class="question-item">
+            <div class="q-number">Question 1</div>
+            <p style="font-size: 14px;">Vertical farms require traditional soil to maintain crop health.</p>
+            <div class="options-list">
+              <label class="option-label"><input type="radio" name="q1"> TRUE</label>
+              <label class="option-label"><input type="radio" name="q1"> FALSE</label>
+              <label class="option-label"><input type="radio" name="q1"> NOT GIVEN</label>
+            </div>
+            <button class="btn-toggle-ans" onclick="toggleExplanation('ans1')">Show Answer & Explanation</button>
+            <div id="ans1" class="explanation-box">
+              <strong>Answer: FALSE</strong><br>
+              ব্যাখ্যা: প্যাসেজের ২য় প্যারায় বলা হয়েছে: <em>"...crops are grown in stacked layers without natural soil."</em> অর্থাৎ মাটি ছাড়া চাষ হয়।
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="question-item">
+            <div class="q-number">Question 2</div>
+            <p style="font-size: 14px;">Vertical farming can produce significantly higher yields per unit area than regular farming.</p>
+            <div class="options-list">
+              <label class="option-label"><input type="radio" name="q2"> TRUE</label>
+              <label class="option-label"><input type="radio" name="q2"> FALSE</label>
+              <label class="option-label"><input type="radio" name="q2"> NOT GIVEN</label>
+            </div>
+            <button class="btn-toggle-ans" onclick="toggleExplanation('ans2')">Show Answer & Explanation</button>
+            <div id="ans2" class="explanation-box">
+              <strong>Answer: TRUE</strong><br>
+              ব্যাখ্যা: প্যাসেজে উল্লেখ আছে: <em>"...can achieve up to ten times the yield of conventional rural farming per square meter."</em>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Theme toggle
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    // Toggle Answer & Explanation
+    function toggleExplanation(id) {
+      const box = document.getElementById(id);
+      if (box.style.display === 'block') {
+        box.style.display = 'none';
+      } else {
+        box.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
