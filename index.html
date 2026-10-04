@@ -27,7 +27,7 @@
               100: '#e1ede6',
               200: '#c5dcd0',
               500: '#3c7558',
-              600: '#2d5a43', // আপনার ডিপ গ্রিন
+              600: '#2d5a43', // আপনার পছন্দের ডিপ ফরেস্ট গ্রিন
               700: '#234935',
               800: '#1c392b',
               900: '#14291f',
@@ -41,31 +41,74 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .view-screen { transition: opacity 0.2s ease-in-out; }
+    .progress-ring-circle {
+      transition: stroke-dashoffset 0.8s ease-in-out;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
   </style>
 </head>
 <body class="bg-[#f4f7f5] text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-forest-600 selection:text-white">
 
-  <!-- ================= TOP HEADER ================= -->
-  <header class="bg-white border-b border-slate-200/80 sticky top-0 z-30 px-4 md:px-8 py-3.5 shadow-sm flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-tr from-forest-700 to-forest-500 text-white font-extrabold flex items-center justify-center text-sm shadow-md ring-2 ring-forest-500/20">
-        TA
-      </div>
-      <div>
-        <div class="flex items-center gap-2">
-          <h2 class="text-sm md:text-base font-extrabold text-slate-900 leading-tight">Tanbir Ahmed</h2>
-          <span class="bg-forest-100 text-forest-700 text-[10px] font-bold px-2 py-0.5 rounded-md">IELTS PRO</span>
+  <!-- ================= TOP HEADER WITH PROFILE DROPDOWN ================= -->
+  <header class="bg-white border-b border-slate-200/80 sticky top-0 z-40 px-4 md:px-8 py-3 shadow-sm flex items-center justify-between">
+    
+    <!-- User Profile & Dropdown Area -->
+    <div class="relative">
+      <button onclick="toggleProfileDropdown(event)" class="flex items-center gap-3 p-1 rounded-2xl hover:bg-slate-50 transition-colors focus:outline-none">
+        <div class="relative">
+          <div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-tr from-forest-700 to-forest-500 text-white font-extrabold flex items-center justify-center text-sm shadow-md ring-2 ring-forest-500/20">
+            TA
+          </div>
+          <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
         </div>
-        <p class="text-xs font-semibold text-slate-400">Target Band: 8.0</p>
+        <div class="text-left">
+          <div class="flex items-center gap-1.5">
+            <h2 class="text-sm md:text-base font-extrabold text-slate-900 leading-tight">Tanbir Ahmed</h2>
+            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+          </div>
+          <p class="text-xs font-semibold text-forest-600">Target Band: 8.0</p>
+        </div>
+      </button>
+
+      <!-- Profile Dropdown Menu -->
+      <div id="profileDropdown" class="hidden absolute left-0 mt-2 w-64 bg-white border border-slate-200/90 rounded-2xl shadow-xl z-50 p-2 space-y-1">
+        <div class="px-3 py-2 border-b border-slate-100">
+          <p class="text-xs text-slate-400 font-bold uppercase">ইউজার অ্যাকাউন্ট</p>
+          <p class="text-sm font-black text-slate-800">tanbir.ahmed@example.com</p>
+        </div>
+
+        <button onclick="showView('viewHome'); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 rounded-xl transition-all text-left">
+          <i class="fa-solid fa-gauge-high text-forest-600 text-sm"></i>
+          <span>ড্যাশবোর্ড ভিউ</span>
+        </button>
+
+        <button onclick="showToast('প্রোফাইল সেটিংস লোড হচ্ছে...'); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 rounded-xl transition-all text-left">
+          <i class="fa-solid fa-sliders text-forest-600 text-sm"></i>
+          <span>টার্গেট ও অ্যাকাউন্ট সেটিংস</span>
+        </button>
+
+        <button onclick="showToast('ব্যান্ড স্কোর ও রিপোর্ট কার্ড'); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 rounded-xl transition-all text-left">
+          <i class="fa-solid fa-award text-forest-600 text-sm"></i>
+          <span>পারফরম্যান্স রিপোর্ট</span>
+        </button>
+
+        <div class="pt-1 border-t border-slate-100">
+          <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition-all text-left">
+            <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+            <span>লগআউট করুন</span>
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Desktop Brand Display -->
+    <!-- Desktop Global Brand Display -->
     <div class="hidden md:flex items-center gap-2">
       <span class="text-lg font-black tracking-tight text-slate-800">IELTS <span class="text-forest-600">VocabMaster</span></span>
-      <span class="text-[11px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">Cambridge 10-19</span>
+      <span class="text-[11px] bg-forest-100 text-forest-800 font-bold px-2 py-0.5 rounded-md">Cambridge 10-19</span>
     </div>
 
+    <!-- Right Header Actions -->
     <div class="flex items-center gap-2.5">
       <button onclick="openPostModal()" class="hidden md:inline-flex items-center gap-2 px-4 py-2 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-forest-900/20 active:scale-95">
         <i class="fa-solid fa-plus"></i> নতুন শব্দ পোস্ট
@@ -109,11 +152,17 @@
         <span>Speaking Cue Cards</span>
       </button>
 
+      <!-- Sidebar Progress Mini Card -->
       <div class="pt-4 border-t border-slate-100">
-        <button onclick="showToast('প্রোগ্রেস অ্যানালিটিক্স লোড হচ্ছে...')" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-bold text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-all text-left">
-          <i class="fa-solid fa-chart-column"></i>
-          <span>প্রোগ্রেস ট্র্যাকার</span>
-        </button>
+        <div class="bg-forest-50/80 border border-forest-100 p-4 rounded-2xl flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-forest-600 text-white flex items-center justify-center font-bold text-xs">
+            <span id="sidePercentText">65%</span>
+          </div>
+          <div>
+            <p class="text-xs font-extrabold text-forest-800">সামগ্রিক অগ্রগতি</p>
+            <p class="text-[10px] font-semibold text-forest-600">২৬/৪০ টেস্ট সম্পন্ন</p>
+          </div>
+        </div>
       </div>
     </aside>
 
@@ -123,9 +172,8 @@
       <!-- ================= 1. HOME VIEW ================= -->
       <div id="viewHome" class="view-screen w-full flex flex-col space-y-6 p-4 md:p-0 pb-28 md:pb-6">
         
-        <!-- Deep Forest Green Banner (মোবাইলে আগের পারফেক্ট কমপ্যাক্ট সাইজ + অতিরিক্ত সুন্দর ফিচার শেড) -->
+        <!-- Deep Forest Green Banner -->
         <section class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-forest-800 via-forest-600 to-emerald-700 text-white p-5 md:p-12 shadow-xl shadow-forest-900/15 md:min-h-[290px] flex flex-col justify-between">
-          
           <div class="relative z-10 space-y-2 md:space-y-4 max-w-2xl">
             <span class="inline-block px-3 py-0.5 md:px-3.5 md:py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] md:text-xs font-extrabold tracking-wider uppercase">
               IELTS Masterclass
@@ -138,7 +186,6 @@
             </p>
           </div>
 
-          <!-- কমপ্যাক্ট ফিচার শেড বার (মোবাইলে স্লিম ইনলাইন, পিসিতে বড় স্ট্রিপ) -->
           <div class="relative z-10 pt-3 md:pt-6 mt-3 border-t border-white/15 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] md:text-xs text-forest-100 font-semibold">
             <div class="flex items-center gap-1">
               <i class="fa-solid fa-circle-check text-emerald-300 text-[10px]"></i>
@@ -156,9 +203,52 @@
             </div>
           </div>
 
-          <!-- হালকা ব্যাকগ্রাউন্ড ওয়াটারমার্ক শেড -->
           <div class="absolute -right-3 -bottom-5 md:-right-6 md:-bottom-8 text-white/[0.06] text-[95px] md:text-[180px] font-black select-none pointer-events-none leading-none">
             IELTS
+          </div>
+        </section>
+
+        <!-- ================= CIRCULAR PROGRESS RING SECTION ================= -->
+        <section class="bg-white border border-slate-200/80 rounded-3xl p-5 md:p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="flex items-center gap-5 w-full md:w-auto">
+            <!-- Circular SVG Ring Widget -->
+            <div class="relative w-24 h-24 md:w-28 md:h-28 shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full" viewBox="0 0 100 100">
+                <!-- Background Circle -->
+                <circle class="text-slate-100" stroke-width="9" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50"/>
+                <!-- Filled Forest Green Ring -->
+                <circle id="progressRing" class="progress-ring-circle text-forest-600" stroke-width="9" stroke-dasharray="251.2" stroke-dashoffset="87.9" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50"/>
+              </svg>
+              <!-- Center Text Percentage -->
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="progressPercentDisplay" class="text-xl md:text-2xl font-black text-slate-800">65%</span>
+                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tight">সম্পন্ন</span>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-forest-100 text-forest-700 text-[11px] font-bold">
+                <i class="fa-solid fa-chart-line"></i> লার্নিং ট্র্যাকার
+              </div>
+              <h3 class="text-base md:text-lg font-black text-slate-800">ক্যামব্রিজ টেস্ট প্রস্তুতি অগ্রগতি</h3>
+              <p class="text-xs text-slate-400 font-medium">৪০টি টেস্টের মধ্যে ২৬টি প্র্যাকটিস শেষ করেছেন। লক্ষ্য ব্যান্ড ৮.০ অর্জনে এগিয়ে থাকুন!</p>
+            </div>
+          </div>
+
+          <!-- Quick Stat Badges -->
+          <div class="grid grid-cols-3 gap-3 w-full md:w-auto border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
+            <div class="text-center p-2 rounded-xl bg-slate-50">
+              <p class="text-xs text-slate-400 font-bold">ভোকাব</p>
+              <p class="text-base font-black text-forest-700">১২০+</p>
+            </div>
+            <div class="text-center p-2 rounded-xl bg-slate-50">
+              <p class="text-xs text-slate-400 font-bold">টেস্ট</p>
+              <p class="text-base font-black text-forest-700">২৬ টি</p>
+            </div>
+            <div class="text-center p-2 rounded-xl bg-slate-50">
+              <p class="text-xs text-slate-400 font-bold">অ্যাকুরেসি</p>
+              <p class="text-base font-black text-emerald-600">৮৪%</p>
+            </div>
           </div>
         </section>
 
@@ -251,7 +341,6 @@
 
       <!-- ================= 3. WORDS & DETAILS VIEW ================= -->
       <div id="viewBookDetails" class="view-screen w-full hidden flex-col space-y-4 p-4 md:p-0 pb-36 md:pb-6">
-        <!-- Details Header -->
         <div class="bg-white border border-slate-200/80 p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm flex items-center justify-between">
           <div class="flex items-center gap-3">
             <button onclick="showView('viewCambridgeList')" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors">
@@ -292,7 +381,7 @@
     </main>
   </div>
 
-  <!-- ================= MOBILE ONLY BOTTOM NAVBAR ================= -->
+  <!-- ================= MOBILE BOTTOM NAVBAR ================= -->
   <nav class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 px-2 py-1.5 z-30 select-none shadow-lg">
     <div class="grid grid-cols-5 items-center justify-items-center w-full max-w-md mx-auto">
       <button onclick="showView('viewHome')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-forest-600 transition-all">
@@ -305,7 +394,7 @@
         <span class="text-[10px] font-medium mt-0.5">সার্চ</span>
       </button>
 
-      <!-- Center Plus Action Button -->
+      <!-- Center Plus Button -->
       <button onclick="openPostModal()" class="flex flex-col items-center justify-center w-full group focus:outline-none">
         <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-forest-800 to-forest-600 text-white flex items-center justify-center text-xl shadow-lg shadow-forest-900/40 border-2 border-white -mt-6 transition-transform group-hover:scale-105 active:scale-95">
           <i class="fa-solid fa-plus"></i>
@@ -318,7 +407,7 @@
         <span class="text-[10px] font-medium mt-0.5">প্রোগ্রেস</span>
       </button>
 
-      <button onclick="showToast('প্রোফাইল সেটিংস ও সাবস্ক্রিপশন')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
+      <button onclick="toggleProfileDropdown(event)" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
         <i class="fa-solid fa-user text-lg"></i>
         <span class="text-[10px] font-medium mt-0.5">প্রোফাইল</span>
       </button>
@@ -409,6 +498,45 @@
     let currentBook = 'Cambridge 10';
     let currentTest = 'T1';
 
+    // Profile Dropdown Toggle
+    function toggleProfileDropdown(e) {
+      if (e) e.stopPropagation();
+      const dropdown = document.getElementById('profileDropdown');
+      dropdown.classList.toggle('hidden');
+    }
+
+    // Close Dropdown when clicked outside
+    window.addEventListener('click', function(e) {
+      const dropdown = document.getElementById('profileDropdown');
+      if (dropdown && !dropdown.classList.contains('hidden')) {
+        dropdown.classList.add('hidden');
+      }
+    });
+
+    // Logout Functionality
+    function handleLogout() {
+      if (confirm("আপনি কি নিশ্চিতভাবে লগআউট করতে চান?")) {
+        localStorage.removeItem('user_auth_token');
+        showToast("সফলভাবে লগআউট হয়েছে!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    }
+
+    // Set Radial Progress
+    function setProgress(percent) {
+      const circle = document.getElementById('progressRing');
+      const radius = circle.r.baseVal.value;
+      const circumference = 2 * Math.PI * radius; // 251.2
+      const offset = circumference - (percent / 100 * circumference);
+      circle.style.strokeDashoffset = offset;
+      document.getElementById('progressPercentDisplay').innerText = percent + '%';
+      const sideText = document.getElementById('sidePercentText');
+      if (sideText) sideText.innerText = percent + '%';
+    }
+
+    // Sample Vocabulary DB
     const initialVocabulary = [
       {
         book: "Cambridge 10",
@@ -490,7 +618,6 @@
       currentTest = testId;
       document.getElementById('activeTestBadge').innerText = "Test " + testId.replace('T', '');
       
-      // Update Mobile Buttons
       ['T1', 'T2', 'T3', 'T4'].forEach(t => {
         const btn = document.getElementById('btn' + t);
         if (btn) {
@@ -502,7 +629,6 @@
         }
       });
 
-      // Update Desktop Buttons
       ['T1', 'T2', 'T3', 'T4'].forEach(t => {
         const deskBtn = document.getElementById('deskBtn' + t);
         if (deskBtn) {
@@ -610,6 +736,7 @@
 
     window.onload = function() {
       selectTest('T1');
+      setProgress(65); // ডিফল্টভাবে ৬৫% অগ্রগতি সেট করা থাকবে
     };
   </script>
 </body>
