@@ -20,25 +20,36 @@
         extend: {
           fontFamily: {
             sans: ['Plus Jakarta Sans', 'Hind Siliguri', 'sans-serif'],
+          },
+          colors: {
+            forest: {
+              50: '#f2f7f4',
+              100: '#e1ede6',
+              200: '#c5dcd0',
+              500: '#3c7558',
+              600: '#2d5a43', // ছবির মাঝের নিখুঁত ডিপ গ্রিন
+              700: '#234935',
+              800: '#1c392b',
+              900: '#14291f',
+            }
           }
         }
       }
     }
   </script>
   <style>
-    /* Hide scrollbar for clean app feel */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .view-screen { transition: opacity 0.2s ease-in-out; }
     body { -webkit-tap-highlight-color: transparent; }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-800 min-h-screen flex items-center justify-center p-0 sm:p-4 font-sans antialiased selection:bg-blue-500 selection:text-white">
+<body class="bg-[#121c17] text-slate-800 min-h-screen flex items-center justify-center p-0 sm:p-4 font-sans antialiased selection:bg-forest-600 selection:text-white">
 
-  <!-- Mobile App Frame Container (Desktop e Center Frame, Mobile e Fullscreen) -->
-  <div class="w-full max-w-[430px] bg-slate-50 h-screen sm:h-[880px] sm:rounded-[40px] shadow-2xl relative overflow-hidden flex flex-col justify-between border-0 sm:border-[8px] sm:border-slate-800">
+  <!-- Mobile App Frame Container -->
+  <div class="w-full max-w-[430px] bg-[#f7faf8] h-screen sm:h-[880px] sm:rounded-[40px] shadow-2xl relative overflow-hidden flex flex-col justify-between border-0 sm:border-[8px] sm:border-[#1c2e25]">
 
-    <!-- Phone Top Status Bar Mockup -->
+    <!-- Phone Status Bar -->
     <div class="px-6 pt-3 pb-1 flex justify-between items-center text-xs font-semibold text-slate-700 bg-white z-30 shrink-0 select-none">
       <span>09:41</span>
       <div class="w-20 h-4 bg-slate-900 rounded-full mx-auto hidden sm:block"></div>
@@ -49,7 +60,7 @@
       </div>
     </div>
 
-    <!-- App Views Container -->
+    <!-- App Views -->
     <div class="relative flex-1 overflow-hidden flex flex-col">
 
       <!-- ================= 1. HOME VIEW ================= -->
@@ -58,7 +69,7 @@
         <header class="px-5 py-3.5 bg-white border-b border-slate-100 flex items-center justify-between sticky top-0 z-20 shadow-sm">
           <div class="flex items-center gap-3">
             <div class="relative">
-              <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-extrabold flex items-center justify-center text-sm shadow-md ring-2 ring-blue-500/20">
+              <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-forest-700 to-forest-500 text-white font-extrabold flex items-center justify-center text-sm shadow-md ring-2 ring-forest-500/20">
                 TA
               </div>
               <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
@@ -66,7 +77,7 @@
             <div>
               <div class="flex items-center gap-1.5">
                 <h2 class="text-sm font-extrabold text-slate-900">Tanbir Ahmed</h2>
-                <span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-1.5 py-0.5 rounded-md">IELTS</span>
+                <span class="bg-forest-100 text-forest-700 text-[10px] font-bold px-1.5 py-0.5 rounded-md">IELTS</span>
               </div>
               <p class="text-xs font-medium text-slate-400">Target Band: 8.0</p>
             </div>
@@ -77,24 +88,24 @@
           </button>
         </header>
 
-        <!-- Main Home Content -->
+        <!-- Main Content -->
         <main class="p-5 space-y-6 pb-28">
-          <!-- Hero Banner -->
-          <section class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-600 to-sky-500 text-white p-6 shadow-xl shadow-blue-500/25">
+          <!-- Deep Forest Green Hero Banner -->
+          <section class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-forest-800 via-forest-600 to-emerald-700 text-white p-6 shadow-xl shadow-forest-900/30">
             <div class="relative z-10 space-y-2.5">
               <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-extrabold tracking-wider uppercase">IELTS Masterclass</span>
               <h1 class="text-2xl font-black leading-tight">ক্যামব্রিজ ১০-১৯ ভোকাভিউ ও সলিউশন</h1>
-              <p class="text-xs text-blue-100/90 font-medium">মডিউল সিলেক্ট করে আপনার প্রতিদিনের প্রস্তুতি শুরু করুন।</p>
+              <p class="text-xs text-forest-100/90 font-medium">মডিউল সিলেক্ট করে আপনার প্রস্তুতি শুরু করুন।</p>
             </div>
           </section>
 
-          <!-- 4 Core Modules (2x2 Grid) -->
+          <!-- Modules (2x2 Grid) -->
           <section class="space-y-3">
             <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">প্রধান মডিউলসমূহ</h3>
             <div class="grid grid-cols-2 gap-3.5">
               <!-- Reading Card -->
-              <button onclick="openCambridgeList('Reading')" class="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md hover:border-emerald-500/50 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
-                <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm">
+              <button onclick="openCambridgeList('Reading')" class="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
+                <div class="w-11 h-11 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                   <i class="fa-solid fa-book-open-reader"></i>
                 </div>
                 <div>
@@ -104,8 +115,8 @@
               </button>
 
               <!-- Listening Card -->
-              <button onclick="openCambridgeList('Listening')" class="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md hover:border-blue-500/50 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
-                <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:bg-blue-500 group-hover:text-white transition-all shadow-sm">
+              <button onclick="openCambridgeList('Listening')" class="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
+                <div class="w-11 h-11 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                   <i class="fa-solid fa-headphones"></i>
                 </div>
                 <div>
@@ -115,8 +126,8 @@
               </button>
 
               <!-- Writing Card -->
-              <button onclick="openCambridgeList('Writing')" class="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md hover:border-amber-500/50 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
-                <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-white transition-all shadow-sm">
+              <button onclick="openCambridgeList('Writing')" class="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
+                <div class="w-11 h-11 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                   <i class="fa-solid fa-pen-to-square"></i>
                 </div>
                 <div>
@@ -126,8 +137,8 @@
               </button>
 
               <!-- Speaking Card -->
-              <button onclick="openCambridgeList('Speaking')" class="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md hover:border-rose-500/50 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
-                <div class="w-11 h-11 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl group-hover:bg-rose-500 group-hover:text-white transition-all shadow-sm">
+              <button onclick="openCambridgeList('Speaking')" class="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
+                <div class="w-11 h-11 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                   <i class="fa-solid fa-microphone-lines"></i>
                 </div>
                 <div>
@@ -141,7 +152,7 @@
       </div>
 
       <!-- ================= 2. CAMBRIDGE BOOKS GRID VIEW ================= -->
-      <div id="viewCambridgeList" class="view-screen w-full h-full hidden flex-col flex-1 overflow-y-auto no-scrollbar bg-slate-50">
+      <div id="viewCambridgeList" class="view-screen w-full h-full hidden flex-col flex-1 overflow-y-auto no-scrollbar bg-[#f7faf8]">
         <header class="px-5 py-4 bg-white border-b border-slate-200 flex items-center gap-3 sticky top-0 z-20 shadow-sm">
           <button onclick="showView('viewHome')" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors">
             <i class="fa-solid fa-chevron-left text-sm"></i>
@@ -155,46 +166,46 @@
         <main class="p-5 pb-28 flex-1">
           <p class="text-xs font-bold text-slate-500 mb-3 uppercase tracking-wider">বই নির্বাচন করুন</p>
           <div class="grid grid-cols-2 gap-3.5">
-            <!-- 10 to 19 Books Generated -->
-            <button onclick="openBookDetails('Cambridge 10')" class="bg-white hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-blue-500 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-blue-600 mt-1">10</span>
+            <!-- 10 to 19 Books with Forest Green Accent -->
+            <button onclick="openBookDetails('Cambridge 10')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
+              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
+              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">10</span>
             </button>
-            <button onclick="openBookDetails('Cambridge 11')" class="bg-white hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-blue-500 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-blue-600 mt-1">11</span>
+            <button onclick="openBookDetails('Cambridge 11')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
+              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
+              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">11</span>
             </button>
-            <button onclick="openBookDetails('Cambridge 12')" class="bg-white hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-blue-500 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-blue-600 mt-1">12</span>
+            <button onclick="openBookDetails('Cambridge 12')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
+              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
+              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">12</span>
             </button>
-            <button onclick="openBookDetails('Cambridge 13')" class="bg-white hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-blue-500 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-blue-600 mt-1">13</span>
+            <button onclick="openBookDetails('Cambridge 13')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
+              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
+              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">13</span>
             </button>
-            <button onclick="openBookDetails('Cambridge 14')" class="bg-white hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-blue-500 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-blue-600 mt-1">14</span>
+            <button onclick="openBookDetails('Cambridge 14')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
+              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
+              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">14</span>
             </button>
-            <button onclick="openBookDetails('Cambridge 15')" class="bg-white hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-blue-500 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-blue-600 mt-1">15</span>
+            <button onclick="openBookDetails('Cambridge 15')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
+              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
+              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">15</span>
             </button>
-            <button onclick="openBookDetails('Cambridge 16')" class="bg-white hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-blue-500 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-blue-600 mt-1">16</span>
+            <button onclick="openBookDetails('Cambridge 16')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
+              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
+              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">16</span>
             </button>
-            <button onclick="openBookDetails('Cambridge 17')" class="bg-white hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-blue-500 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-blue-600 mt-1">17</span>
+            <button onclick="openBookDetails('Cambridge 17')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
+              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
+              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">17</span>
             </button>
-            <button onclick="openBookDetails('Cambridge 18')" class="bg-white hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-blue-500 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-blue-600 mt-1">18</span>
+            <button onclick="openBookDetails('Cambridge 18')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
+              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
+              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">18</span>
             </button>
-            <button onclick="openBookDetails('Cambridge 19')" class="bg-white hover:bg-blue-50/50 p-4 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-blue-500 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-blue-600 mt-1">19</span>
+            <button onclick="openBookDetails('Cambridge 19')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
+              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
+              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">19</span>
             </button>
           </div>
         </main>
@@ -209,18 +220,18 @@
             </button>
             <h2 id="selectedBookHeader" class="text-base font-black text-slate-800">Cambridge 10</h2>
           </div>
-          <span id="activeTestBadge" class="px-2.5 py-1 bg-blue-100 text-blue-700 font-bold text-xs rounded-lg">Test 1</span>
+          <span id="activeTestBadge" class="px-2.5 py-1 bg-forest-100 text-forest-700 font-bold text-xs rounded-lg">Test 1</span>
         </header>
 
         <!-- Scrollable Word Cards -->
         <main id="wordsContainer" class="p-4 space-y-4 overflow-y-auto no-scrollbar flex-1 pb-36">
-          <!-- Rendered dynamically by JS -->
+          <!-- Rendered dynamically -->
         </main>
 
         <!-- T1 - T4 Sticky Test Selector -->
         <div class="absolute bottom-[66px] inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 z-20 shadow-lg">
           <div class="grid grid-cols-4 gap-2 max-w-sm mx-auto">
-            <button onclick="selectTest('T1')" id="btnT1" class="test-btn py-2 text-xs font-bold rounded-xl border border-blue-600 bg-blue-600 text-white transition-all shadow-sm">T1</button>
+            <button onclick="selectTest('T1')" id="btnT1" class="test-btn py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white transition-all shadow-sm">T1</button>
             <button onclick="selectTest('T2')" id="btnT2" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all">T2</button>
             <button onclick="selectTest('T3')" id="btnT3" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all">T3</button>
             <button onclick="selectTest('T4')" id="btnT4" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all">T4</button>
@@ -230,10 +241,10 @@
 
     </div>
 
-    <!-- ================= FIXED BOTTOM NAVBAR ================= -->
+    <!-- ================= BOTTOM NAVBAR ================= -->
     <nav class="shrink-0 bg-white border-t border-slate-200 px-2 py-1.5 z-30 relative select-none">
       <div class="grid grid-cols-5 items-center justify-items-center w-full max-w-md mx-auto">
-        <button onclick="showView('viewHome')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-blue-600 transition-all">
+        <button onclick="showView('viewHome')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-forest-600 transition-all">
           <i class="fa-solid fa-house text-lg"></i>
           <span class="text-[10px] font-bold mt-0.5">হোম</span>
         </button>
@@ -243,9 +254,9 @@
           <span class="text-[10px] font-medium mt-0.5">সার্চ</span>
         </button>
 
-        <!-- Center Plus Action Button -->
+        <!-- Center Forest Green Plus Button -->
         <button onclick="openPostModal()" class="flex flex-col items-center justify-center w-full group focus:outline-none">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-xl shadow-lg shadow-blue-500/35 border-2 border-white -mt-6 transition-transform group-hover:scale-105 active:scale-95">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-forest-800 to-forest-600 text-white flex items-center justify-center text-xl shadow-lg shadow-forest-900/40 border-2 border-white -mt-6 transition-transform group-hover:scale-105 active:scale-95">
             <i class="fa-solid fa-plus"></i>
           </div>
           <span class="text-[10px] font-semibold mt-0.5 text-slate-600">পোস্ট</span>
@@ -268,7 +279,7 @@
       <div class="bg-white rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-sm shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto no-scrollbar">
         <div class="flex items-center justify-between border-b pb-3 border-slate-100">
           <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold">
+            <div class="w-8 h-8 rounded-lg bg-forest-100 text-forest-700 flex items-center justify-center text-sm font-bold">
               <i class="fa-solid fa-pen"></i>
             </div>
             <h3 class="text-base font-extrabold text-slate-800">নতুন শব্দ পোস্ট করুন</h3>
@@ -281,17 +292,17 @@
         <form onsubmit="handlePostSubmit(event)" class="space-y-3">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Word (ইংরেজি শব্দ)</label>
-            <input type="text" id="inputWord" required placeholder="e.g. Cautiously" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" id="inputWord" required placeholder="e.g. Cautiously" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Bangla Meaning (বাংলা অর্থ)</label>
-            <input type="text" id="inputMeaning" required placeholder="e.g. সতর্কতার সাথে" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" id="inputMeaning" required placeholder="e.g. সতর্কতার সাথে" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
           </div>
 
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">Cambridge Book</label>
-              <select id="inputBook" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+              <select id="inputBook" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none bg-white">
                 <option>Cambridge 10</option>
                 <option>Cambridge 11</option>
                 <option>Cambridge 12</option>
@@ -306,7 +317,7 @@
             </div>
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">Test Number</label>
-              <select id="inputTest" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+              <select id="inputTest" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none bg-white">
                 <option value="T1">Test 1 (T1)</option>
                 <option value="T2">Test 2 (T2)</option>
                 <option value="T3">Test 3 (T3)</option>
@@ -317,19 +328,19 @@
 
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Synonyms (কমা দিয়ে লিখুন)</label>
-            <input type="text" id="inputSynonyms" placeholder="Carefully + সাবধানতার সাথে, Prudently" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" id="inputSynonyms" placeholder="Carefully + সাবধানতার সাথে, Prudently" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
           </div>
 
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Antonyms (কমা দিয়ে লিখুন)</label>
-            <input type="text" id="inputAntonyms" placeholder="Carelessly + অসাবধানতাবশত, Rashly" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="text" id="inputAntonyms" placeholder="Carelessly + অসাবধানতাবশত, Rashly" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
           </div>
 
           <div class="pt-2 flex gap-2">
             <button type="button" onclick="closePostModal()" class="flex-1 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200">
               বাতিল
             </button>
-            <button type="submit" class="flex-1 py-2.5 bg-blue-600 text-white font-bold text-xs rounded-xl hover:bg-blue-700 shadow-md shadow-blue-500/20">
+            <button type="submit" class="flex-1 py-2.5 bg-forest-600 text-white font-bold text-xs rounded-xl hover:bg-forest-700 shadow-md shadow-forest-900/20">
               পোস্ট করুন
             </button>
           </div>
@@ -344,13 +355,11 @@
 
   </div>
 
-  <!-- Client-side Logic & Data Engine -->
   <script>
     let currentModule = 'Reading';
     let currentBook = 'Cambridge 10';
     let currentTest = 'T1';
 
-    // Local Storage or Pre-loaded Words Database
     const initialVocabulary = [
       {
         book: "Cambridge 10",
@@ -434,7 +443,7 @@
       ['T1', 'T2', 'T3', 'T4'].forEach(t => {
         const btn = document.getElementById('btn' + t);
         if (t === testId) {
-          btn.className = "test-btn py-2 text-xs font-bold rounded-xl border border-blue-600 bg-blue-600 text-white transition-all shadow-md";
+          btn.className = "test-btn py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white transition-all shadow-sm";
         } else {
           btn.className = "test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all";
         }
@@ -470,12 +479,12 @@
         card.innerHTML = `
           <div class="border-b border-slate-100 pb-2.5">
             <h3 class="text-sm font-extrabold text-slate-800">
-              Word: <span class="text-blue-600">${data.word}</span> — <span class="text-emerald-700 font-bold">${data.meaning}</span>
+              Word: <span class="text-forest-600 font-black">${data.word}</span> — <span class="text-emerald-700 font-bold">${data.meaning}</span>
             </h3>
           </div>
           <div class="grid grid-cols-2 gap-3 pt-0.5">
-            <div class="bg-slate-50/80 p-2.5 rounded-xl border border-slate-100">
-              <h4 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 border-b border-slate-200 pb-1">Synonym:</h4>
+            <div class="bg-forest-50/50 p-2.5 rounded-xl border border-forest-100">
+              <h4 class="text-[11px] font-bold text-forest-700 uppercase tracking-wider mb-1.5 border-b border-forest-200 pb-1">Synonym:</h4>
               <ul class="space-y-1 list-disc list-inside text-slate-700">
                 ${synHTML || '<li class="text-[10px] text-slate-400">নেই</li>'}
               </ul>
@@ -534,7 +543,6 @@
       setTimeout(() => { toast.classList.add('hidden'); }, 2200);
     }
 
-    // Default startup
     window.onload = function() {
       selectTest('T1');
     };
