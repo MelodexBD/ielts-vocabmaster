@@ -2,14 +2,14 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IELTS Cambridge Prep & Vocabulary Master</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome 6 Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Fonts: Plus Jakarta Sans & Hind Siliguri -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@
               100: '#e1ede6',
               200: '#c5dcd0',
               500: '#3c7558',
-              600: '#2d5a43', // ছবির মাঝের নিখুঁত ডিপ গ্রিন
+              600: '#2d5a43', // আপনার ছবির নিখুঁত ডিপ গ্রিন
               700: '#234935',
               800: '#1c392b',
               900: '#14291f',
@@ -41,318 +41,339 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     .view-screen { transition: opacity 0.2s ease-in-out; }
-    body { -webkit-tap-highlight-color: transparent; }
   </style>
 </head>
-<body class="bg-[#121c17] text-slate-800 min-h-screen flex items-center justify-center p-0 sm:p-4 font-sans antialiased selection:bg-forest-600 selection:text-white">
+<body class="bg-[#f4f7f5] text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-forest-600 selection:text-white">
 
-  <!-- Mobile App Frame Container -->
-  <div class="w-full max-w-[430px] bg-[#f7faf8] h-screen sm:h-[880px] sm:rounded-[40px] shadow-2xl relative overflow-hidden flex flex-col justify-between border-0 sm:border-[8px] sm:border-[#1c2e25]">
-
-    <!-- Phone Status Bar -->
-    <div class="px-6 pt-3 pb-1 flex justify-between items-center text-xs font-semibold text-slate-700 bg-white z-30 shrink-0 select-none">
-      <span>09:41</span>
-      <div class="w-20 h-4 bg-slate-900 rounded-full mx-auto hidden sm:block"></div>
-      <div class="flex items-center gap-1.5 text-slate-800">
-        <i class="fa-solid fa-signal text-[10px]"></i>
-        <i class="fa-solid fa-wifi text-[10px]"></i>
-        <i class="fa-solid fa-battery-full text-[12px]"></i>
+  <!-- ================= TOP HEADER (DESKTOP & MOBILE) ================= -->
+  <header class="bg-white border-b border-slate-200/80 sticky top-0 z-30 px-4 md:px-8 py-3.5 shadow-sm flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-tr from-forest-700 to-forest-500 text-white font-extrabold flex items-center justify-center text-sm shadow-md ring-2 ring-forest-500/20">
+        TA
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h2 class="text-sm md:text-base font-extrabold text-slate-900 leading-tight">Tanbir Ahmed</h2>
+          <span class="bg-forest-100 text-forest-700 text-[10px] font-bold px-2 py-0.5 rounded-md">IELTS PRO</span>
+        </div>
+        <p class="text-xs font-semibold text-slate-400">Target Band: 8.0</p>
       </div>
     </div>
 
-    <!-- App Views -->
-    <div class="relative flex-1 overflow-hidden flex flex-col">
+    <!-- Desktop Global Brand Display -->
+    <div class="hidden md:flex items-center gap-2">
+      <span class="text-lg font-black tracking-tight text-slate-800">IELTS <span class="text-forest-600">VocabMaster</span></span>
+      <span class="text-[11px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-md">Cambridge 10-19</span>
+    </div>
+
+    <div class="flex items-center gap-2.5">
+      <button onclick="openPostModal()" class="hidden md:inline-flex items-center gap-2 px-4 py-2 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-forest-900/20 active:scale-95">
+        <i class="fa-solid fa-plus"></i> নতুন শব্দ পোস্ট
+      </button>
+      <button onclick="showToast('কোনো নতুন নোটিফিকেশন নেই')" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors relative">
+        <i class="fa-regular fa-bell text-base"></i>
+        <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-rose-500 rounded-full"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN LAYOUT WRAPPER ================= -->
+  <div class="flex-1 flex max-w-7xl w-full mx-auto md:px-6 md:py-6 gap-6">
+
+    <!-- DESKTOP SIDEBAR (পিসিতে বামপাশে থাকবে, মোবাইলে লুকিয়ে যাবে) -->
+    <aside class="hidden md:flex flex-col w-64 bg-white border border-slate-200/80 rounded-3xl p-5 shadow-sm shrink-0 h-fit sticky top-24 space-y-2">
+      <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1">নেভিগেশন মেনু</span>
+      
+      <button onclick="showView('viewHome')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-forest-700 bg-forest-50 border border-forest-100 transition-all text-left">
+        <i class="fa-solid fa-house text-base"></i>
+        <span>হোম ড্যাশবোর্ড</span>
+      </button>
+
+      <button onclick="openCambridgeList('Reading')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
+        <i class="fa-solid fa-book-open-reader text-base text-slate-400"></i>
+        <span>Reading Vault</span>
+      </button>
+
+      <button onclick="openCambridgeList('Listening')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
+        <i class="fa-solid fa-headphones text-base text-slate-400"></i>
+        <span>Listening Audio</span>
+      </button>
+
+      <button onclick="openCambridgeList('Writing')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
+        <i class="fa-solid fa-pen-to-square text-base text-slate-400"></i>
+        <span>Writing Tasks</span>
+      </button>
+
+      <button onclick="openCambridgeList('Speaking')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
+        <i class="fa-solid fa-microphone-lines text-base text-slate-400"></i>
+        <span>Speaking Cue Cards</span>
+      </button>
+
+      <div class="pt-4 border-t border-slate-100">
+        <button onclick="showToast('প্রোগ্রেস অ্যানালিটিক্স লোড হচ্ছে...')" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-bold text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-all text-left">
+          <i class="fa-solid fa-chart-column"></i>
+          <span>প্রোগ্রেস ট্র্যাকার</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTENT DISPLAY VIEWPORT -->
+    <main class="flex-1 w-full flex flex-col min-w-0">
 
       <!-- ================= 1. HOME VIEW ================= -->
-      <div id="viewHome" class="view-screen w-full h-full flex flex-col flex-1 overflow-y-auto no-scrollbar">
-        <!-- Top Profile Bar -->
-        <header class="px-5 py-3.5 bg-white border-b border-slate-100 flex items-center justify-between sticky top-0 z-20 shadow-sm">
-          <div class="flex items-center gap-3">
-            <div class="relative">
-              <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-forest-700 to-forest-500 text-white font-extrabold flex items-center justify-center text-sm shadow-md ring-2 ring-forest-500/20">
-                TA
-              </div>
-              <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
-            </div>
-            <div>
-              <div class="flex items-center gap-1.5">
-                <h2 class="text-sm font-extrabold text-slate-900">Tanbir Ahmed</h2>
-                <span class="bg-forest-100 text-forest-700 text-[10px] font-bold px-1.5 py-0.5 rounded-md">IELTS</span>
-              </div>
-              <p class="text-xs font-medium text-slate-400">Target Band: 8.0</p>
-            </div>
+      <div id="viewHome" class="view-screen w-full flex flex-col space-y-6 p-4 md:p-0 pb-28 md:pb-6">
+        <!-- Deep Forest Green Banner -->
+        <section class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-forest-800 via-forest-600 to-emerald-700 text-white p-6 md:p-10 shadow-xl shadow-forest-900/15">
+          <div class="relative z-10 space-y-3 max-w-2xl">
+            <span class="px-3.5 py-1 bg-white/20 backdrop-blur-md rounded-full text-[11px] font-extrabold tracking-wider uppercase">IELTS Masterclass</span>
+            <h1 class="text-2xl md:text-4xl font-black leading-tight">ক্যামব্রিজ ১০-১৯ ভোকাভিউ ও সলিউশন</h1>
+            <p class="text-xs md:text-sm text-forest-100/90 font-medium leading-relaxed">
+              Cambridge 10 থেকে 19 এর প্রতিটি টেস্টের শব্দভাণ্ডার, রিডিং ও লিসেনিং উত্তর ব্যাখ্যা এবং স্পিকিং ও রাইটিং প্র্যাকটিস দিয়ে আপনার লক্ষ্য অর্জন করুন।
+            </p>
           </div>
-          <button onclick="showToast('কোনো নতুন নোটিফিকেশন নেই')" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors relative">
-            <i class="fa-regular fa-bell text-base"></i>
-            <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-rose-500 rounded-full"></span>
-          </button>
-        </header>
+        </section>
 
-        <!-- Main Content -->
-        <main class="p-5 space-y-6 pb-28">
-          <!-- Deep Forest Green Hero Banner -->
-          <section class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-forest-800 via-forest-600 to-emerald-700 text-white p-6 shadow-xl shadow-forest-900/30">
-            <div class="relative z-10 space-y-2.5">
-              <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-extrabold tracking-wider uppercase">IELTS Masterclass</span>
-              <h1 class="text-2xl font-black leading-tight">ক্যামব্রিজ ১০-১৯ ভোকাভিউ ও সলিউশন</h1>
-              <p class="text-xs text-forest-100/90 font-medium">মডিউল সিলেক্ট করে আপনার প্রস্তুতি শুরু করুন।</p>
-            </div>
-          </section>
+        <!-- 4 Core Modules (Mobile e 2 Column, Desktop e 4 Column) -->
+        <section class="space-y-3.5">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">প্রধান মডিউলসমূহ</h3>
+            <span class="text-xs text-slate-400 font-semibold hidden md:inline">মডিউল ক্লিক করে বই নির্বাচন করুন</span>
+          </div>
 
-          <!-- Modules (2x2 Grid) -->
-          <section class="space-y-3">
-            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">প্রধান মডিউলসমূহ</h3>
-            <div class="grid grid-cols-2 gap-3.5">
-              <!-- Reading Card -->
-              <button onclick="openCambridgeList('Reading')" class="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
-                <div class="w-11 h-11 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
-                  <i class="fa-solid fa-book-open-reader"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-slate-800 text-base">Reading</h4>
-                  <p class="text-xs text-slate-400 font-medium">Cambridge 10-19</p>
-                </div>
-              </button>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 md:gap-5">
+            <!-- Reading Card -->
+            <button onclick="openCambridgeList('Reading')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+              <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
+                <i class="fa-solid fa-book-open-reader"></i>
+              </div>
+              <div>
+                <h4 class="font-extrabold text-slate-800 text-base md:text-lg">Reading</h4>
+                <p class="text-xs md:text-sm text-slate-400 font-medium">Cambridge 10-19</p>
+              </div>
+            </button>
 
-              <!-- Listening Card -->
-              <button onclick="openCambridgeList('Listening')" class="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
-                <div class="w-11 h-11 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
-                  <i class="fa-solid fa-headphones"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-slate-800 text-base">Listening</h4>
-                  <p class="text-xs text-slate-400 font-medium">Cambridge 10-19</p>
-                </div>
-              </button>
+            <!-- Listening Card -->
+            <button onclick="openCambridgeList('Listening')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+              <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
+                <i class="fa-solid fa-headphones"></i>
+              </div>
+              <div>
+                <h4 class="font-extrabold text-slate-800 text-base md:text-lg">Listening</h4>
+                <p class="text-xs md:text-sm text-slate-400 font-medium">Cambridge 10-19</p>
+              </div>
+            </button>
 
-              <!-- Writing Card -->
-              <button onclick="openCambridgeList('Writing')" class="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
-                <div class="w-11 h-11 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
-                  <i class="fa-solid fa-pen-to-square"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-slate-800 text-base">Writing</h4>
-                  <p class="text-xs text-slate-400 font-medium">Task 1 & Task 2</p>
-                </div>
-              </button>
+            <!-- Writing Card -->
+            <button onclick="openCambridgeList('Writing')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+              <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </div>
+              <div>
+                <h4 class="font-extrabold text-slate-800 text-base md:text-lg">Writing</h4>
+                <p class="text-xs md:text-sm text-slate-400 font-medium">Task 1 & Task 2</p>
+              </div>
+            </button>
 
-              <!-- Speaking Card -->
-              <button onclick="openCambridgeList('Speaking')" class="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 active:scale-95 group">
-                <div class="w-11 h-11 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
-                  <i class="fa-solid fa-microphone-lines"></i>
-                </div>
-                <div>
-                  <h4 class="font-bold text-slate-800 text-base">Speaking</h4>
-                  <p class="text-xs text-slate-400 font-medium">Cue Cards & Q/A</p>
-                </div>
-              </button>
-            </div>
-          </section>
-        </main>
+            <!-- Speaking Card -->
+            <button onclick="openCambridgeList('Speaking')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+              <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
+                <i class="fa-solid fa-microphone-lines"></i>
+              </div>
+              <div>
+                <h4 class="font-extrabold text-slate-800 text-base md:text-lg">Speaking</h4>
+                <p class="text-xs md:text-sm text-slate-400 font-medium">Cue Cards & Q/A</p>
+              </div>
+            </button>
+          </div>
+        </section>
       </div>
 
       <!-- ================= 2. CAMBRIDGE BOOKS GRID VIEW ================= -->
-      <div id="viewCambridgeList" class="view-screen w-full h-full hidden flex-col flex-1 overflow-y-auto no-scrollbar bg-[#f7faf8]">
-        <header class="px-5 py-4 bg-white border-b border-slate-200 flex items-center gap-3 sticky top-0 z-20 shadow-sm">
-          <button onclick="showView('viewHome')" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors">
-            <i class="fa-solid fa-chevron-left text-sm"></i>
-          </button>
-          <div>
-            <h2 id="moduleTitleHeader" class="text-base font-extrabold text-slate-800">Reading Module</h2>
-            <p class="text-[11px] font-medium text-slate-400">Cambridge Books 10 to 19</p>
-          </div>
-        </header>
-
-        <main class="p-5 pb-28 flex-1">
-          <p class="text-xs font-bold text-slate-500 mb-3 uppercase tracking-wider">বই নির্বাচন করুন</p>
-          <div class="grid grid-cols-2 gap-3.5">
-            <!-- 10 to 19 Books with Forest Green Accent -->
-            <button onclick="openBookDetails('Cambridge 10')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">10</span>
-            </button>
-            <button onclick="openBookDetails('Cambridge 11')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">11</span>
-            </button>
-            <button onclick="openBookDetails('Cambridge 12')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">12</span>
-            </button>
-            <button onclick="openBookDetails('Cambridge 13')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">13</span>
-            </button>
-            <button onclick="openBookDetails('Cambridge 14')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">14</span>
-            </button>
-            <button onclick="openBookDetails('Cambridge 15')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">15</span>
-            </button>
-            <button onclick="openBookDetails('Cambridge 16')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">16</span>
-            </button>
-            <button onclick="openBookDetails('Cambridge 17')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">17</span>
-            </button>
-            <button onclick="openBookDetails('Cambridge 18')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">18</span>
-            </button>
-            <button onclick="openBookDetails('Cambridge 19')" class="bg-white hover:bg-forest-50/60 p-4 rounded-2xl border border-slate-200 hover:border-forest-500 shadow-sm transition-all text-center flex flex-col items-center justify-center h-28 group active:scale-95">
-              <span class="text-[11px] font-bold text-slate-400 group-hover:text-forest-600 uppercase">Cambridge</span>
-              <span class="text-2xl font-black text-slate-800 group-hover:text-forest-600 mt-1">19</span>
-            </button>
-          </div>
-        </main>
-      </div>
-
-      <!-- ================= 3. WORDS & SYNONYM DETAILS VIEW ================= -->
-      <div id="viewBookDetails" class="view-screen w-full h-full hidden flex-col flex-1 bg-slate-100 overflow-hidden">
-        <header class="px-5 py-3.5 bg-white border-b border-slate-200 flex items-center justify-between sticky top-0 z-20 shadow-sm shrink-0">
+      <div id="viewCambridgeList" class="view-screen w-full hidden flex-col space-y-5 p-4 md:p-0 pb-28 md:pb-6">
+        <div class="bg-white border border-slate-200/80 p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-sm flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <button onclick="showView('viewCambridgeList')" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors">
+            <button onclick="showView('viewHome')" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors">
               <i class="fa-solid fa-chevron-left text-sm"></i>
             </button>
-            <h2 id="selectedBookHeader" class="text-base font-black text-slate-800">Cambridge 10</h2>
+            <div>
+              <h2 id="moduleTitleHeader" class="text-base md:text-xl font-extrabold text-slate-800">Reading Module</h2>
+              <p class="text-xs text-slate-400 font-medium">Cambridge Books 10 to 19</p>
+            </div>
           </div>
-          <span id="activeTestBadge" class="px-2.5 py-1 bg-forest-100 text-forest-700 font-bold text-xs rounded-lg">Test 1</span>
-        </header>
+          <button onclick="showView('viewHome')" class="text-xs font-bold text-forest-600 hover:underline hidden md:inline-block">← ড্যাশবোর্ডে ফিরে যান</button>
+        </div>
 
-        <!-- Scrollable Word Cards -->
-        <main id="wordsContainer" class="p-4 space-y-4 overflow-y-auto no-scrollbar flex-1 pb-36">
+        <div class="space-y-3">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">বই নির্বাচন করুন</p>
+          <!-- Mobile e 2 Column, Desktop e 5 Column Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5 md:gap-4">
+            <script>
+              for(let i=10; i<=19; i++) {
+                document.write(`
+                  <button onclick="openBookDetails('Cambridge ${i}')" class="bg-white hover:bg-forest-50/60 p-5 rounded-2xl md:rounded-3xl border border-slate-200/90 hover:border-forest-500 shadow-sm hover:shadow-lg transition-all text-center flex flex-col items-center justify-center h-28 md:h-36 group active:scale-95">
+                    <span class="text-[11px] md:text-xs font-bold text-slate-400 group-hover:text-forest-600 uppercase tracking-wider">Cambridge</span>
+                    <span class="text-2xl md:text-3xl font-black text-slate-800 group-hover:text-forest-600 mt-1">${i}</span>
+                  </button>
+                `);
+              }
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 3. WORDS & DETAILS VIEW ================= -->
+      <div id="viewBookDetails" class="view-screen w-full hidden flex-col space-y-4 p-4 md:p-0 pb-36 md:pb-6">
+        <!-- Details Header -->
+        <div class="bg-white border border-slate-200/80 p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <button onclick="showView('viewCambridgeList')" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors">
+              <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+            <h2 id="selectedBookHeader" class="text-base md:text-xl font-black text-slate-800">Cambridge 10</h2>
+          </div>
+
+          <!-- T1-T4 Desktop Selector Bar -->
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-400 hidden md:inline mr-2">টেস্ট সিলেক্ট করুন:</span>
+            <div class="inline-flex bg-slate-100 p-1 rounded-xl">
+              <button onclick="selectTest('T1')" id="deskBtnT1" class="px-3 py-1.5 text-xs font-bold rounded-lg border border-forest-600 bg-forest-600 text-white transition-all">T1</button>
+              <button onclick="selectTest('T2')" id="deskBtnT2" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-200 transition-all">T2</button>
+              <button onclick="selectTest('T3')" id="deskBtnT3" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-200 transition-all">T3</button>
+              <button onclick="selectTest('T4')" id="deskBtnT4" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-200 transition-all">T4</button>
+            </div>
+            <span id="activeTestBadge" class="px-2.5 py-1 bg-forest-100 text-forest-700 font-bold text-xs rounded-lg md:hidden">Test 1</span>
+          </div>
+        </div>
+
+        <!-- Word Cards Grid (Desktop e 2 Column, Mobile e 1 Column) -->
+        <div id="wordsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Rendered dynamically -->
-        </main>
+        </div>
 
-        <!-- T1 - T4 Sticky Test Selector -->
-        <div class="absolute bottom-[66px] inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 z-20 shadow-lg">
+        <!-- Mobile Only Sticky Bottom T1-T4 Bar -->
+        <div class="md:hidden fixed bottom-[62px] inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 z-20 shadow-lg">
           <div class="grid grid-cols-4 gap-2 max-w-sm mx-auto">
             <button onclick="selectTest('T1')" id="btnT1" class="test-btn py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white transition-all shadow-sm">T1</button>
-            <button onclick="selectTest('T2')" id="btnT2" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all">T2</button>
-            <button onclick="selectTest('T3')" id="btnT3" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all">T3</button>
-            <button onclick="selectTest('T4')" id="btnT4" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all">T4</button>
+            <button onclick="selectTest('T2')" id="btnT2" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition-all">T2</button>
+            <button onclick="selectTest('T3')" id="btnT3" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition-all">T3</button>
+            <button onclick="selectTest('T4')" id="btnT4" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition-all">T4</button>
           </div>
         </div>
       </div>
 
+    </main>
+  </div>
+
+  <!-- ================= MOBILE ONLY BOTTOM NAVBAR (পিসিতে লুকানো থাকবে) ================= -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 px-2 py-1.5 z-30 select-none shadow-lg">
+    <div class="grid grid-cols-5 items-center justify-items-center w-full max-w-md mx-auto">
+      <button onclick="showView('viewHome')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-forest-600 transition-all">
+        <i class="fa-solid fa-house text-lg"></i>
+        <span class="text-[10px] font-bold mt-0.5">হোম</span>
+      </button>
+
+      <button onclick="showToast('খুঁজতে শব্দ বা টেস্টের নাম লিখুন')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
+        <i class="fa-solid fa-magnifying-glass text-lg"></i>
+        <span class="text-[10px] font-medium mt-0.5">সার্চ</span>
+      </button>
+
+      <!-- Center Plus Action Button -->
+      <button onclick="openPostModal()" class="flex flex-col items-center justify-center w-full group focus:outline-none">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-forest-800 to-forest-600 text-white flex items-center justify-center text-xl shadow-lg shadow-forest-900/40 border-2 border-white -mt-6 transition-transform group-hover:scale-105 active:scale-95">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+        <span class="text-[10px] font-semibold mt-0.5 text-slate-600">পোস্ট</span>
+      </button>
+
+      <button onclick="showToast('প্রোগ্রেস অ্যানালিটিক্স লোড হচ্ছে...')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
+        <i class="fa-solid fa-chart-column text-lg"></i>
+        <span class="text-[10px] font-medium mt-0.5">প্রোগ্রেস</span>
+      </button>
+
+      <button onclick="showToast('প্রোফাইল সেটিংস ও সাবস্ক্রিপশন')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
+        <i class="fa-solid fa-user text-lg"></i>
+        <span class="text-[10px] font-medium mt-0.5">প্রোফাইল</span>
+      </button>
     </div>
+  </nav>
 
-    <!-- ================= BOTTOM NAVBAR ================= -->
-    <nav class="shrink-0 bg-white border-t border-slate-200 px-2 py-1.5 z-30 relative select-none">
-      <div class="grid grid-cols-5 items-center justify-items-center w-full max-w-md mx-auto">
-        <button onclick="showView('viewHome')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-forest-600 transition-all">
-          <i class="fa-solid fa-house text-lg"></i>
-          <span class="text-[10px] font-bold mt-0.5">হোম</span>
-        </button>
-
-        <button onclick="showToast('খুঁজতে শব্দ বা টেস্টের নাম লিখুন')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
-          <i class="fa-solid fa-magnifying-glass text-lg"></i>
-          <span class="text-[10px] font-medium mt-0.5">সার্চ</span>
-        </button>
-
-        <!-- Center Forest Green Plus Button -->
-        <button onclick="openPostModal()" class="flex flex-col items-center justify-center w-full group focus:outline-none">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-forest-800 to-forest-600 text-white flex items-center justify-center text-xl shadow-lg shadow-forest-900/40 border-2 border-white -mt-6 transition-transform group-hover:scale-105 active:scale-95">
-            <i class="fa-solid fa-plus"></i>
+  <!-- ================= ADD NEW WORD MODAL ================= -->
+  <div id="postModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto no-scrollbar">
+      <div class="flex items-center justify-between border-b pb-3 border-slate-100">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-forest-100 text-forest-700 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-pen"></i>
           </div>
-          <span class="text-[10px] font-semibold mt-0.5 text-slate-600">পোস্ট</span>
-        </button>
-
-        <button onclick="showToast('প্রোগ্রেস অ্যানালিটিক্স লোড হচ্ছে...')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
-          <i class="fa-solid fa-chart-column text-lg"></i>
-          <span class="text-[10px] font-medium mt-0.5">প্রোগ্রেস</span>
-        </button>
-
-        <button onclick="showToast('প্রোফাইল সেটিংস ও সাবস্ক্রিপশন')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
-          <i class="fa-solid fa-user text-lg"></i>
-          <span class="text-[10px] font-medium mt-0.5">প্রোফাইল</span>
+          <h3 class="text-base font-extrabold text-slate-800">নতুন শব্দ পোস্ট করুন</h3>
+        </div>
+        <button onclick="closePostModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200">
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-    </nav>
 
-    <!-- ================= ADD NEW WORD MODAL ================= -->
-    <div id="postModal" class="hidden absolute inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div class="bg-white rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-sm shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto no-scrollbar">
-        <div class="flex items-center justify-between border-b pb-3 border-slate-100">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-forest-100 text-forest-700 flex items-center justify-center text-sm font-bold">
-              <i class="fa-solid fa-pen"></i>
-            </div>
-            <h3 class="text-base font-extrabold text-slate-800">নতুন শব্দ পোস্ট করুন</h3>
+      <form onsubmit="handlePostSubmit(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Word (ইংরেজি শব্দ)</label>
+          <input type="text" id="inputWord" required placeholder="e.g. Cautiously" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Bangla Meaning (বাংলা অর্থ)</label>
+          <input type="text" id="inputMeaning" required placeholder="e.g. সতর্কতার সাথে" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Cambridge Book</label>
+            <select id="inputBook" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none bg-white">
+              <option>Cambridge 10</option>
+              <option>Cambridge 11</option>
+              <option>Cambridge 12</option>
+              <option>Cambridge 13</option>
+              <option>Cambridge 14</option>
+              <option>Cambridge 15</option>
+              <option>Cambridge 16</option>
+              <option>Cambridge 17</option>
+              <option>Cambridge 18</option>
+              <option>Cambridge 19</option>
+            </select>
           </div>
-          <button onclick="closePostModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200">
-            <i class="fa-solid fa-xmark"></i>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Test Number</label>
+            <select id="inputTest" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none bg-white">
+              <option value="T1">Test 1 (T1)</option>
+              <option value="T2">Test 2 (T2)</option>
+              <option value="T3">Test 3 (T3)</option>
+              <option value="T4">Test 4 (T4)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Synonyms (কমা দিয়ে লিখুন)</label>
+          <input type="text" id="inputSynonyms" placeholder="Carefully + সাবধানতার সাথে, Prudently" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Antonyms (কমা দিয়ে লিখুন)</label>
+          <input type="text" id="inputAntonyms" placeholder="Carelessly + অসাবধানতাবশত, Rashly" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
+        </div>
+
+        <div class="pt-2 flex gap-2">
+          <button type="button" onclick="closePostModal()" class="flex-1 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200">
+            বাতিল
+          </button>
+          <button type="submit" class="flex-1 py-2.5 bg-forest-600 text-white font-bold text-xs rounded-xl hover:bg-forest-700 shadow-md shadow-forest-900/20">
+            পোস্ট করুন
           </button>
         </div>
-
-        <form onsubmit="handlePostSubmit(event)" class="space-y-3">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Word (ইংরেজি শব্দ)</label>
-            <input type="text" id="inputWord" required placeholder="e.g. Cautiously" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Bangla Meaning (বাংলা অর্থ)</label>
-            <input type="text" id="inputMeaning" required placeholder="e.g. সতর্কতার সাথে" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Cambridge Book</label>
-              <select id="inputBook" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none bg-white">
-                <option>Cambridge 10</option>
-                <option>Cambridge 11</option>
-                <option>Cambridge 12</option>
-                <option>Cambridge 13</option>
-                <option>Cambridge 14</option>
-                <option>Cambridge 15</option>
-                <option>Cambridge 16</option>
-                <option>Cambridge 17</option>
-                <option>Cambridge 18</option>
-                <option>Cambridge 19</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Test Number</label>
-              <select id="inputTest" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none bg-white">
-                <option value="T1">Test 1 (T1)</option>
-                <option value="T2">Test 2 (T2)</option>
-                <option value="T3">Test 3 (T3)</option>
-                <option value="T4">Test 4 (T4)</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Synonyms (কমা দিয়ে লিখুন)</label>
-            <input type="text" id="inputSynonyms" placeholder="Carefully + সাবধানতার সাথে, Prudently" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
-          </div>
-
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Antonyms (কমা দিয়ে লিখুন)</label>
-            <input type="text" id="inputAntonyms" placeholder="Carelessly + অসাবধানতাবশত, Rashly" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
-          </div>
-
-          <div class="pt-2 flex gap-2">
-            <button type="button" onclick="closePostModal()" class="flex-1 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200">
-              বাতিল
-            </button>
-            <button type="submit" class="flex-1 py-2.5 bg-forest-600 text-white font-bold text-xs rounded-xl hover:bg-forest-700 shadow-md shadow-forest-900/20">
-              পোস্ট করুন
-            </button>
-          </div>
-        </form>
-      </div>
+      </form>
     </div>
+  </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="hidden absolute top-12 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xl z-50">
-      বিজ্ঞপ্তি
-    </div>
-
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed top-12 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xl z-50">
+    বিজ্ঞপ্তি
   </div>
 
   <script>
@@ -421,6 +442,7 @@
       const target = document.getElementById(viewId);
       target.classList.remove('hidden');
       target.classList.add('flex');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function openCambridgeList(moduleName) {
@@ -440,12 +462,27 @@
       currentTest = testId;
       document.getElementById('activeTestBadge').innerText = "Test " + testId.replace('T', '');
       
+      // Update Mobile Buttons
       ['T1', 'T2', 'T3', 'T4'].forEach(t => {
         const btn = document.getElementById('btn' + t);
-        if (t === testId) {
-          btn.className = "test-btn py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white transition-all shadow-sm";
-        } else {
-          btn.className = "test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all";
+        if (btn) {
+          if (t === testId) {
+            btn.className = "test-btn py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white transition-all shadow-sm";
+          } else {
+            btn.className = "test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition-all";
+          }
+        }
+      });
+
+      // Update Desktop Buttons
+      ['T1', 'T2', 'T3', 'T4'].forEach(t => {
+        const deskBtn = document.getElementById('deskBtn' + t);
+        if (deskBtn) {
+          if (t === testId) {
+            deskBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg border border-forest-600 bg-forest-600 text-white transition-all";
+          } else {
+            deskBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-200 transition-all";
+          }
         }
       });
 
@@ -460,10 +497,10 @@
 
       if (filtered.length === 0) {
         container.innerHTML = `
-          <div class="bg-white rounded-2xl p-8 text-center space-y-2 border border-slate-200 my-4 shadow-sm">
-            <i class="fa-solid fa-folder-open text-3xl text-slate-300"></i>
-            <p class="text-xs font-bold text-slate-700">${currentBook} (${currentTest}) এর জন্য কোনো শব্দ পাওয়া যায়নি</p>
-            <p class="text-[11px] text-slate-400">নিচের '+' আইকনে ট্যাপ করে নতুন শব্দ যুক্ত করুন।</p>
+          <div class="col-span-full bg-white rounded-2xl md:rounded-3xl p-8 md:p-12 text-center space-y-2 border border-slate-200 my-4 shadow-sm">
+            <i class="fa-solid fa-folder-open text-4xl text-slate-300"></i>
+            <p class="text-sm font-bold text-slate-700">${currentBook} (${currentTest}) এর জন্য কোনো শব্দ পাওয়া যায়নি</p>
+            <p class="text-xs text-slate-400">নতুন শব্দ পোস্ট করতে '+' বাটনে ক্লিক করুন।</p>
           </div>
         `;
         return;
@@ -471,28 +508,28 @@
 
       filtered.forEach(data => {
         const card = document.createElement('div');
-        card.className = "bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm space-y-3";
+        card.className = "bg-white rounded-2xl md:rounded-3xl border border-slate-200/90 p-5 shadow-sm space-y-3.5 hover:shadow-md transition-shadow";
 
-        const synHTML = data.synonyms.map(s => `<li class="text-[11px] text-slate-600 font-medium leading-relaxed">${s}</li>`).join('');
-        const antHTML = data.antonyms.map(a => `<li class="text-[11px] text-slate-600 font-medium leading-relaxed">${a}</li>`).join('');
+        const synHTML = data.synonyms.map(s => `<li class="text-xs text-slate-600 font-medium leading-relaxed">${s}</li>`).join('');
+        const antHTML = data.antonyms.map(a => `<li class="text-xs text-slate-600 font-medium leading-relaxed">${a}</li>`).join('');
 
         card.innerHTML = `
-          <div class="border-b border-slate-100 pb-2.5">
-            <h3 class="text-sm font-extrabold text-slate-800">
+          <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
+            <h3 class="text-base font-extrabold text-slate-800">
               Word: <span class="text-forest-600 font-black">${data.word}</span> — <span class="text-emerald-700 font-bold">${data.meaning}</span>
             </h3>
           </div>
           <div class="grid grid-cols-2 gap-3 pt-0.5">
-            <div class="bg-forest-50/50 p-2.5 rounded-xl border border-forest-100">
-              <h4 class="text-[11px] font-bold text-forest-700 uppercase tracking-wider mb-1.5 border-b border-forest-200 pb-1">Synonym:</h4>
+            <div class="bg-forest-50/50 p-3 rounded-xl border border-forest-100">
+              <h4 class="text-xs font-bold text-forest-700 uppercase tracking-wider mb-2 border-b border-forest-200 pb-1">Synonym:</h4>
               <ul class="space-y-1 list-disc list-inside text-slate-700">
-                ${synHTML || '<li class="text-[10px] text-slate-400">নেই</li>'}
+                ${synHTML || '<li class="text-[11px] text-slate-400">নেই</li>'}
               </ul>
             </div>
-            <div class="bg-slate-50/80 p-2.5 rounded-xl border border-slate-100">
-              <h4 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 border-b border-slate-200 pb-1">Antonym:</h4>
+            <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-100">
+              <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1">Antonym:</h4>
               <ul class="space-y-1 list-disc list-inside text-slate-700">
-                ${antHTML || '<li class="text-[10px] text-slate-400">নেই</li>'}
+                ${antHTML || '<li class="text-[11px] text-slate-400">নেই</li>'}
               </ul>
             </div>
           </div>
