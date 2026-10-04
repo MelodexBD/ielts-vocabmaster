@@ -656,15 +656,28 @@
     });
 
     // Logout Functionality
+    // Logout Functionality (সরাসরি signup.html এ পাঠিয়ে দেবে)
     function handleLogout() {
       if (confirm("আপনি কি নিশ্চিতভাবে লগআউট করতে চান?")) {
         localStorage.removeItem('user_auth_token');
+        localStorage.removeItem('user_name');
+        localStorage.removeItem('user_email');
         showToast("সফলভাবে লগআউট হয়েছে!");
+        
+        // ১ সেকেন্ডের মধ্যে সাইনআপ/লগইন পেজে রিডাইরেক্ট হবে
         setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+          window.location.href = "signup.html";
+        }, 800);
       }
     }
+
+    // Auth Protection Check (লগইন ছাড়া এই পেজে ঢুকলে স্বয়ংক্রিয়ভাবে signup.html এ পাঠিয়ে দেবে)
+    window.addEventListener('DOMContentLoaded', () => {
+      const authToken = localStorage.getItem('user_auth_token');
+      if (!authToken) {
+        window.location.href = "signup.html";
+      }
+    });
 
     // Generic Modal Handlers
     function openModal(modalId) {
