@@ -9,11 +9,30 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome 6 Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Fonts: Plus Jakarta Sans & Hind Siliguri -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   
+  <!-- Zero-Flash Instant Authentication Guard -->
+  <script>
+    if (!localStorage.getItem('user_auth_token')) {
+      window.location.replace("signup.html");
+    }
+  </script>
+  <style>
+    /* আনঅথরাইজড থাকা অবস্থায় ফ্ল্যাশ পুরোপুরি বন্ধ রাখা */
+    body { display: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .view-screen { transition: opacity 0.2s ease-in-out; }
+    .progress-ring-circle {
+      transition: stroke-dashoffset 0.8s ease-in-out;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+  </style>
+
   <script>
     tailwind.config = {
       theme: {
@@ -37,20 +56,10 @@
       }
     }
   </script>
-  <style>
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    .view-screen { transition: opacity 0.2s ease-in-out; }
-    .progress-ring-circle {
-      transition: stroke-dashoffset 0.8s ease-in-out;
-      transform: rotate(-90deg);
-      transform-origin: 50% 50%;
-    }
-  </style>
 </head>
 <body class="bg-[#f4f7f5] text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-forest-600 selection:text-white">
 
-  <!-- ================= TOP HEADER WITH USER INFO & DROPDOWN ================= -->
+  <!-- ================= TOP HEADER ================= -->
   <header class="bg-white border-b border-slate-200/80 sticky top-0 z-40 px-4 md:px-8 py-3 shadow-sm flex items-center justify-between">
     
     <!-- User Profile Dropdown Button -->
@@ -152,7 +161,6 @@
         <span>Speaking Cue Cards</span>
       </button>
 
-      <!-- Sidebar Mini Progress Card -->
       <div class="pt-4 border-t border-slate-100">
         <div class="bg-forest-50/80 border border-forest-100 p-4 rounded-2xl flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-forest-600 text-white flex items-center justify-center font-bold text-xs">
@@ -186,7 +194,6 @@
             </p>
           </div>
 
-          <!-- Feature Shade Strip -->
           <div class="relative z-10 pt-3 md:pt-6 mt-3 border-t border-white/15 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] md:text-xs text-forest-100 font-semibold">
             <div class="flex items-center gap-1">
               <i class="fa-solid fa-circle-check text-emerald-300 text-[10px]"></i>
@@ -212,7 +219,6 @@
         <!-- ================= CIRCULAR PROGRESS RING SECTION ================= -->
         <section class="bg-white border border-slate-200/80 rounded-3xl p-5 md:p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
           <div class="flex items-center gap-5 w-full md:w-auto">
-            <!-- Circular SVG Ring Widget -->
             <div class="relative w-24 h-24 md:w-28 md:h-28 shrink-0 flex items-center justify-center">
               <svg class="w-full h-full" viewBox="0 0 100 100">
                 <circle class="text-slate-100" stroke-width="9" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50"/>
@@ -233,7 +239,6 @@
             </div>
           </div>
 
-          <!-- Quick Stats Badges -->
           <div class="grid grid-cols-3 gap-3 w-full md:w-auto border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
             <div class="text-center p-2 rounded-xl bg-slate-50">
               <p class="text-xs text-slate-400 font-bold">ভোকাব</p>
@@ -250,7 +255,7 @@
           </div>
         </section>
 
-        <!-- 4 Core Modules (Mobile e 2 Column, Desktop e 4 Column) -->
+        <!-- 4 Core Modules -->
         <section class="space-y-3.5">
           <div class="flex items-center justify-between">
             <h3 class="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">প্রধান মডিউলসমূহ</h3>
@@ -258,7 +263,6 @@
           </div>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 md:gap-5">
-            <!-- Reading Card -->
             <button onclick="openCambridgeList('Reading')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-book-open-reader"></i>
@@ -269,7 +273,6 @@
               </div>
             </button>
 
-            <!-- Listening Card -->
             <button onclick="openCambridgeList('Listening')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-headphones"></i>
@@ -280,7 +283,6 @@
               </div>
             </button>
 
-            <!-- Writing Card -->
             <button onclick="openCambridgeList('Writing')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-pen-to-square"></i>
@@ -291,7 +293,6 @@
               </div>
             </button>
 
-            <!-- Speaking Card -->
             <button onclick="openCambridgeList('Speaking')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-microphone-lines"></i>
@@ -347,7 +348,6 @@
             <h2 id="selectedBookHeader" class="text-base md:text-xl font-black text-slate-800">Cambridge 10</h2>
           </div>
 
-          <!-- T1-T4 Desktop Selector Bar -->
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold text-slate-400 hidden md:inline mr-2">টেস্ট সিলেক্ট করুন:</span>
             <div class="inline-flex bg-slate-100 p-1 rounded-xl">
@@ -360,12 +360,10 @@
           </div>
         </div>
 
-        <!-- Word Cards Grid -->
         <div id="wordsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Rendered dynamically -->
         </div>
 
-        <!-- Mobile Only Sticky Bottom T1-T4 Bar -->
         <div class="md:hidden fixed bottom-[62px] inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 z-20 shadow-lg">
           <div class="grid grid-cols-4 gap-2 max-w-sm mx-auto">
             <button onclick="selectTest('T1')" id="btnT1" class="test-btn py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white transition-all shadow-sm">T1</button>
@@ -459,7 +457,6 @@
         <span class="text-[10px] font-medium mt-0.5">সার্চ</span>
       </button>
 
-      <!-- Center Plus Button -->
       <button onclick="openPostModal()" class="flex flex-col items-center justify-center w-full group focus:outline-none">
         <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-forest-800 to-forest-600 text-white flex items-center justify-center text-xl shadow-lg shadow-forest-900/40 border-2 border-white -mt-6 transition-transform group-hover:scale-105 active:scale-95">
           <i class="fa-solid fa-plus"></i>
@@ -480,8 +477,7 @@
   </nav>
 
   <!-- ================= MODALS & POPUPS ================= -->
-
-  <!-- ১. নতুন শব্দ পোস্ট মডাল -->
+  <!-- নতুন শব্দ পোস্ট মডাল -->
   <div id="postModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-white rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto no-scrollbar">
       <div class="flex items-center justify-between border-b pb-3 border-slate-100">
@@ -555,7 +551,7 @@
     </div>
   </div>
 
-  <!-- ২. About Us Modal -->
+  <!-- About Us Modal -->
   <div id="aboutModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl space-y-4">
       <div class="flex items-center justify-between border-b pb-3 border-slate-100">
@@ -571,7 +567,7 @@
     </div>
   </div>
 
-  <!-- ৩. Contact Us Modal -->
+  <!-- Contact Us Modal -->
   <div id="contactModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4">
       <div class="flex items-center justify-between border-b pb-3 border-slate-100">
@@ -596,7 +592,7 @@
     </div>
   </div>
 
-  <!-- ৪. Privacy Policy Modal -->
+  <!-- Privacy Policy Modal -->
   <div id="privacyModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex items-center justify-between border-b pb-3 border-slate-100">
@@ -610,7 +606,7 @@
     </div>
   </div>
 
-  <!-- ৫. Terms of Service Modal -->
+  <!-- Terms of Service Modal -->
   <div id="termsModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto no-scrollbar">
       <div class="flex items-center justify-between border-b pb-3 border-slate-100">
@@ -630,21 +626,16 @@
     বিজ্ঞপ্তি
   </div>
 
-  <!-- ================= JAVASCRIPT ENGINE & AUTHENTICATION ================= -->
   <script>
     // ------------------------------------------------------------------
-    // AUTHENTICATION GUARD & USER DATA LOADER
+    // AUTHENTICATION & INITIALIZATION
     // ------------------------------------------------------------------
-    window.addEventListener('DOMContentLoaded', () => {
-      const authToken = localStorage.getItem('user_auth_token');
-      
-      // ইউজার লগইন না থাকলে সরাসরি signup.html এ পাঠিয়ে দেওয়া হবে
-      if (!authToken) {
-        window.location.href = "signup.html";
-        return;
+    document.addEventListener("DOMContentLoaded", () => {
+      // অথেনটিকেশন নিশ্চিত হলে বডি প্রদর্শন করা
+      if (localStorage.getItem('user_auth_token')) {
+        document.body.style.display = "flex";
       }
 
-      // লগইন থাকা ইউজারের নাম ও ইমেইল দেখানো
       const savedName = localStorage.getItem('user_name') || 'Tanbir Ahmed';
       const savedEmail = localStorage.getItem('user_email') || 'tanbir.ahmed@example.com';
       
@@ -654,17 +645,14 @@
       const emailEl = document.getElementById('dropdownUserEmail');
       if (emailEl) emailEl.innerText = savedEmail;
 
-      // নামের আদ্যক্ষর দিয়ে অ্যাভাটার তৈরি (যেমন: Tanbir Ahmed -> TA)
       const initials = savedName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'TA';
       const avatarEl = document.getElementById('userAvatarPill');
       if (avatarEl) avatarEl.innerText = initials;
 
-      // ডিফল্ট টেস্ট ও প্রোগ্রেস সেট
       selectTest('T1');
       setProgress(65);
     });
 
-    // Logout Functionality (সরাসরি signup.html এ রিডাইরেক্ট)
     function handleLogout() {
       if (confirm("আপনি কি নিশ্চিতভাবে লগআউট করতে চান?")) {
         localStorage.removeItem('user_auth_token');
@@ -674,13 +662,10 @@
         
         setTimeout(() => {
           window.location.href = "signup.html";
-        }, 600);
+        }, 500);
       }
     }
 
-    // ------------------------------------------------------------------
-    // DROPDOWN & MODAL LOGIC
-    // ------------------------------------------------------------------
     function toggleProfileDropdown(e) {
       if (e) e.stopPropagation();
       const dropdown = document.getElementById('profileDropdown');
@@ -711,12 +696,11 @@
       e.target.reset();
     }
 
-    // Circular Progress Setter
     function setProgress(percent) {
       const circle = document.getElementById('progressRing');
       if (!circle) return;
       const radius = circle.r.baseVal.value;
-      const circumference = 2 * Math.PI * radius; // 251.2
+      const circumference = 2 * Math.PI * radius;
       const offset = circumference - (percent / 100 * circumference);
       circle.style.strokeDashoffset = offset;
       
@@ -728,7 +712,7 @@
     }
 
     // ------------------------------------------------------------------
-    // APPLICATION DATA & NAVIGATION
+    // VOCABULARY ENGINE & VIEWS
     // ------------------------------------------------------------------
     let currentModule = 'Reading';
     let currentBook = 'Cambridge 10';
