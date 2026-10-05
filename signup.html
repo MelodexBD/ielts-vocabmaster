@@ -53,8 +53,8 @@
 </head>
 <body class="bg-[#f4f7f5] text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-forest-600 selection:text-white">
 
-  <!-- ================= TOP HEADER BAR ================= -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 px-5 md:px-10 py-3.5 shadow-sm">
+<!-- ================= TOP HEADER BAR ================= -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 px-5 md:px-10 py-3.5 shadow-sm relative">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       
       <!-- Brand Logo -->
@@ -75,11 +75,11 @@
 
     </div>
 
-    <!-- ================= TOP SLIDE-DOWN DRAWER MENU ================= -->
-    <div id="topDrawer" class="border-t border-slate-100 bg-white shadow-xl">
+    <!-- ================= TOP SLIDE-DOWN DRAWER (ABSOLUTE OVERLAY) ================= -->
+    <!-- absolute ও z-50 ক্লাসের কারণে লগইন ফর্মটি আর নিচে নামবে না -->
+    <div id="topDrawer" class="absolute top-full left-0 right-0 border-t border-slate-100 bg-white/95 backdrop-blur-md shadow-2xl z-50">
       <div class="max-w-md mx-auto py-5 px-6 space-y-4">
         
-        <!-- Drawer Nav Links -->
         <nav class="space-y-1">
           <a href="index.html" class="flex items-center gap-3.5 px-3 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-forest-50 hover:text-forest-600 transition-colors">
             <i class="fa-solid fa-house text-base w-5 text-slate-400"></i>
@@ -111,7 +111,6 @@
           </a>
         </nav>
 
-        <!-- Helpline / Message Area inside Drawer -->
         <div class="pt-3 border-t border-slate-100">
           <p class="text-xs text-slate-500 font-medium">Looking for help? Feel free to drop a message.</p>
           <a href="tel:+8801757674052" class="mt-1.5 inline-flex items-center gap-2 text-sm font-black text-forest-600 hover:text-forest-700 transition-colors">
@@ -123,7 +122,6 @@
       </div>
     </div>
   </header>
-
   <!-- ================= AUTHENTICATION CONTAINER ================= -->
   <main class="flex-1 flex items-center justify-center p-4 sm:p-8">
     <div class="w-full max-w-[420px] bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-forest-900/5 p-6 sm:p-8 transition-all">
