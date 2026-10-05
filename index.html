@@ -694,16 +694,16 @@
         const initials = savedName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'TA';
         document.getElementById('userAvatarPill').innerText = initials;
 
-        // অ্যাডমিন ইমেইল চেক (শুধু এই ইমেইলগুলো অ্যাডমিন প্যানেল দেখতে পারবে)
-        const ADMIN_EMAILS = [
-          'admin@ieltsvocabmaster.com',
-          'tanbir.google@gmail.com',
-          'tanbir.ahmed@example.com'
-        ];
-        
+       // শুধুমাত্র ieltsvocabmaster@gmail.com হলেই অ্যাডমিন অপশনটি দৃশ্যমান হবে
         const adminLink = document.getElementById('adminMenuLink');
-        if (adminLink && ADMIN_EMAILS.includes(savedEmail.trim().toLowerCase())) {
-          adminLink.classList.remove('hidden');
+        const currentUserEmail = (localStorage.getItem('user_email') || '').trim().toLowerCase();
+
+        if (adminLink) {
+          if (currentUserEmail === 'ieltsvocabmaster@gmail.com') {
+            adminLink.classList.remove('hidden');
+          } else {
+            adminLink.classList.add('hidden');
+          }
         }
 
       } else {
