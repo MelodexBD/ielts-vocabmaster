@@ -6,13 +6,13 @@
   <title>Login & Sign Up - IELTS VocabMaster</title>
   
   <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
   <!-- FontAwesome 6 Icons CDN -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css)">
   <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
+  <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+  <link href="[https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap)" rel="stylesheet">
   
   <script>
     tailwind.config = {
@@ -27,7 +27,7 @@
               100: '#e1ede6',
               200: '#c5dcd0',
               500: '#3c7558',
-              600: '#2d5a43', // ডিপ ফরেস্ট গ্রিন
+              600: '#2d5a43',
               700: '#234935',
               800: '#1c392b',
               900: '#14291f',
@@ -38,7 +38,6 @@
     }
   </script>
   <style>
-    /* Smooth Top Drawer Slide Animation */
     #topDrawer {
       transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
       max-height: 0;
@@ -75,10 +74,9 @@
 
     </div>
 
-    <!-- ================= TOP SLIDE-DOWN DRAWER (ABSOLUTE OVERLAY) ================= -->
+    <!-- Top Drawer Menu (Absolute Overlay) -->
     <div id="topDrawer" class="absolute top-full left-0 right-0 border-t border-slate-100 bg-white/95 backdrop-blur-md shadow-2xl z-50">
       <div class="max-w-md mx-auto py-5 px-6 space-y-4">
-        
         <nav class="space-y-1">
           <a href="index.html" class="flex items-center gap-3.5 px-3 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-forest-50 hover:text-forest-600 transition-colors">
             <i class="fa-solid fa-house text-base w-5 text-slate-400"></i>
@@ -89,27 +87,14 @@
             <span>About</span>
           </a>
           <a href="index.html" class="flex items-center gap-3.5 px-3 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-forest-50 hover:text-forest-600 transition-colors">
-            <i class="fa-solid fa-tags text-base w-5 text-slate-400"></i>
-            <span>Pricing</span>
-          </a>
-          <a href="index.html" class="flex items-center gap-3.5 px-3 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-forest-50 hover:text-forest-600 transition-colors">
             <i class="fa-solid fa-square-check text-base w-5 text-slate-400"></i>
             <span>Mock Test</span>
-          </a>
-          <a href="index.html" class="flex items-center gap-3.5 px-3 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-forest-50 hover:text-forest-600 transition-colors">
-            <i class="fa-solid fa-newspaper text-base w-5 text-slate-400"></i>
-            <span>Blog</span>
-          </a>
-          <a href="index.html" class="flex items-center gap-3.5 px-3 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-forest-50 hover:text-forest-600 transition-colors">
-            <i class="fa-solid fa-book-bookmark text-base w-5 text-slate-400"></i>
-            <span>Resources</span>
           </a>
           <a href="index.html" class="flex items-center gap-3.5 px-3 py-2.5 rounded-xl font-bold text-sm text-slate-700 hover:bg-forest-50 hover:text-forest-600 transition-colors">
             <i class="fa-solid fa-envelope text-base w-5 text-slate-400"></i>
             <span>Contact</span>
           </a>
         </nav>
-
         <div class="pt-3 border-t border-slate-100">
           <p class="text-xs text-slate-500 font-medium">Looking for help? Feel free to drop a message.</p>
           <a href="tel:+8801757674052" class="mt-1.5 inline-flex items-center gap-2 text-sm font-black text-forest-600 hover:text-forest-700 transition-colors">
@@ -117,12 +102,11 @@
             <span>+88017-57674052</span>
           </a>
         </div>
-
       </div>
     </div>
   </header>
 
-  <!-- ================= AUTHENTICATION CONTAINER ================= -->
+  <!-- ================= AUTH CONTAINER ================= -->
   <main class="flex-1 flex items-center justify-center p-4 sm:p-8">
     <div class="w-full max-w-[420px] bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-forest-900/5 p-6 sm:p-8 transition-all">
 
@@ -135,19 +119,15 @@
 
         <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5">
-              Email<span class="text-rose-500">*</span>
-            </label>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Email<span class="text-rose-500">*</span></label>
             <input type="email" id="loginEmail" required placeholder="Enter your email" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5">
-              Password<span class="text-rose-500">*</span>
-            </label>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Password<span class="text-rose-500">*</span></label>
             <div class="relative">
               <input type="password" id="loginPassword" required placeholder="Enter your password" class="w-full pl-4 pr-11 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
-              <button type="button" onclick="togglePasswordVisibility('loginPassword', 'eyeIconLogin')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none">
+              <button type="button" onclick="togglePasswordVisibility('loginPassword', 'eyeIconLogin')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                 <i id="eyeIconLogin" class="fa-regular fa-eye text-sm"></i>
               </button>
             </div>
@@ -155,28 +135,23 @@
 
           <div class="flex items-center justify-between text-xs pt-0.5">
             <label class="flex items-center gap-2 cursor-pointer text-slate-600 font-medium">
-              <input type="checkbox" class="w-4 h-4 rounded text-forest-600 focus:ring-forest-500 border-slate-300">
+              <input type="checkbox" class="w-4 h-4 rounded text-forest-600 focus:ring-forest-500 border-slate-300" checked>
               <span>Remember me</span>
             </label>
-            <a href="javascript:void(0)" onclick="alert('পাসওয়ার্ড রিসেট লিঙ্ক আপনার ইমেইলে পাঠানো হবে।')" class="font-bold text-forest-600 hover:text-forest-700 hover:underline">
-              Forgot your password?
-            </a>
+            <a href="javascript:void(0)" onclick="alert('পাসওয়ার্ড রিসেট লিংক আপনার ইমেইলে পাঠানো হবে।')" class="font-bold text-forest-600 hover:underline">Forgot password?</a>
           </div>
 
-          <!-- Main Login Button -->
           <button type="submit" class="w-full py-3.5 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-forest-900/20 active:scale-[0.99] transition-all">
             Login
           </button>
         </form>
 
-        <!-- Divider (OR) -->
         <div class="relative flex py-1 items-center">
           <div class="flex-grow border-t border-slate-200"></div>
           <span class="flex-shrink mx-3 text-slate-400 text-[11px] font-bold uppercase tracking-wider">OR</span>
           <div class="flex-grow border-t border-slate-200"></div>
         </div>
 
-        <!-- Continue with Google Button -->
         <button type="button" onclick="handleGoogleAuth()" class="w-full py-3 px-4 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm rounded-xl border border-slate-200 shadow-sm flex items-center justify-center gap-3 transition-all active:scale-[0.99]">
           <svg class="w-4 h-4" viewBox="0 0 48 48">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -187,7 +162,6 @@
           <span>Continue with Google</span>
         </button>
 
-        <!-- Switch to Signup Section -->
         <div class="pt-3 border-t border-slate-100 text-center space-y-2.5">
           <p class="text-xs font-bold text-slate-600">Don't have an account?</p>
           <button onclick="switchToSignUp()" class="w-full py-3.5 bg-forest-50 hover:bg-forest-100 text-forest-800 hover:text-forest-900 font-extrabold text-xs sm:text-sm rounded-xl border-2 border-forest-600/25 hover:border-forest-600 transition-all shadow-sm active:scale-[0.99] flex items-center justify-center gap-2">
@@ -201,61 +175,50 @@
       <div id="signupFormContainer" class="hidden space-y-5">
         <div>
           <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Create Account</h1>
-          <p class="text-xs text-slate-400 mt-1 font-medium">আপনার ফ্রি অ্যাকাউন্ট তৈরি করে প্রস্তুতি শুরু করুন।</p>
+          <p class="text-xs text-slate-400 mt-1 font-medium">আপনার ফ্রি একাউন্ট তৈরি করে প্রস্তুতি শুরু করুন।</p>
         </div>
 
         <form onsubmit="handleSignupSubmit(event)" class="space-y-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5">
-              Full Name<span class="text-rose-500">*</span>
-            </label>
-            <input type="text" id="signupName" required placeholder="Enter your full name" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Full Name<span class="text-rose-500">*</span></label>
+            <input type="text" id="signupName" required placeholder="e.g. Tanbir Ahmed" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5">
-              Email Address<span class="text-rose-500">*</span>
-            </label>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Email Address<span class="text-rose-500">*</span></label>
             <input type="email" id="signupEmail" required placeholder="Enter your email" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5">
-              Password<span class="text-rose-500">*</span>
-            </label>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Password<span class="text-rose-500">*</span></label>
             <div class="relative">
-              <input type="password" id="signupPassword" required placeholder="Create a password (min 6 chars)" minlength="6" class="w-full pl-4 pr-11 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
-              <button type="button" onclick="togglePasswordVisibility('signupPassword', 'eyeIconSignup')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none">
+              <input type="password" id="signupPassword" required placeholder="Create password (min 6 chars)" minlength="6" class="w-full pl-4 pr-11 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
+              <button type="button" onclick="togglePasswordVisibility('signupPassword', 'eyeIconSignup')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                 <i id="eyeIconSignup" class="fa-regular fa-eye text-sm"></i>
               </button>
             </div>
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1.5">Target IELTS Band</label>
-            <select class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
-              <option>Target Band: 7.0</option>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Target Band</label>
+            <select class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl outline-none">
               <option>Target Band: 7.5</option>
               <option selected>Target Band: 8.0</option>
               <option>Target Band: 8.5</option>
-              <option>Target Band: 9.0</option>
             </select>
           </div>
 
-          <!-- Main Signup Button -->
           <button type="submit" class="w-full py-3.5 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-forest-900/20 active:scale-[0.99] transition-all">
             Sign Up
           </button>
         </form>
 
-        <!-- Divider (OR) -->
         <div class="relative flex py-1 items-center">
           <div class="flex-grow border-t border-slate-200"></div>
           <span class="flex-shrink mx-3 text-slate-400 text-[11px] font-bold uppercase tracking-wider">OR</span>
           <div class="flex-grow border-t border-slate-200"></div>
         </div>
 
-        <!-- Continue with Google Button -->
         <button type="button" onclick="handleGoogleAuth()" class="w-full py-3 px-4 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm rounded-xl border border-slate-200 shadow-sm flex items-center justify-center gap-3 transition-all active:scale-[0.99]">
           <svg class="w-4 h-4" viewBox="0 0 48 48">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -266,7 +229,6 @@
           <span>Continue with Google</span>
         </button>
 
-        <!-- Switch to Login Section -->
         <div class="pt-3 border-t border-slate-100 text-center space-y-2.5">
           <p class="text-xs font-bold text-slate-600">Already have an account?</p>
           <button onclick="switchToLogIn()" class="w-full py-3.5 bg-forest-50 hover:bg-forest-100 text-forest-800 hover:text-forest-900 font-extrabold text-xs sm:text-sm rounded-xl border-2 border-forest-600/25 hover:border-forest-600 transition-all shadow-sm active:scale-[0.99] flex items-center justify-center gap-2">
@@ -287,25 +249,17 @@
     function toggleTopDrawer() {
       const drawer = document.getElementById('topDrawer');
       const icon = document.getElementById('drawerIcon');
-      
       drawer.classList.toggle('open');
-      if (drawer.classList.contains('open')) {
-        icon.className = "fa-solid fa-xmark text-lg text-rose-500 transition-transform rotate-90";
-      } else {
-        icon.className = "fa-solid fa-bars text-lg transition-transform";
-      }
+      icon.className = drawer.classList.contains('open') 
+        ? "fa-solid fa-xmark text-lg text-rose-500 transition-transform rotate-90" 
+        : "fa-solid fa-bars text-lg transition-transform";
     }
 
     function togglePasswordVisibility(inputId, eyeIconId) {
       const input = document.getElementById(inputId);
       const icon = document.getElementById(eyeIconId);
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.className = 'fa-regular fa-eye-slash text-sm text-forest-600';
-      } else {
-        input.type = 'password';
-        icon.className = 'fa-regular fa-eye text-sm text-slate-400';
-      }
+      input.type = (input.type === 'password') ? 'text' : 'password';
+      icon.className = (input.type === 'password') ? 'fa-regular fa-eye text-sm text-slate-400' : 'fa-regular fa-eye-slash text-sm text-forest-600';
     }
 
     function switchToSignUp() {
@@ -322,7 +276,7 @@
 
     function handleGoogleAuth() {
       localStorage.setItem('user_auth_token', 'loggedIn_google');
-      localStorage.setItem('user_name', 'Tanbir Ahmed (Google)');
+      localStorage.setItem('user_name', 'Tanbir Ahmed');
       localStorage.setItem('user_email', 'tanbir.google@gmail.com');
       window.location.href = "index.html";
     }
