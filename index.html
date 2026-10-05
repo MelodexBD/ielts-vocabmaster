@@ -5,29 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IELTS Cambridge Prep & Vocabulary Master</title>
   
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 6 Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Auth Guard: লগইন না থাকলে ফ্ল্যাশ ছাড়া তাৎক্ষণিক signup.html-এ পাঠাবে -->
-  <script>
-    if (!localStorage.getItem('user_auth_token')) {
-      window.location.replace("signup.html");
-    }
-  </script>
-  <style>
-    body { display: none; }
-  </style>
-  <script>
-    if (localStorage.getItem('user_auth_token')) {
-      document.addEventListener("DOMContentLoaded", () => {
-        document.body.style.display = "flex";
-      });
-    }
-  </script>
-
   <script>
     tailwind.config = {
       theme: {
@@ -41,7 +27,7 @@
               100: '#e1ede6',
               200: '#c5dcd0',
               500: '#3c7558',
-              600: '#2d5a43',
+              600: '#2d5a43', // ডিপ ফরেস্ট গ্রিন
               700: '#234935',
               800: '#1c392b',
               900: '#14291f',
@@ -64,72 +50,75 @@
 </head>
 <body class="bg-[#f4f7f5] text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-forest-600 selection:text-white">
 
-  <!-- ================= TOP HEADER ================= -->
+  <!-- ================= TOP HEADER (DYNAMIC FOR GUEST & USER) ================= -->
   <header class="bg-white border-b border-slate-200/80 sticky top-0 z-40 px-4 md:px-8 py-3 shadow-sm flex items-center justify-between">
     
-    <!-- User Profile Dropdown Button -->
-    <div class="relative">
-      <button onclick="toggleProfileDropdown(event)" class="flex items-center gap-3 p-1 rounded-2xl hover:bg-slate-50 transition-colors focus:outline-none">
-        <div class="relative">
-          <div id="userAvatarPill" class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-tr from-forest-700 to-forest-500 text-white font-extrabold flex items-center justify-center text-sm shadow-md ring-2 ring-forest-500/20">
-            TA
+    <!-- Brand Logo -->
+    <div class="flex items-center gap-3">
+      <a href="javascript:void(0)" onclick="showView('viewHome')" class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl bg-forest-600 text-white flex items-center justify-center font-black text-sm shadow-md shadow-forest-900/20">
+          IV
+        </div>
+        <div>
+          <span class="text-base md:text-lg font-black tracking-tight text-slate-900 leading-tight">IELTS <span class="text-forest-600">VocabMaster</span></span>
+          <span class="hidden sm:inline-block ml-1 text-[10px] font-bold bg-forest-100 text-forest-700 px-2 py-0.5 rounded-md">Cambridge 10-19</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Right Header: Logged Out vs Logged In Dynamic Views -->
+    <div class="flex items-center gap-3">
+      
+      <!-- ১. গেস্ট ভিজিটরদের জন্য বাটন (লগইন না থাকলে দেখাবে) -->
+      <div id="guestNavGroup" class="flex items-center gap-2">
+        <a href="signup.html" class="px-4 py-2 text-xs font-bold text-forest-700 hover:bg-forest-50 rounded-xl transition-all">লগইন</a>
+        <a href="signup.html" class="px-4 py-2 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold rounded-xl shadow-md shadow-forest-900/20 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-user-plus text-[10px]"></i>
+          <span>ফ্রি অ্যাকাউন্ট খুলুন</span>
+        </a>
+      </div>
+
+      <!-- ২. লগইন করা ইউজারের প্রোফাইল মেনু (লগইন থাকলে দেখাবে) -->
+      <div id="userProfileGroup" class="hidden relative">
+        <button onclick="toggleProfileDropdown(event)" class="flex items-center gap-3 p-1 rounded-2xl hover:bg-slate-50 transition-colors focus:outline-none">
+          <div class="relative">
+            <div id="userAvatarPill" class="w-10 h-10 rounded-full bg-gradient-to-tr from-forest-700 to-forest-500 text-white font-extrabold flex items-center justify-center text-sm shadow-md ring-2 ring-forest-500/20">
+              TA
+            </div>
+            <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
           </div>
-          <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
-        </div>
-        <div class="text-left">
-          <div class="flex items-center gap-1.5">
-            <h2 id="headerUserName" class="text-sm md:text-base font-extrabold text-slate-900 leading-tight">Tanbir Ahmed</h2>
-            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+          <div class="text-left hidden sm:block">
+            <div class="flex items-center gap-1.5">
+              <h2 id="headerUserName" class="text-sm font-extrabold text-slate-900 leading-tight">Tanbir Ahmed</h2>
+              <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+            </div>
+            <p id="userSubscriptionBadge" class="text-[11px] font-bold text-amber-600">Free Tier Member</p>
           </div>
-          <p class="text-xs font-semibold text-forest-600">Target Band: 8.0</p>
-        </div>
-      </button>
-
-      <!-- Profile Dropdown Menu -->
-      <div id="profileDropdown" class="hidden absolute left-0 mt-2 w-64 bg-white border border-slate-200/90 rounded-2xl shadow-2xl z-50 p-2 space-y-1">
-        <div class="px-3 py-2 border-b border-slate-100">
-          <p class="text-xs text-slate-400 font-bold uppercase">ইউজার অ্যাকাউন্ট</p>
-          <p id="dropdownUserEmail" class="text-sm font-black text-slate-800 truncate">tanbir.ahmed@example.com</p>
-        </div>
-
-        <button onclick="showView('viewHome'); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 rounded-xl transition-all text-left">
-          <i class="fa-solid fa-gauge-high text-forest-600 text-sm"></i>
-          <span>ড্যাশবোর্ড ভিউ</span>
         </button>
 
-        <button onclick="showToast('প্রোফাইল সেটিংস লোড হচ্ছে...'); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 rounded-xl transition-all text-left">
-          <i class="fa-solid fa-sliders text-forest-600 text-sm"></i>
-          <span>টার্গেট ও অ্যাকাউন্ট সেটিংস</span>
-        </button>
-
-        <button onclick="showToast('ব্যান্ড স্কোর ও রিপোর্ট কার্ড'); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 rounded-xl transition-all text-left">
-          <i class="fa-solid fa-award text-forest-600 text-sm"></i>
-          <span>পারফরম্যান্স রিপোর্ট</span>
-        </button>
-
-        <div class="pt-1 border-t border-slate-100">
-          <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition-all text-left">
-            <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
-            <span>লগআউট করুন</span>
+        <!-- Dropdown Menu -->
+        <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white border border-slate-200/90 rounded-2xl shadow-2xl z-50 p-2 space-y-1">
+          <div class="px-3 py-2 border-b border-slate-100">
+            <p class="text-xs text-slate-400 font-bold uppercase">ইউজার অ্যাকাউন্ট</p>
+            <p id="dropdownUserEmail" class="text-sm font-black text-slate-800 truncate">tanbir.ahmed@example.com</p>
+          </div>
+          <button onclick="openPricingModal(); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-xl transition-all text-left">
+            <i class="fa-solid fa-crown text-sm"></i>
+            <span>প্রিমিয়াম আপগ্রেড করুন</span>
           </button>
+          <button onclick="showView('viewHome'); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 rounded-xl transition-all text-left">
+            <i class="fa-solid fa-gauge-high text-forest-600 text-sm"></i>
+            <span>ড্যাশবোর্ড ভিউ</span>
+          </button>
+          <div class="pt-1 border-t border-slate-100">
+            <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition-all text-left">
+              <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+              <span>লগআউট করুন</span>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Desktop Global Brand Display -->
-    <div class="hidden md:flex items-center gap-2">
-      <span class="text-lg font-black tracking-tight text-slate-800">IELTS <span class="text-forest-600">VocabMaster</span></span>
-      <span class="text-[11px] bg-forest-100 text-forest-800 font-bold px-2 py-0.5 rounded-md">Cambridge 10-19</span>
-    </div>
-
-    <div class="flex items-center gap-2.5">
-      <button onclick="openPostModal()" class="hidden md:inline-flex items-center gap-2 px-4 py-2 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-forest-900/20 active:scale-95">
-        <i class="fa-solid fa-plus"></i> নতুন শব্দ পোস্ট
-      </button>
-      <button onclick="showToast('কোনো নতুন নোটিফিকেশন নেই')" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors relative">
-        <i class="fa-regular fa-bell text-base"></i>
-        <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-rose-500 rounded-full"></span>
-      </button>
     </div>
   </header>
 
@@ -142,7 +131,7 @@
       
       <button onclick="showView('viewHome')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-forest-700 bg-forest-50 border border-forest-100 transition-all text-left">
         <i class="fa-solid fa-house text-base"></i>
-        <span>হোম ড্যাশবোর্ড</span>
+        <span>হোম ল্যান্ডিং</span>
       </button>
 
       <button onclick="openCambridgeList('Reading')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
@@ -165,15 +154,15 @@
         <span>Speaking Cue Cards</span>
       </button>
 
-      <!-- Mini Progress -->
+      <!-- Sidebar Mini Progress Card -->
       <div class="pt-4 border-t border-slate-100">
         <div class="bg-forest-50/80 border border-forest-100 p-4 rounded-2xl flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-forest-600 text-white flex items-center justify-center font-bold text-xs">
-            <span id="sidePercentText">65%</span>
+            <span id="sidePercentText">25%</span>
           </div>
           <div>
-            <p class="text-xs font-extrabold text-forest-800">সামগ্রিক অগ্রগতি</p>
-            <p class="text-[10px] font-semibold text-forest-600">২৬/৪০ টেস্ট সম্পন্ন</p>
+            <p class="text-xs font-extrabold text-forest-800">ফ্রি প্রস্তুতি অগ্রগতি</p>
+            <p class="text-[10px] font-semibold text-forest-600">১/৪ টেস্ট আনলকড</p>
           </div>
         </div>
       </div>
@@ -182,38 +171,37 @@
     <!-- CONTENT DISPLAY VIEWPORT -->
     <main class="flex-1 w-full flex flex-col min-w-0">
 
-      <!-- ================= 1. HOME VIEW ================= -->
+      <!-- ================= 1. HOME VIEW (LANDING & OVERVIEW) ================= -->
       <div id="viewHome" class="view-screen w-full flex flex-col space-y-6 p-4 md:p-0">
         
-        <!-- Deep Forest Green Banner -->
+        <!-- Deep Forest Green Hero Banner -->
         <section class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-forest-800 via-forest-600 to-emerald-700 text-white p-5 md:p-12 shadow-xl shadow-forest-900/15 md:min-h-[290px] flex flex-col justify-between">
           <div class="relative z-10 space-y-2 md:space-y-4 max-w-2xl">
             <span class="inline-block px-3 py-0.5 md:px-3.5 md:py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] md:text-xs font-extrabold tracking-wider uppercase">
-              IELTS Masterclass
+              Free & Premium IELTS Prep
             </span>
             <h1 class="text-xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight">
               ক্যামব্রিজ ১০–১৯ ভোকাভিউ ও সলিউশন
             </h1>
             <p class="text-xs md:text-base text-forest-100/90 font-medium leading-relaxed max-w-xl">
-              Cambridge 10 থেকে 19 এর প্রতিটি টেস্টের শব্দভাণ্ডার, রিডিং ও লিসেনিং উত্তর ব্যাখ্যা এবং স্পিকিং ও রাইটিং প্র্যাকটিস দিয়ে আপনার লক্ষ্য অর্জন করুন।
+              প্রতিটি বইয়ের টেস্ট ১ এর সব ভোকাবুলারি সবার জন্য সম্পূর্ণ উন্মুক্ত! পরবর্তী টেস্ট এবং ফুল টেস্ট ভল্ট আনলক করতে এগিয়ে যান।
             </p>
           </div>
 
-          <!-- Feature Shade Strip -->
           <div class="relative z-10 pt-3 md:pt-6 mt-3 border-t border-white/15 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] md:text-xs text-forest-100 font-semibold">
             <div class="flex items-center gap-1">
               <i class="fa-solid fa-circle-check text-emerald-300 text-[10px]"></i>
-              <span>১০টি অফিশিয়াল বই</span>
+              <span>Cambridge 10–19 টেস্ট ১ ফ্রি</span>
             </div>
             <span class="text-white/30 hidden sm:inline">•</span>
             <div class="flex items-center gap-1">
-              <i class="fa-solid fa-circle-check text-emerald-300 text-[10px]"></i>
-              <span>৪০টি ফুল টেস্ট</span>
+              <i class="fa-solid fa-lock text-amber-300 text-[10px]"></i>
+              <span>প্রিমিয়াম ফুল ভল্ট</span>
             </div>
             <span class="text-white/30 hidden sm:inline">•</span>
             <div class="flex items-center gap-1">
-              <i class="fa-solid fa-circle-check text-emerald-300 text-[10px]"></i>
-              <span>সিনোনিম ও অ্যান্টনিম</span>
+              <i class="fa-solid fa-bolt text-yellow-300 text-[10px]"></i>
+              <span>ব্যান্ড ৮.০ টার্গেট সলিউশন</span>
             </div>
           </div>
 
@@ -225,44 +213,43 @@
         <!-- ================= CIRCULAR PROGRESS RING SECTION ================= -->
         <section class="bg-white border border-slate-200/80 rounded-3xl p-5 md:p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
           <div class="flex items-center gap-5 w-full md:w-auto">
-            <!-- Circular SVG Ring Widget -->
             <div class="relative w-24 h-24 md:w-28 md:h-28 shrink-0 flex items-center justify-center">
               <svg class="w-full h-full" viewBox="0 0 100 100">
                 <circle class="text-slate-100" stroke-width="9" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50"/>
-                <circle id="progressRing" class="progress-ring-circle text-forest-600" stroke-width="9" stroke-dasharray="251.2" stroke-dashoffset="87.9" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50"/>
+                <circle id="progressRing" class="progress-ring-circle text-forest-600" stroke-width="9" stroke-dasharray="251.2" stroke-dashoffset="188.4" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50"/>
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center">
-                <span id="progressPercentDisplay" class="text-xl md:text-2xl font-black text-slate-800">65%</span>
+                <span id="progressPercentDisplay" class="text-xl md:text-2xl font-black text-slate-800">25%</span>
                 <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tight">সম্পন্ন</span>
               </div>
             </div>
 
             <div class="space-y-1">
               <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-forest-100 text-forest-700 text-[11px] font-bold">
-                <i class="fa-solid fa-chart-line"></i> লার্নিং ট্র্যাকার
+                <i class="fa-solid fa-chart-line"></i> লার্নিং ড্যাশবোর্ড
               </div>
               <h3 class="text-base md:text-lg font-black text-slate-800">ক্যামব্রিজ টেস্ট প্রস্তুতি অগ্রগতি</h3>
-              <p class="text-xs text-slate-400 font-medium">৪০টি টেস্টের মধ্যে ২৬টি প্র্যাকটিস শেষ করেছেন। লক্ষ্য ব্যান্ড ৮.০ অর্জনে নিয়মিত অনুশীলন চালিয়ে যান!</p>
+              <p class="text-xs text-slate-400 font-medium">ফ্রি কোটায় টেস্ট ১ শেষ করেছেন। বাকি টেস্টগুলো আনলক করে পুরো প্রস্তুতি সম্পন্ন করুন।</p>
             </div>
           </div>
 
           <div class="grid grid-cols-3 gap-3 w-full md:w-auto border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
             <div class="text-center p-2 rounded-xl bg-slate-50">
-              <p class="text-xs text-slate-400 font-bold">ভোকাব</p>
-              <p class="text-base font-black text-forest-700">১২০+</p>
+              <p class="text-xs text-slate-400 font-bold">ফ্রি শব্দ</p>
+              <p class="text-base font-black text-forest-700">৫০+</p>
             </div>
             <div class="text-center p-2 rounded-xl bg-slate-50">
-              <p class="text-xs text-slate-400 font-bold">টেস্ট</p>
-              <p class="text-base font-black text-forest-700">২৬ টি</p>
+              <p class="text-xs text-slate-400 font-bold">লকড টেস্ট</p>
+              <p class="text-base font-black text-amber-600">৩০ টি</p>
             </div>
             <div class="text-center p-2 rounded-xl bg-slate-50">
-              <p class="text-xs text-slate-400 font-bold">অ্যাকুরেসি</p>
-              <p class="text-base font-black text-emerald-600">৮৪%</p>
+              <p class="text-xs text-slate-400 font-bold">টার্গেট</p>
+              <p class="text-base font-black text-emerald-600">৮.০</p>
             </div>
           </div>
         </section>
 
-        <!-- 4 Core Modules (Mobile 2 Column, Desktop 4 Column) -->
+        <!-- 4 Core Modules -->
         <section class="space-y-3.5">
           <div class="flex items-center justify-between">
             <h3 class="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">প্রধান মডিউলসমূহ</h3>
@@ -270,7 +257,6 @@
           </div>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 md:gap-5">
-            <!-- Reading Card -->
             <button onclick="openCambridgeList('Reading')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-book-open-reader"></i>
@@ -281,7 +267,6 @@
               </div>
             </button>
 
-            <!-- Listening Card -->
             <button onclick="openCambridgeList('Listening')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-headphones"></i>
@@ -292,7 +277,6 @@
               </div>
             </button>
 
-            <!-- Writing Card -->
             <button onclick="openCambridgeList('Writing')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-pen-to-square"></i>
@@ -303,7 +287,6 @@
               </div>
             </button>
 
-            <!-- Speaking Card -->
             <button onclick="openCambridgeList('Speaking')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-microphone-lines"></i>
@@ -338,7 +321,8 @@
             <script>
               for(let i=10; i<=19; i++) {
                 document.write(`
-                  <button onclick="openBookDetails('Cambridge ${i}')" class="bg-white hover:bg-forest-50/60 p-5 rounded-2xl md:rounded-3xl border border-slate-200/90 hover:border-forest-500 shadow-sm hover:shadow-lg transition-all text-center flex flex-col items-center justify-center h-28 md:h-36 group active:scale-95">
+                  <button onclick="openBookDetails('Cambridge ${i}')" class="bg-white hover:bg-forest-50/60 p-5 rounded-2xl md:rounded-3xl border border-slate-200/90 hover:border-forest-500 shadow-sm hover:shadow-lg transition-all text-center flex flex-col items-center justify-center h-28 md:h-36 group active:scale-95 relative">
+                    ${i > 10 ? '<span class="absolute top-2.5 right-2.5 text-amber-500 text-[10px] bg-amber-50 px-1.5 py-0.5 rounded-md font-bold flex items-center gap-1"><i class="fa-solid fa-lock text-[9px]"></i>PRO</span>' : '<span class="absolute top-2.5 right-2.5 text-emerald-600 text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded-md font-bold">FREE</span>'}
                     <span class="text-[11px] md:text-xs font-bold text-slate-400 group-hover:text-forest-600 uppercase tracking-wider">Cambridge</span>
                     <span class="text-2xl md:text-3xl font-black text-slate-800 group-hover:text-forest-600 mt-1">${i}</span>
                   </button>
@@ -349,7 +333,7 @@
         </div>
       </div>
 
-      <!-- ================= 3. WORDS & DETAILS VIEW ================= -->
+      <!-- ================= 3. WORDS & DETAILS VIEW WITH LOCK SYSTEM ================= -->
       <div id="viewBookDetails" class="view-screen w-full hidden flex-col space-y-4 p-4 md:p-0">
         <div class="bg-white border border-slate-200/80 p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm flex items-center justify-between">
           <div class="flex items-center gap-3">
@@ -359,16 +343,30 @@
             <h2 id="selectedBookHeader" class="text-base md:text-xl font-black text-slate-800">Cambridge 10</h2>
           </div>
 
-          <!-- T1-T4 Selector Bar -->
+          <!-- T1 (Free) and T2-T4 (Locked) Selector Bar for Desktop -->
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-slate-400 hidden md:inline mr-2">টেস্ট সিলেক্ট করুন:</span>
+            <span class="text-xs font-bold text-slate-400 hidden md:inline mr-2">টেস্ট নির্বাচন:</span>
             <div class="inline-flex bg-slate-100 p-1 rounded-xl">
-              <button onclick="selectTest('T1')" id="deskBtnT1" class="px-3 py-1.5 text-xs font-bold rounded-lg border border-forest-600 bg-forest-600 text-white transition-all">T1</button>
-              <button onclick="selectTest('T2')" id="deskBtnT2" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-200 transition-all">T2</button>
-              <button onclick="selectTest('T3')" id="deskBtnT3" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-200 transition-all">T3</button>
-              <button onclick="selectTest('T4')" id="deskBtnT4" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-200 transition-all">T4</button>
+              <!-- T1 is Free -->
+              <button onclick="selectTest('T1')" id="deskBtnT1" class="px-3 py-1.5 text-xs font-bold rounded-lg border border-forest-600 bg-forest-600 text-white transition-all flex items-center gap-1">
+                <span>T1</span>
+                <span class="text-[9px] bg-white/20 px-1 rounded">FREE</span>
+              </button>
+              
+              <!-- T2, T3, T4 are Locked -->
+              <button onclick="handleLockedContentClick('T2')" id="deskBtnT2" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
+                <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
+                <span>T2</span>
+              </button>
+              <button onclick="handleLockedContentClick('T3')" id="deskBtnT3" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
+                <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
+                <span>T3</span>
+              </button>
+              <button onclick="handleLockedContentClick('T4')" id="deskBtnT4" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
+                <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
+                <span>T4</span>
+              </button>
             </div>
-            <span id="activeTestBadge" class="px-2.5 py-1 bg-forest-100 text-forest-700 font-bold text-xs rounded-lg md:hidden">Test 1</span>
           </div>
         </div>
 
@@ -376,13 +374,25 @@
         <div id="wordsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         </div>
 
-        <!-- Mobile Only Sticky Bottom T1-T4 Bar -->
+        <!-- Mobile Only Sticky Bottom T1-T4 Bar with Lock -->
         <div class="md:hidden fixed bottom-[62px] inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 z-20 shadow-lg">
           <div class="grid grid-cols-4 gap-2 max-w-sm mx-auto">
-            <button onclick="selectTest('T1')" id="btnT1" class="test-btn py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white transition-all shadow-sm">T1</button>
-            <button onclick="selectTest('T2')" id="btnT2" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition-all">T2</button>
-            <button onclick="selectTest('T3')" id="btnT3" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition-all">T3</button>
-            <button onclick="selectTest('T4')" id="btnT4" class="test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition-all">T4</button>
+            <button onclick="selectTest('T1')" id="btnT1" class="py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white shadow-sm flex items-center justify-center gap-1">
+              <span>T1</span>
+              <span class="text-[9px] bg-white/20 px-1 rounded">FREE</span>
+            </button>
+            <button onclick="handleLockedContentClick('T2')" class="py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 flex items-center justify-center gap-1">
+              <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
+              <span>T2</span>
+            </button>
+            <button onclick="handleLockedContentClick('T3')" class="py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 flex items-center justify-center gap-1">
+              <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
+              <span>T3</span>
+            </button>
+            <button onclick="handleLockedContentClick('T4')" class="py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 flex items-center justify-center gap-1">
+              <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
+              <span>T4</span>
+            </button>
           </div>
         </div>
       </div>
@@ -390,10 +400,9 @@
     </main>
   </div>
 
-  <!-- ================= FOOTER ================= -->
+  <!-- ================= MODERN FOOTER SECTION ================= -->
   <footer class="bg-white border-t border-slate-200 mt-12 pb-24 md:pb-8 pt-10 px-5 md:px-12 text-slate-600">
     <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-      
       <div class="space-y-3">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-xl bg-forest-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
@@ -404,60 +413,44 @@
         <p class="text-xs text-slate-500 leading-relaxed">
           Cambridge IELTS 10–19 পরীক্ষার শতভাগ কার্যকরী প্রস্তুতি। ভোকাবুলারি ভল্ট, উত্তরপত্রের ব্যাখ্যা এবং রিয়েল টাইমড প্র্যাকটিস প্ল্যাটফর্ম।
         </p>
-        <div class="flex items-center gap-3 pt-1 text-slate-400">
-          <a href="#" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-forest-50 hover:text-forest-600 flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f text-xs"></i></a>
-          <a href="#" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-forest-50 hover:text-forest-600 flex items-center justify-center transition-colors"><i class="fa-brands fa-whatsapp text-xs"></i></a>
-          <a href="#" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-forest-50 hover:text-forest-600 flex items-center justify-center transition-colors"><i class="fa-brands fa-telegram text-xs"></i></a>
-        </div>
       </div>
 
       <div class="space-y-3">
         <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">মডিউলসমূহ</h4>
         <ul class="space-y-2 text-xs font-medium">
-          <li><a href="javascript:void(0)" onclick="openCambridgeList('Reading')" class="hover:text-forest-600 transition-colors">Reading Vault</a></li>
-          <li><a href="javascript:void(0)" onclick="openCambridgeList('Listening')" class="hover:text-forest-600 transition-colors">Listening Station</a></li>
-          <li><a href="javascript:void(0)" onclick="openCambridgeList('Writing')" class="hover:text-forest-600 transition-colors">Writing Tasks 1 & 2</a></li>
-          <li><a href="javascript:void(0)" onclick="openCambridgeList('Speaking')" class="hover:text-forest-600 transition-colors">Speaking Cue Cards</a></li>
+          <li><a href="javascript:void(0)" onclick="openCambridgeList('Reading')" class="hover:text-forest-600">Reading Vault</a></li>
+          <li><a href="javascript:void(0)" onclick="openCambridgeList('Listening')" class="hover:text-forest-600">Listening Station</a></li>
+          <li><a href="javascript:void(0)" onclick="openCambridgeList('Writing')" class="hover:text-forest-600">Writing Tasks 1 & 2</a></li>
+          <li><a href="javascript:void(0)" onclick="openCambridgeList('Speaking')" class="hover:text-forest-600">Speaking Cue Cards</a></li>
         </ul>
       </div>
 
       <div class="space-y-3">
-        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">গুরুত্বপূর্ণ তথ্য</h4>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">সাবস্ক্রিপশন ও অফার</h4>
         <ul class="space-y-2 text-xs font-medium">
-          <li><a href="javascript:void(0)" onclick="openModal('aboutModal')" class="hover:text-forest-600 transition-colors">About Us (আমাদের সম্পর্কে)</a></li>
-          <li><a href="javascript:void(0)" onclick="openModal('privacyModal')" class="hover:text-forest-600 transition-colors">Privacy Policy (গোপনীয়তা নীতি)</a></li>
-          <li><a href="javascript:void(0)" onclick="openModal('termsModal')" class="hover:text-forest-600 transition-colors">Terms of Service (ব্যবহারের শর্তাবলী)</a></li>
-          <li><a href="javascript:void(0)" onclick="showToast('FAQ গাইড শীঘ্রই প্রকাশ করা হবে')" class="hover:text-forest-600 transition-colors">FAQ & Guide</a></li>
+          <li><a href="javascript:void(0)" onclick="openPricingModal()" class="text-amber-600 font-bold hover:underline">✨ প্রিমিয়াম প্ল্যান দেখুন</a></li>
+          <li><a href="javascript:void(0)" onclick="openModal('aboutModal')" class="hover:text-forest-600">About Us</a></li>
+          <li><a href="javascript:void(0)" onclick="openModal('privacyModal')" class="hover:text-forest-600">Privacy Policy</a></li>
         </ul>
       </div>
 
       <div class="space-y-3">
-        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">যোগাযোগ ও সহায়তা</h4>
-        <p class="text-xs text-slate-500">যেকোনো প্রশ্ন বা টেকনিক্যাল সমস্যার জন্য সরাসরি যোগাযোগ করুন।</p>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">যোগাযোগ ও হেল্পলাইন</h4>
+        <p class="text-xs text-slate-500">যেকোনো প্রশ্ন বা পেমেন্ট সমস্যার জন্য যোগাযোগ করুন।</p>
         <div class="space-y-1.5 text-xs font-medium">
-          <div class="flex items-center gap-2 text-slate-600">
-            <i class="fa-regular fa-envelope text-forest-600"></i>
-            <span>support@ieltsvocabmaster.com</span>
-          </div>
-          <div class="flex items-center gap-2 text-slate-600">
-            <i class="fa-solid fa-phone text-forest-600"></i>
-            <span>+880 1700-000000</span>
-          </div>
+          <p><i class="fa-regular fa-envelope text-forest-600 mr-2"></i>support@ieltsvocabmaster.com</p>
+          <p><i class="fa-solid fa-phone text-forest-600 mr-2"></i>+880 1757-674052</p>
         </div>
-        <button onclick="openModal('contactModal')" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-forest-50 hover:bg-forest-100 text-forest-700 text-xs font-bold rounded-xl border border-forest-200 transition-all">
-          <i class="fa-solid fa-paper-plane text-[10px]"></i> মেসেজ পাঠান
-        </button>
       </div>
-
     </div>
 
     <div class="max-w-7xl mx-auto mt-8 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
       <p>© 2026 IELTS VocabMaster. সর্বস্বত্ব সংরক্ষিত।</p>
-      <p class="text-slate-400">Designed with passion for IELTS candidates in Bangladesh</p>
+      <p>Designed with passion for IELTS candidates in Bangladesh</p>
     </div>
   </footer>
 
-  <!-- ================= MOBILE BOTTOM NAVBAR ================= -->
+  <!-- ================= MOBILE ONLY BOTTOM NAVBAR ================= -->
   <nav class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 px-2 py-1.5 z-30 select-none shadow-lg">
     <div class="grid grid-cols-5 items-center justify-items-center w-full max-w-md mx-auto">
       <button onclick="showView('viewHome')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-forest-600 transition-all">
@@ -470,11 +463,11 @@
         <span class="text-[10px] font-medium mt-0.5">সার্চ</span>
       </button>
 
-      <button onclick="openPostModal()" class="flex flex-col items-center justify-center w-full group focus:outline-none">
-        <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-forest-800 to-forest-600 text-white flex items-center justify-center text-xl shadow-lg shadow-forest-900/40 border-2 border-white -mt-6 transition-transform group-hover:scale-105 active:scale-95">
-          <i class="fa-solid fa-plus"></i>
+      <button onclick="openPricingModal()" class="flex flex-col items-center justify-center w-full group focus:outline-none">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 to-amber-400 text-white flex items-center justify-center text-xl shadow-lg shadow-amber-900/30 border-2 border-white -mt-6 transition-transform group-hover:scale-105 active:scale-95">
+          <i class="fa-solid fa-crown text-base"></i>
         </div>
-        <span class="text-[10px] font-semibold mt-0.5 text-slate-600">পোস্ট</span>
+        <span class="text-[10px] font-bold mt-0.5 text-amber-600">PRO</span>
       </button>
 
       <button onclick="showToast('প্রোগ্রেস ট্র্যাকার লোড হচ্ছে...')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
@@ -482,148 +475,115 @@
         <span class="text-[10px] font-medium mt-0.5">প্রোগ্রেস</span>
       </button>
 
-      <button onclick="toggleProfileDropdown(event)" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
+      <button onclick="handleProfileOrLoginClick()" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
         <i class="fa-solid fa-user text-lg"></i>
         <span class="text-[10px] font-medium mt-0.5">প্রোফাইল</span>
       </button>
     </div>
   </nav>
 
-  <!-- ================= MODALS ================= -->
-  <!-- ১. নতুন শব্দ পোস্ট মডাল -->
-  <div id="postModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-white rounded-t-3xl sm:rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto no-scrollbar">
-      <div class="flex items-center justify-between border-b pb-3 border-slate-100">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-forest-100 text-forest-700 flex items-center justify-center text-sm font-bold">
-            <i class="fa-solid fa-pen"></i>
+  <!-- ================= POPUP 1: REGISTER PROMPT MODAL (লগআউট ইউজারের জন্য) ================= -->
+  <div id="authPromptModal" class="hidden fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-md shadow-2xl text-center space-y-5 animate-fade-in">
+      <div class="w-16 h-16 rounded-3xl bg-forest-50 text-forest-600 border border-forest-100 flex items-center justify-center mx-auto text-2xl shadow-inner">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <div>
+        <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-[11px] font-bold uppercase tracking-wider">কনটেন্টটি লক করা</span>
+        <h3 class="text-xl font-black text-slate-900 mt-2">ফ্রি অ্যাকাউন্ট খুলে আনলক করুন</h3>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+          ক্যামব্রিজের সব টেস্ট সলিউশন ও ভোকাবুলারি অ্যাক্সেস করতে এখনই একটি সম্পূর্ণ ফ্রি অ্যাকাউন্ট তৈরি করুন। কোনো ক্রেডিট কার্ডের প্রয়োজন নেই!
+        </p>
+      </div>
+      <div class="space-y-2 pt-2">
+        <a href="signup.html" class="w-full py-3.5 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-forest-900/20 block transition-all active:scale-95">
+          ফ্রি একাউন্ট খুলুন / লগইন করুন
+        </a>
+        <button onclick="closeModal('authPromptModal')" class="w-full py-2.5 text-slate-400 hover:text-slate-600 text-xs font-bold">
+          পরে দেখব
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= POPUP 2: PREMIUM PRICING MODAL (১ মাস, ৩ মাস, ৬ মাস, ১ বছর) ================= -->
+  <div id="pricingModal" class="hidden fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto no-scrollbar">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-xl shadow-2xl space-y-6 my-auto">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b pb-4 border-slate-100">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[11px] font-black">
+            <i class="fa-solid fa-crown text-[10px]"></i> PRO ACCESS
           </div>
-          <h3 class="text-base font-extrabold text-slate-800">নতুন শব্দ পোস্ট করুন</h3>
+          <h3 class="text-xl font-black text-slate-900 mt-1">ক্যামব্রিজ ফুল ভল্ট আনলক করুন</h3>
+          <p class="text-xs text-slate-400 font-medium">Cambridge 10 থেকে 19 এর ৪০টি টেস্টের সম্পূর্ণ ব্যাখ্যা ও আনলিমিটেড অ্যাক্সেস</p>
         </div>
-        <button onclick="closePostModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200">
+        <button onclick="closeModal('pricingModal')" class="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <form onsubmit="handlePostSubmit(event)" class="space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Word (ইংরেজি শব্দ)</label>
-          <input type="text" id="inputWord" required placeholder="e.g. Cautiously" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Bangla Meaning (বাংলা অর্থ)</label>
-          <input type="text" id="inputMeaning" required placeholder="e.g. সতর্কতার সাথে" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Cambridge Book</label>
-            <select id="inputBook" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none bg-white">
-              <option>Cambridge 10</option>
-              <option>Cambridge 11</option>
-              <option>Cambridge 12</option>
-              <option>Cambridge 13</option>
-              <option>Cambridge 14</option>
-              <option>Cambridge 15</option>
-              <option>Cambridge 16</option>
-              <option>Cambridge 17</option>
-              <option>Cambridge 18</option>
-              <option>Cambridge 19</option>
-            </select>
+      <!-- Pricing Plans Grid (1 Month, 3 Months, 6 Months, 1 Year) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        
+        <!-- ১ মাস প্ল্যান -->
+        <div class="p-4 rounded-2xl border-2 border-slate-200 hover:border-forest-600 transition-all cursor-pointer relative bg-slate-50/50 hover:bg-forest-50/30 group">
+          <div class="flex justify-between items-start">
+            <span class="font-extrabold text-sm text-slate-800">১ মাস প্ল্যান</span>
+            <span class="text-xs font-black text-forest-700">২৯০৳</span>
           </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Test Number</label>
-            <select id="inputTest" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none bg-white">
-              <option value="T1">Test 1 (T1)</option>
-              <option value="T2">Test 2 (T2)</option>
-              <option value="T3">Test 3 (T3)</option>
-              <option value="T4">Test 4 (T4)</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Synonyms (কমা দিয়ে লিখুন)</label>
-          <input type="text" id="inputSynonyms" placeholder="Carefully + সাবধানতার সাথে, Prudently" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Antonyms (কমা দিয়ে লিখুন)</label>
-          <input type="text" id="inputAntonyms" placeholder="Carelessly + অসাবধানতাবশত, Rashly" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
-        </div>
-
-        <div class="pt-2 flex gap-2">
-          <button type="button" onclick="closePostModal()" class="flex-1 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200">
-            বাতিল
-          </button>
-          <button type="submit" class="flex-1 py-2.5 bg-forest-600 text-white font-bold text-xs rounded-xl hover:bg-forest-700 shadow-md shadow-forest-900/20">
-            পোস্ট করুন
+          <p class="text-[11px] text-slate-400 mt-1">স্বল্পমেয়াদী কুইক রিভিশন</p>
+          <button onclick="handleSubscribe('১ মাস', '২৯০৳')" class="w-full mt-3 py-2 bg-slate-200 group-hover:bg-forest-600 group-hover:text-white text-slate-700 text-xs font-bold rounded-xl transition-all">
+            সিলেক্ট করুন
           </button>
         </div>
-      </form>
-    </div>
-  </div>
 
-  <!-- ২. About Us Modal -->
-  <div id="aboutModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl space-y-4">
-      <div class="flex items-center justify-between border-b pb-3 border-slate-100">
-        <h3 class="text-base font-extrabold text-slate-900">About IELTS VocabMaster</h3>
-        <button onclick="closeModal('aboutModal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <p class="text-xs text-slate-600 leading-relaxed">
-        <strong>IELTS VocabMaster</strong> হলো এমন একটি প্ল্যাটফর্ম যা বিশেষভাবে ক্যামব্রিজ আইইএলটিএস বুক ১০ থেকে ১৯-এর ওপর ভিত্তি করে তৈরি। আমাদের লক্ষ্য হলো শিক্ষার্থীদের জন্য রিডিং, লিসেনিং, রাইটিং ও স্পিকিং টেস্টের প্রতিটি গুরুত্বপূর্ণ শব্দভাণ্ডার সহজবোধ্য বাংলা অর্থ, সিনোনিম ও কার্যকর ব্যাখ্যার মাধ্যমে পৌঁছে দেওয়া।
-      </p>
-    </div>
-  </div>
-
-  <!-- ৩. Contact Us Modal -->
-  <div id="contactModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4">
-      <div class="flex items-center justify-between border-b pb-3 border-slate-100">
-        <h3 class="text-base font-extrabold text-slate-900">যোগাযোগ করুন</h3>
-        <button onclick="closeModal('contactModal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <form onsubmit="handleContactSubmit(event)" class="space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">আপনার নাম</label>
-          <input type="text" required placeholder="e.g. Tanbir Ahmed" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
+        <!-- ৩ মাস প্ল্যান (জনপ্রিয়) -->
+        <div class="p-4 rounded-2xl border-2 border-forest-600 bg-forest-50/40 relative shadow-sm cursor-pointer group">
+          <span class="absolute -top-2.5 right-3 bg-forest-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">সবচেয়ে জনপ্রিয়</span>
+          <div class="flex justify-between items-start">
+            <span class="font-extrabold text-sm text-slate-800">৩ মাস প্ল্যান</span>
+            <span class="text-xs font-black text-forest-700">৬৯০৳</span>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1">পারফেক্ট আইইএলটিএস প্রস্তুতি</p>
+          <button onclick="handleSubscribe('৩ মাস', '৬৯০৳')" class="w-full mt-3 py-2 bg-forest-600 text-white text-xs font-bold rounded-xl shadow-md transition-all">
+            আনলক করুন
+          </button>
         </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">ইমেইল ঠিকানা</label>
-          <input type="email" required placeholder="e.g. yourname@gmail.com" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">আপনার বার্তা</label>
-          <textarea rows="3" required placeholder="আপনার মতামত বা সমস্যা লিখুন..." class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-forest-500 outline-none"></textarea>
-        </div>
-        <button type="submit" class="w-full py-2.5 bg-forest-600 hover:bg-forest-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">মেসেজ পাঠান</button>
-      </form>
-    </div>
-  </div>
 
-  <!-- ৪. Privacy Policy Modal -->
-  <div id="privacyModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto no-scrollbar">
-      <div class="flex items-center justify-between border-b pb-3 border-slate-100">
-        <h3 class="text-base font-extrabold text-slate-900">Privacy Policy (গোপনীয়তা নীতি)</h3>
-        <button onclick="closeModal('privacyModal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="text-xs text-slate-600 space-y-2 leading-relaxed">
-        <p>আমরা আপনার তথ্যের সুরক্ষাকে সর্বোচ্চ প্রাধান্য দিই। আপনার অনুশীলন করা টেস্ট রেকর্ড ও সংরক্ষিত ভোকাবুলারি শুধুই আপনার শেখার অগ্রগতির জন্য ব্যবহৃত হয়।</p>
-      </div>
-    </div>
-  </div>
+        <!-- ৬ মাস প্ল্যান -->
+        <div class="p-4 rounded-2xl border-2 border-slate-200 hover:border-forest-600 transition-all cursor-pointer bg-slate-50/50 hover:bg-forest-50/30 group">
+          <div class="flex justify-between items-start">
+            <span class="font-extrabold text-sm text-slate-800">৬ মাস প্ল্যান</span>
+            <span class="text-xs font-black text-forest-700">১১৫০৳</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">টানা প্র্যাকটিস ও ব্যান্ড বুস্টিং</p>
+          <button onclick="handleSubscribe('৬ মাস', '১১৫০৳')" class="w-full mt-3 py-2 bg-slate-200 group-hover:bg-forest-600 group-hover:text-white text-slate-700 text-xs font-bold rounded-xl transition-all">
+            সিলেক্ট করুন
+          </button>
+        </div>
 
-  <!-- ৫. Terms of Service Modal -->
-  <div id="termsModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto no-scrollbar">
-      <div class="flex items-center justify-between border-b pb-3 border-slate-100">
-        <h3 class="text-base font-extrabold text-slate-900">Terms of Service (ব্যবহারের শর্তাবলী)</h3>
-        <button onclick="closeModal('termsModal')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
+        <!-- ১ বছর প্ল্যান (সেরা ভ্যালু) -->
+        <div class="p-4 rounded-2xl border-2 border-amber-400 bg-amber-50/40 relative shadow-sm cursor-pointer group">
+          <span class="absolute -top-2.5 right-3 bg-amber-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">বেস্ট ভ্যালু</span>
+          <div class="flex justify-between items-start">
+            <span class="font-extrabold text-sm text-slate-800">১ বছর (লাইফটাইম আপডেট)</span>
+            <span class="text-xs font-black text-amber-700">১৯৫০৳</span>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1">সব নতুন বইসহ ফুল অ্যাক্সেস</p>
+          <button onclick="handleSubscribe('১ বছর', '১৯৫০৳')" class="w-full mt-3 py-2 bg-amber-600 text-white text-xs font-bold rounded-xl shadow-md transition-all">
+            আনলক করুন
+          </button>
+        </div>
+
       </div>
-      <div class="text-xs text-slate-600 space-y-2 leading-relaxed">
-        <p>১. এই ওয়েবসাইটের সমস্ত কনটেন্ট শিক্ষামূলক উদ্দেশ্যে তৈরি করা হয়েছে।</p>
+
+      <!-- Features Checklist -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-1.5 text-xs text-slate-600 font-medium">
+        <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-forest-600"></i><span>Cambridge 10-19 এর সব টেস্ট (T1, T2, T3, T4) ফুল অ্যাক্সেস</span></div>
+        <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-forest-600"></i><span>প্রতিটি কঠিন শব্দের বাংলা অনুবাদ, সিনোনিম ও অ্যান্টনিম ভল্ট</span></div>
+        <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-forest-600"></i><span>বিকাশ, নগদ বা কার্ডের মাধ্যমে তাৎক্ষণিক অ্যাক্সেস</span></div>
       </div>
     </div>
   </div>
@@ -633,115 +593,58 @@
     বিজ্ঞপ্তি
   </div>
 
+  <!-- ================= LOGIC ENGINE ================= -->
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedName = localStorage.getItem('user_name') || 'Tanbir Ahmed';
-      const savedEmail = localStorage.getItem('user_email') || 'tanbir.ahmed@example.com';
-      
-      const nameEl = document.getElementById('headerUserName');
-      if (nameEl) nameEl.innerText = savedName;
-
-      const emailEl = document.getElementById('dropdownUserEmail');
-      if (emailEl) emailEl.innerText = savedEmail;
-
-      const initials = savedName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'TA';
-      const avatarEl = document.getElementById('userAvatarPill');
-      if (avatarEl) avatarEl.innerText = initials;
-
-      selectTest('T1');
-      setProgress(65);
-    });
-
-    function handleLogout() {
-      if (confirm("আপনি কি নিশ্চিতভাবে লগআউট করতে চান?")) {
-        localStorage.removeItem('user_auth_token');
-        localStorage.removeItem('user_name');
-        localStorage.removeItem('user_email');
-        showToast("সফলভাবে লগআউট হয়েছে!");
-        setTimeout(() => {
-          window.location.replace("signup.html");
-        }, 500);
-      }
-    }
-
-    function toggleProfileDropdown(e) {
-      if (e) e.stopPropagation();
-      const dropdown = document.getElementById('profileDropdown');
-      dropdown.classList.toggle('hidden');
-    }
-
-    window.addEventListener('click', function(e) {
-      const dropdown = document.getElementById('profileDropdown');
-      if (dropdown && !dropdown.classList.contains('hidden')) {
-        dropdown.classList.add('hidden');
-      }
-    });
-
-    function openModal(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) modal.classList.remove('hidden');
-    }
-
-    function closeModal(modalId) {
-      const modal = document.getElementById(modalId);
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function handleContactSubmit(e) {
-      e.preventDefault();
-      closeModal('contactModal');
-      showToast('ধন্যবাদ! আপনার বার্তাটি পাঠানো হয়েছে।');
-      e.target.reset();
-    }
-
-    function setProgress(percent) {
-      const circle = document.getElementById('progressRing');
-      if (!circle) return;
-      const radius = circle.r.baseVal.value;
-      const circumference = 2 * Math.PI * radius;
-      const offset = circumference - (percent / 100 * circumference);
-      circle.style.strokeDashoffset = offset;
-      
-      const percentEl = document.getElementById('progressPercentDisplay');
-      if (percentEl) percentEl.innerText = percent + '%';
-      
-      const sideText = document.getElementById('sidePercentText');
-      if (sideText) sideText.innerText = percent + '%';
-    }
-
+    let isLoggedIn = false;
     let currentModule = 'Reading';
     let currentBook = 'Cambridge 10';
     let currentTest = 'T1';
 
-    const initialVocabulary = [
-      {
-        book: "Cambridge 10",
-        test: "T1",
-        word: "Cautiously",
-        meaning: "সতর্কতার সাথে / সাবধানতার সাথে",
-        synonyms: ["Carefully + সাবধানতার সাথে", "Prudently + বিচক্ষণতার সাথে", "Warily + সতর্কভাবে"],
-        antonyms: ["Carelessly + অসাবধানতাবশত", "Recklessly + বেপরোয়াভাবে", "Rashly + হুড়মুড় করে"]
-      },
-      {
-        book: "Cambridge 10",
-        test: "T1",
-        word: "Prevailed",
-        meaning: "জয়ী হওয়া / বিদ্যমান থাকা",
-        synonyms: ["Triumphed + জয়লাভ করেছিল", "Succeeded + সফল হয়েছিল", "Predominated + আধিপত্য বিস্তার করেছিল"],
-        antonyms: ["Failed + ব্যর্থ হয়েছিল", "Surrendered + আত্মসমর্পণ করেছিল", "Yielded + নতি স্বীকার করেছিল"]
-      },
-      {
-        book: "Cambridge 10",
-        test: "T2",
-        word: "Reluctant",
-        meaning: "অনিচ্ছুক / দ্বিধাগ্রস্ত",
-        synonyms: ["Unwilling + অনিচ্ছুক", "Hesitant + দ্বিধাগ্রস্ত", "Disinclined + অপছন্দকারী"],
-        antonyms: ["Eager + আগ্রহী", "Willing + ইচ্ছুক", "Enthusiastic + উৎফুল্ল"]
+    // 1. Initial State Check on Page Load
+    window.addEventListener('DOMContentLoaded', () => {
+      const authToken = localStorage.getItem('user_auth_token');
+      isLoggedIn = !!authToken;
+
+      if (isLoggedIn) {
+        // লগইন থাকলে প্রোফাইল মেনু অন হবে এবং গেস্ট বাটন হাইড হবে
+        document.getElementById('guestNavGroup').classList.add('hidden');
+        document.getElementById('userProfileGroup').classList.remove('hidden');
+
+        const savedName = localStorage.getItem('user_name') || 'Tanbir Ahmed';
+        const savedEmail = localStorage.getItem('user_email') || 'tanbir.ahmed@example.com';
+        
+        document.getElementById('headerUserName').innerText = savedName;
+        document.getElementById('dropdownUserEmail').innerText = savedEmail;
+        
+        const initials = savedName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'TA';
+        document.getElementById('userAvatarPill').innerText = initials;
+      } else {
+        // লগআউট থাকলে গেস্ট বাটন অন থাকবে
+        document.getElementById('guestNavGroup').classList.remove('hidden');
+        document.getElementById('userProfileGroup').classList.add('hidden');
       }
-    ];
 
-    let vocabularyDB = JSON.parse(localStorage.getItem('user_vocab_db')) || initialVocabulary;
+      selectTest('T1');
+    });
 
+    // 2. Lock System Interceptor (লক কনটেন্টে ক্লিক করলে যে লজিক চলবে)
+    function handleLockedContentClick(testName) {
+      if (!isLoggedIn) {
+        // ইউজার লগইন না থাকলে: ফ্রি অ্যাকাউন্ট রেজিস্ট্রেশন পপ-আপ দেখাবে
+        openModal('authPromptModal');
+      } else {
+        // ইউজার ইতিমধ্যে লগইন করা থাকলে: সরাসরি সাবস্ক্রিপশন প্ল্যান দেখাবে
+        openModal('pricingModal');
+      }
+    }
+
+    // 3. Subscription Selection Handler
+    function handleSubscribe(planName, price) {
+      alert(`আপনি ${planName} (${price}) সিলেক্ট করেছেন। বিকাশ/নগদ পেমেন্ট গেটওয়ে সংযুক্তির পর এটি স্বয়ংক্রিয়ভাবে সক্রিয় হবে!`);
+      closeModal('pricingModal');
+    }
+
+    // 4. View Handlers
     function showView(viewId) {
       document.getElementById('viewHome').classList.add('hidden');
       document.getElementById('viewCambridgeList').classList.add('hidden');
@@ -760,6 +663,15 @@
     }
 
     function openBookDetails(bookName) {
+      // Cambridge 11-19 ক্লিক করলেও লগইন/প্রাইসিং ইন্টারসেপ্ট করবে
+      if (bookName !== 'Cambridge 10' && !isLoggedIn) {
+        openModal('authPromptModal');
+        return;
+      } else if (bookName !== 'Cambridge 10' && isLoggedIn) {
+        openModal('pricingModal');
+        return;
+      }
+
       currentBook = bookName;
       document.getElementById('selectedBookHeader').innerText = bookName;
       renderWords();
@@ -768,50 +680,34 @@
 
     function selectTest(testId) {
       currentTest = testId;
-      const badge = document.getElementById('activeTestBadge');
-      if (badge) badge.innerText = "Test " + testId.replace('T', '');
-      
-      ['T1', 'T2', 'T3', 'T4'].forEach(t => {
-        const btn = document.getElementById('btn' + t);
-        if (btn) {
-          if (t === testId) {
-            btn.className = "test-btn py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white transition-all shadow-sm";
-          } else {
-            btn.className = "test-btn py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition-all";
-          }
-        }
-      });
-
-      ['T1', 'T2', 'T3', 'T4'].forEach(t => {
-        const deskBtn = document.getElementById('deskBtn' + t);
-        if (deskBtn) {
-          if (t === testId) {
-            deskBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg border border-forest-600 bg-forest-600 text-white transition-all";
-          } else {
-            deskBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:bg-slate-200 transition-all";
-          }
-        }
-      });
-
       renderWords();
     }
+
+    // 5. Sample Vocabulary DB
+    const initialVocabulary = [
+      {
+        book: "Cambridge 10",
+        test: "T1",
+        word: "Cautiously",
+        meaning: "সতর্কতার সাথে / সাবধানতার সাথে",
+        synonyms: ["Carefully + সাবধানতার সাথে", "Prudently + বিচক্ষণতার সাথে", "Warily + সতর্কভাবে"],
+        antonyms: ["Carelessly + অসাবধানতাবশত", "Recklessly + বেপরোয়াভাবে", "Rashly + হুড়মুড় করে"]
+      },
+      {
+        book: "Cambridge 10",
+        test: "T1",
+        word: "Prevailed",
+        meaning: "জয়ী হওয়া / বিদ্যমান থাকা",
+        synonyms: ["Triumphed + জয়লাভ করেছিল", "Succeeded + সফল হয়েছিল", "Predominated + আধিপত্য বিস্তার করেছিল"],
+        antonyms: ["Failed + ব্যর্থ হয়েছিল", "Surrendered + আত্মসমর্পণ করেছিল", "Yielded + নতি স্বীকার করেছিল"]
+      }
+    ];
 
     function renderWords() {
       const container = document.getElementById('wordsContainer');
       container.innerHTML = '';
 
-      const filtered = vocabularyDB.filter(item => item.book === currentBook && item.test === currentTest);
-
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full bg-white rounded-2xl md:rounded-3xl p-8 md:p-12 text-center space-y-2 border border-slate-200 my-4 shadow-sm">
-            <i class="fa-solid fa-folder-open text-4xl text-slate-300"></i>
-            <p class="text-sm font-bold text-slate-700">${currentBook} (${currentTest}) এর জন্য কোনো শব্দ পাওয়া যায়নি</p>
-            <p class="text-xs text-slate-400">নতুন শব্দ পোস্ট করতে '+' বাটনে ক্লিক করুন।</p>
-          </div>
-        `;
-        return;
-      }
+      const filtered = initialVocabulary.filter(item => item.book === currentBook && item.test === currentTest);
 
       filtered.forEach(data => {
         const card = document.createElement('div');
@@ -825,18 +721,19 @@
             <h3 class="text-base font-extrabold text-slate-800">
               Word: <span class="text-forest-600 font-black">${data.word}</span> — <span class="text-emerald-700 font-bold">${data.meaning}</span>
             </h3>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">FREE UNLOCKED</span>
           </div>
           <div class="grid grid-cols-2 gap-3 pt-0.5">
             <div class="bg-forest-50/50 p-3 rounded-xl border border-forest-100">
               <h4 class="text-xs font-bold text-forest-700 uppercase tracking-wider mb-2 border-b border-forest-200 pb-1">Synonym:</h4>
               <ul class="space-y-1 list-disc list-inside text-slate-700">
-                ${synHTML || '<li class="text-[11px] text-slate-400">নেই</li>'}
+                ${synHTML}
               </ul>
             </div>
             <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-100">
               <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1">Antonym:</h4>
               <ul class="space-y-1 list-disc list-inside text-slate-700">
-                ${antHTML || '<li class="text-[11px] text-slate-400">নেই</li>'}
+                ${antHTML}
               </ul>
             </div>
           </div>
@@ -845,47 +742,43 @@
       });
     }
 
-    function openPostModal() {
-      document.getElementById('postModal').classList.remove('hidden');
-    }
-
-    function closePostModal() {
-      document.getElementById('postModal').classList.add('hidden');
-    }
-
-    function handlePostSubmit(e) {
-      e.preventDefault();
-      const word = document.getElementById('inputWord').value.trim();
-      const meaning = document.getElementById('inputMeaning').value.trim();
-      const book = document.getElementById('inputBook').value;
-      const test = document.getElementById('inputTest').value;
-      const synonymsInput = document.getElementById('inputSynonyms').value.trim();
-      const antonymsInput = document.getElementById('inputAntonyms').value.trim();
-
-      const synonyms = synonymsInput ? synonymsInput.split(',').map(s => s.trim()) : [];
-      const antonyms = antonymsInput ? antonymsInput.split(',').map(a => a.trim()) : [];
-
-      vocabularyDB.unshift({ book, test, word, meaning, synonyms, antonyms });
-      localStorage.setItem('user_vocab_db', JSON.stringify(vocabularyDB));
-
-      closePostModal();
-      showToast('নতুন শব্দ সফলভাবে পোস্ট করা হয়েছে!');
-
-      if (currentBook === book && currentTest === test) {
-        renderWords();
-      } else {
-        openBookDetails(book);
-        selectTest(test);
-      }
-      e.target.reset();
-    }
-
+    // 6. Generic Modals & Utilities
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    function openPricingModal() { openModal('pricingModal'); }
     function showToast(msg) {
       const toast = document.getElementById('toast');
       toast.innerText = msg;
       toast.classList.remove('hidden');
       setTimeout(() => { toast.classList.add('hidden'); }, 2200);
     }
+
+    function toggleProfileDropdown(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('profileDropdown').classList.toggle('hidden');
+    }
+
+    function handleProfileOrLoginClick() {
+      if (isLoggedIn) {
+        toggleProfileDropdown();
+      } else {
+        window.location.href = "signup.html";
+      }
+    }
+
+    function handleLogout() {
+      if (confirm("আপনি কি নিশ্চিতভাবে লগআউট করতে চান?")) {
+        localStorage.removeItem('user_auth_token');
+        localStorage.removeItem('user_name');
+        localStorage.removeItem('user_email');
+        window.location.reload();
+      }
+    }
+
+    window.addEventListener('click', (e) => {
+      const dd = document.getElementById('profileDropdown');
+      if (dd && !dd.classList.contains('hidden')) dd.classList.add('hidden');
+    });
   </script>
 </body>
 </html>
