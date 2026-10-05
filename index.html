@@ -104,10 +104,10 @@
             <p class="text-xs text-slate-400 font-bold uppercase">ইউজার অ্যাকাউন্ট</p>
             <p id="dropdownUserEmail" class="text-sm font-black text-slate-800 truncate">tanbir.ahmed@example.com</p>
           </div>
-          <a href="admin.html" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-forest-700 bg-forest-50/70 hover:bg-forest-100 rounded-xl transition-all text-left">
-            <i class="fa-solid fa-screwdriver-wrench text-sm text-forest-600"></i>
-            <span>অ্যাডমিন প্যানেল (কন্ট্রোল)</span>
-          </a>
+          <a href="admin.html" id="adminMenuLink" class="hidden w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-forest-700 bg-forest-50/70 hover:bg-forest-100 rounded-xl transition-all text-left">
+  <i class="fa-solid fa-screwdriver-wrench text-sm text-forest-600"></i>
+  <span>অ্যাডমিন প্যানেল (কন্ট্রোল)</span>
+</a>
           <button onclick="openPricingModal(); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-amber-600 hover:bg-amber-50 rounded-xl transition-all text-left">
             <i class="fa-solid fa-crown text-sm"></i>
             <span>প্রিমিয়াম আপগ্রেড করুন</span>
@@ -698,10 +698,17 @@
         const initials = savedName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'TA';
         document.getElementById('userAvatarPill').innerText = initials;
       } else {
-        document.getElementById('guestNavGroup').classList.remove('hidden');
-        document.getElementById('userProfileGroup').classList.add('hidden');
-      }
-
+        // শুধুমাত্র অ্যাডমিন ইমেইল হলে মেনু দেখাবে
+        const ADMIN_EMAILS = [
+          'admin@ieltsvocabmaster.com',
+          'tanbir.google@gmail.com', // আপনার গুগল লগইন ইমেইল
+          'tanbir.ahmed@example.com'
+        ];
+        
+        const adminLink = document.getElementById('adminMenuLink');
+        if (adminLink && ADMIN_EMAILS.includes(savedEmail.trim().toLowerCase())) {
+          adminLink.classList.remove('hidden');
+        }
       renderSlider();
       startSliderTimer();
       selectTest('T1');
