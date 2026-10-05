@@ -33,16 +33,11 @@
   <!-- ================= ADMIN SECURITY GUARD ================= -->
   <!-- সাধারণ ইউজার বা লগইন ছাড়া কেউ ঢুকলে সাথে সাথে বের করে হোমপেজে পাঠাবে -->
   <script>
-    const ADMIN_EMAILS = [
-      'admin@ieltsvocabmaster.com',
-      'tanbir.google@gmail.com',
-      'tanbir.ahmed@example.com'
-    ];
-
-    const currentAuth = localStorage.getItem('user_auth_token');
+  const currentAuth = localStorage.getItem('user_auth_token');
     const currentEmail = (localStorage.getItem('user_email') || '').trim().toLowerCase();
 
-    if (!currentAuth || !ADMIN_EMAILS.includes(currentEmail)) {
+    // শুধুমাত্র ieltsvocabmaster@gmail.com ছাড়া অন্য যেকোনো আইডিকে সরাসরি বের করে দেবে
+    if (!currentAuth || currentEmail !== 'ieltsvocabmaster@gmail.com') {
       alert("অননুমোদিত অ্যাক্সেস! এই পেজটি শুধুমাত্র অ্যাডমিনের জন্য সংরক্ষিত।");
       window.location.replace("index.html");
     }
