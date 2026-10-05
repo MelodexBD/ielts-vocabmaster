@@ -104,10 +104,13 @@
             <p class="text-xs text-slate-400 font-bold uppercase">ইউজার অ্যাকাউন্ট</p>
             <p id="dropdownUserEmail" class="text-sm font-black text-slate-800 truncate">tanbir.ahmed@example.com</p>
           </div>
+          
+          <!-- অ্যাডমিন লিংক (ডিফল্টভাবে লুকানো থাকবে, শুধু অ্যাডমিন ইমেইল হলে দেখাবে) -->
           <a href="admin.html" id="adminMenuLink" class="hidden w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-forest-700 bg-forest-50/70 hover:bg-forest-100 rounded-xl transition-all text-left">
-  <i class="fa-solid fa-screwdriver-wrench text-sm text-forest-600"></i>
-  <span>অ্যাডমিন প্যানেল (কন্ট্রোল)</span>
-</a>
+            <i class="fa-solid fa-screwdriver-wrench text-sm text-forest-600"></i>
+            <span>অ্যাডমিন প্যানেল (কন্ট্রোল)</span>
+          </a>
+
           <button onclick="openPricingModal(); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-amber-600 hover:bg-amber-50 rounded-xl transition-all text-left">
             <i class="fa-solid fa-crown text-sm"></i>
             <span>প্রিমিয়াম আপগ্রেড করুন</span>
@@ -182,12 +185,9 @@
         <!-- ================= HERO SLIDER SECTION ================= -->
         <section class="relative rounded-3xl overflow-hidden shadow-xl shadow-forest-900/15 md:min-h-[300px] h-[320px] md:h-[310px] select-none group">
           
-          <!-- Slider Slides Container -->
           <div id="sliderWrapper" class="relative w-full h-full">
-            <!-- Rendered Dynamically from site_banners_db -->
           </div>
 
-          <!-- Slider Navigation Arrows -->
           <button onclick="prevSlide()" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/30 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-80 md:opacity-0 group-hover:opacity-100 z-20">
             <i class="fa-solid fa-chevron-left text-xs"></i>
           </button>
@@ -195,9 +195,7 @@
             <i class="fa-solid fa-chevron-right text-xs"></i>
           </button>
 
-          <!-- Slider Dots Indicator -->
           <div id="sliderDots" class="absolute bottom-3.5 inset-x-0 flex justify-center items-center gap-1.5 z-20">
-            <!-- Dots generated dynamically -->
           </div>
         </section>
 
@@ -609,7 +607,6 @@
         slide.className = `slide-item absolute inset-0 w-full h-full p-5 md:p-12 flex flex-col justify-between text-white ${idx === currentSlideIdx ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none z-0'}`;
         
         slide.innerHTML = `
-          <!-- Premium Backdrop Image with Deep Green Gradient -->
           <div class="absolute inset-0 z-0 overflow-hidden">
             <img src="${banner.image}" alt="Slide Image" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-r from-forest-900/95 via-forest-800/85 to-forest-950/70"></div>
@@ -643,7 +640,6 @@
         `;
         wrapper.appendChild(slide);
 
-        // Dot
         const dot = document.createElement('button');
         dot.className = `w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all ${idx === currentSlideIdx ? 'bg-white w-6 md:w-7' : 'bg-white/40 hover:bg-white/70'}`;
         dot.onclick = () => goToSlide(idx);
@@ -670,7 +666,7 @@
     }
 
     function startSliderTimer() {
-      sliderTimer = setInterval(nextSlide, 5000); // প্রতি ৫ সেকেন্ডে স্লাইড ঘুরবে
+      sliderTimer = setInterval(nextSlide, 5000);
     }
 
     function restartSliderTimer() {
@@ -679,7 +675,7 @@
     }
 
     // ------------------------------------------------------------------
-    // APPLICATION INITIALIZATION
+    // APPLICATION INITIALIZATION & ADMIN CHECK
     // ------------------------------------------------------------------
     window.addEventListener('DOMContentLoaded', () => {
       const authToken = localStorage.getItem('user_auth_token');
@@ -697,11 +693,11 @@
         
         const initials = savedName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'TA';
         document.getElementById('userAvatarPill').innerText = initials;
-      } else {
-        // শুধুমাত্র অ্যাডমিন ইমেইল হলে মেনু দেখাবে
+
+        // অ্যাডমিন ইমেইল চেক (শুধু এই ইমেইলগুলো অ্যাডমিন প্যানেল দেখতে পারবে)
         const ADMIN_EMAILS = [
           'admin@ieltsvocabmaster.com',
-          'tanbir.google@gmail.com', // আপনার গুগল লগইন ইমেইল
+          'tanbir.google@gmail.com',
           'tanbir.ahmed@example.com'
         ];
         
@@ -709,6 +705,12 @@
         if (adminLink && ADMIN_EMAILS.includes(savedEmail.trim().toLowerCase())) {
           adminLink.classList.remove('hidden');
         }
+
+      } else {
+        document.getElementById('guestNavGroup').classList.remove('hidden');
+        document.getElementById('userProfileGroup').classList.add('hidden');
+      }
+
       renderSlider();
       startSliderTimer();
       selectTest('T1');
@@ -772,16 +774,16 @@
         test: "T1",
         word: "Cautiously",
         meaning: "সতর্কতার সাথে / সাবধানতার সাথে",
-        synonyms: ["Carefully + সাবধানতার সাথে", "Prudently + বিচক্ষণতার সাথে", "Warily + সতর্কভাবে"],
-        antonyms: ["Carelessly + অসাবধানতাবশত", "Recklessly + বেপরোয়াভাবে", "Rashly + হুড়মুড় করে"]
+        synonyms: ["Carefully + সাবধানতার সাথে", "Prudently + বিচক্ষণতার সাথে"],
+        antonyms: ["Carelessly + অসাবধানতাবশত", "Recklessly + বেপরোয়াভাবে"]
       },
       {
         book: "Cambridge 10",
         test: "T1",
         word: "Prevailed",
         meaning: "জয়ী হওয়া / বিদ্যমান থাকা",
-        synonyms: ["Triumphed + জয়লাভ করেছিল", "Succeeded + সফল হয়েছিল", "Predominated + আধিপত্য বিস্তার করেছিল"],
-        antonyms: ["Failed + ব্যর্থ হয়েছিল", "Surrendered + আত্মসমর্পণ করেছিল", "Yielded + নতি স্বীকার করেছিল"]
+        synonyms: ["Triumphed + জয়লাভ করেছিল", "Succeeded + সফল হয়েছিল"],
+        antonyms: ["Failed + ব্যর্থ হয়েছিল", "Surrendered + আত্মসমর্পণ করেছিল"]
       }
     ];
 
