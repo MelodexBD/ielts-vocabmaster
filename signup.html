@@ -53,7 +53,7 @@
 </head>
 <body class="bg-[#f4f7f5] text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-forest-600 selection:text-white">
 
-<!-- ================= TOP HEADER BAR ================= -->
+  <!-- ================= TOP HEADER BAR ================= -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-50 px-5 md:px-10 py-3.5 shadow-sm relative">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       
@@ -76,7 +76,6 @@
     </div>
 
     <!-- ================= TOP SLIDE-DOWN DRAWER (ABSOLUTE OVERLAY) ================= -->
-    <!-- absolute ও z-50 ক্লাসের কারণে লগইন ফর্মটি আর নিচে নামবে না -->
     <div id="topDrawer" class="absolute top-full left-0 right-0 border-t border-slate-100 bg-white/95 backdrop-blur-md shadow-2xl z-50">
       <div class="max-w-md mx-auto py-5 px-6 space-y-4">
         
@@ -122,6 +121,7 @@
       </div>
     </div>
   </header>
+
   <!-- ================= AUTHENTICATION CONTAINER ================= -->
   <main class="flex-1 flex items-center justify-center p-4 sm:p-8">
     <div class="w-full max-w-[420px] bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-forest-900/5 p-6 sm:p-8 transition-all">
@@ -134,7 +134,6 @@
         </div>
 
         <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
-          <!-- Email Field -->
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5">
               Email<span class="text-rose-500">*</span>
@@ -142,7 +141,6 @@
             <input type="email" id="loginEmail" required placeholder="Enter your email" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
           </div>
 
-          <!-- Password Field with Show/Hide -->
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5">
               Password<span class="text-rose-500">*</span>
@@ -155,7 +153,6 @@
             </div>
           </div>
 
-          <!-- Remember me & Forgot Password -->
           <div class="flex items-center justify-between text-xs pt-0.5">
             <label class="flex items-center gap-2 cursor-pointer text-slate-600 font-medium">
               <input type="checkbox" class="w-4 h-4 rounded text-forest-600 focus:ring-forest-500 border-slate-300">
@@ -166,7 +163,7 @@
             </a>
           </div>
 
-          <!-- Login Button -->
+          <!-- Main Login Button -->
           <button type="submit" class="w-full py-3.5 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-forest-900/20 active:scale-[0.99] transition-all">
             Login
           </button>
@@ -179,7 +176,7 @@
           <div class="flex-grow border-t border-slate-200"></div>
         </div>
 
-        <!-- Google Sign-in Button (নিচে স্থানান্তরিত) -->
+        <!-- Continue with Google Button -->
         <button type="button" onclick="handleGoogleAuth()" class="w-full py-3 px-4 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm rounded-xl border border-slate-200 shadow-sm flex items-center justify-center gap-3 transition-all active:scale-[0.99]">
           <svg class="w-4 h-4" viewBox="0 0 48 48">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -193,8 +190,9 @@
         <!-- Switch to Signup Section -->
         <div class="pt-3 border-t border-slate-100 text-center space-y-2.5">
           <p class="text-xs font-bold text-slate-600">Don't have an account?</p>
-          <button onclick="switchToSignUp()" class="w-full py-3 bg-white hover:bg-forest-50 text-forest-700 font-extrabold text-xs sm:text-sm rounded-xl border border-forest-600/40 hover:border-forest-600 transition-all shadow-sm">
-            Create Account
+          <button onclick="switchToSignUp()" class="w-full py-3.5 bg-forest-50 hover:bg-forest-100 text-forest-800 hover:text-forest-900 font-extrabold text-xs sm:text-sm rounded-xl border-2 border-forest-600/25 hover:border-forest-600 transition-all shadow-sm active:scale-[0.99] flex items-center justify-center gap-2">
+            <i class="fa-solid fa-user-plus text-xs text-forest-600"></i>
+            <span>Create Account</span>
           </button>
         </div>
       </div>
@@ -207,7 +205,6 @@
         </div>
 
         <form onsubmit="handleSignupSubmit(event)" class="space-y-4">
-          <!-- Full Name -->
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5">
               Full Name<span class="text-rose-500">*</span>
@@ -215,7 +212,6 @@
             <input type="text" id="signupName" required placeholder="e.g. Tanbir Ahmed" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
           </div>
 
-          <!-- Email -->
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5">
               Email Address<span class="text-rose-500">*</span>
@@ -223,7 +219,6 @@
             <input type="email" id="signupEmail" required placeholder="Enter your email" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
           </div>
 
-          <!-- Password with Show/Hide -->
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5">
               Password<span class="text-rose-500">*</span>
@@ -236,7 +231,6 @@
             </div>
           </div>
 
-          <!-- Target Band Selection -->
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1.5">Target IELTS Band</label>
             <select class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-forest-600 focus:ring-2 focus:ring-forest-500/20 outline-none transition-all">
@@ -248,7 +242,7 @@
             </select>
           </div>
 
-          <!-- Submit Button -->
+          <!-- Main Signup Button -->
           <button type="submit" class="w-full py-3.5 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-forest-900/20 active:scale-[0.99] transition-all">
             Sign Up
           </button>
@@ -261,7 +255,7 @@
           <div class="flex-grow border-t border-slate-200"></div>
         </div>
 
-        <!-- Google Sign-up Button (নিচে স্থানান্তরিত) -->
+        <!-- Continue with Google Button -->
         <button type="button" onclick="handleGoogleAuth()" class="w-full py-3 px-4 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm rounded-xl border border-slate-200 shadow-sm flex items-center justify-center gap-3 transition-all active:scale-[0.99]">
           <svg class="w-4 h-4" viewBox="0 0 48 48">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -275,8 +269,9 @@
         <!-- Switch to Login Section -->
         <div class="pt-3 border-t border-slate-100 text-center space-y-2.5">
           <p class="text-xs font-bold text-slate-600">Already have an account?</p>
-          <button onclick="switchToLogIn()" class="w-full py-3 bg-white hover:bg-forest-50 text-forest-700 font-extrabold text-xs sm:text-sm rounded-xl border border-forest-600/40 hover:border-forest-600 transition-all shadow-sm">
-            Log In
+          <button onclick="switchToLogIn()" class="w-full py-3.5 bg-forest-50 hover:bg-forest-100 text-forest-800 hover:text-forest-900 font-extrabold text-xs sm:text-sm rounded-xl border-2 border-forest-600/25 hover:border-forest-600 transition-all shadow-sm active:scale-[0.99] flex items-center justify-center gap-2">
+            <i class="fa-solid fa-arrow-right-to-bracket text-xs text-forest-600"></i>
+            <span>Log In</span>
           </button>
         </div>
       </div>
@@ -284,14 +279,11 @@
     </div>
   </main>
 
-  <!-- ================= FOOTER NOTE ================= -->
   <footer class="py-4 text-center text-xs text-slate-400 border-t border-slate-200 bg-white">
     © 2026 IELTS VocabMaster. All rights reserved.
   </footer>
 
-  <!-- ================= LOGIC SCRIPT ================= -->
   <script>
-    // 1. Top Drawer Toggle Logic
     function toggleTopDrawer() {
       const drawer = document.getElementById('topDrawer');
       const icon = document.getElementById('drawerIcon');
@@ -304,7 +296,6 @@
       }
     }
 
-    // 2. Password Show / Hide Logic
     function togglePasswordVisibility(inputId, eyeIconId) {
       const input = document.getElementById(inputId);
       const icon = document.getElementById(eyeIconId);
@@ -317,7 +308,6 @@
       }
     }
 
-    // 3. Switch between Login & Signup
     function switchToSignUp() {
       document.getElementById('loginFormContainer').classList.add('hidden');
       document.getElementById('signupFormContainer').classList.remove('hidden');
@@ -330,23 +320,18 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 4. Continue with Google Handler
     function handleGoogleAuth() {
       localStorage.setItem('user_auth_token', 'loggedIn_google');
       localStorage.setItem('user_name', 'Tanbir Ahmed (Google)');
       localStorage.setItem('user_email', 'tanbir.google@gmail.com');
-      
       window.location.href = "index.html";
     }
 
-    // 5. Standard Form Submissions
     function handleLoginSubmit(e) {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
-      
       localStorage.setItem('user_auth_token', 'loggedIn');
       localStorage.setItem('user_email', email);
-      
       window.location.href = "index.html";
     }
 
@@ -354,11 +339,9 @@
       e.preventDefault();
       const name = document.getElementById('signupName').value.trim();
       const email = document.getElementById('signupEmail').value.trim();
-      
       localStorage.setItem('user_auth_token', 'loggedIn');
       localStorage.setItem('user_name', name);
       localStorage.setItem('user_email', email);
-      
       window.location.href = "index.html";
     }
   </script>
