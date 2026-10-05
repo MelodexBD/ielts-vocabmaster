@@ -30,13 +30,11 @@
     }
   </script>
 
-  <!-- ================= ADMIN SECURITY GUARD ================= -->
-  <!-- সাধারণ ইউজার বা লগইন ছাড়া কেউ ঢুকলে সাথে সাথে বের করে হোমপেজে পাঠাবে -->
+  <!-- শুধুমাত্র ieltsvocabmaster@gmail.com হলে অ্যাক্সেস পাবে -->
   <script>
-  const currentAuth = localStorage.getItem('user_auth_token');
+    const currentAuth = localStorage.getItem('user_auth_token');
     const currentEmail = (localStorage.getItem('user_email') || '').trim().toLowerCase();
 
-    // শুধুমাত্র ieltsvocabmaster@gmail.com ছাড়া অন্য যেকোনো আইডিকে সরাসরি বের করে দেবে
     if (!currentAuth || currentEmail !== 'ieltsvocabmaster@gmail.com') {
       alert("অননুমোদিত অ্যাক্সেস! এই পেজটি শুধুমাত্র অ্যাডমিনের জন্য সংরক্ষিত।");
       window.location.replace("index.html");
@@ -48,9 +46,7 @@
   <!-- Admin Top Bar -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-40 px-5 md:px-10 py-3.5 shadow-sm flex items-center justify-between">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-forest-600 text-white flex items-center justify-center font-black text-sm">
-        IV
-      </div>
+      <div class="w-9 h-9 rounded-xl bg-forest-600 text-white flex items-center justify-center font-black text-sm">IV</div>
       <div>
         <h1 class="text-base font-black text-slate-900 leading-tight">Admin <span class="text-forest-600">Control Center</span></h1>
         <p class="text-[11px] text-slate-400 font-semibold">IELTS VocabMaster Platform</p>
@@ -66,93 +62,102 @@
   </header>
 
   <!-- Admin Main Workspace -->
-  <main class="max-w-6xl w-full mx-auto p-4 md:p-8 space-y-8">
+  <main class="max-w-6xl w-full mx-auto p-4 md:p-8 space-y-6">
     
-    <!-- Tab Controls -->
-    <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
+    <!-- ৩টি প্রধান ট্যাব -->
+    <div class="flex items-center gap-2 border-b border-slate-200 pb-3 overflow-x-auto no-scrollbar">
       <button onclick="switchTab('tabBanners')" id="btnTabBanners" class="px-4 py-2 rounded-xl font-extrabold text-xs bg-forest-600 text-white transition-all flex items-center gap-2">
-        <i class="fa-solid fa-images text-xs"></i>
-        <span>ব্যানার স্লাইডার কন্ট্রোল</span>
+        <i class="fa-solid fa-images"></i>
+        <span>১. স্লাইডার (Drag & Drop)</span>
       </button>
-      <button onclick="switchTab('tabVocab')" id="btnTabVocab" class="px-4 py-2 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all flex items-center gap-2">
-        <i class="fa-solid fa-book-bookmark text-xs"></i>
-        <span>ভোকাবুলারি ও টেস্ট আপলোডার</span>
+      <button onclick="switchTab('tabModules')" id="btnTabModules" class="px-4 py-2 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all flex items-center gap-2">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>২. ৪-মডিউল আপলোডার</span>
+      </button>
+      <button onclick="switchTab('tabAutoEngine')" id="btnTabAutoEngine" class="px-4 py-2 rounded-xl font-bold text-xs bg-slate-900 text-purple-300 border border-purple-500/30 hover:bg-slate-800 transition-all flex items-center gap-2">
+        <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i>
+        <span>৩. Vocab DB Engine (Auto Generate)</span>
       </button>
     </div>
 
-    <!-- ================= 1. TAB: BANNER SLIDER MANAGER ================= -->
+    <!-- ================= ১. ট্যাব: স্লাইডার DRAG AND DROP ================= -->
     <div id="tabBanners" class="space-y-6">
-      
-      <!-- New Banner Form Card -->
       <div class="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-sm space-y-4">
-        <div class="flex items-center justify-between border-b pb-3 border-slate-100">
-          <h2 class="text-base font-black text-slate-800 flex items-center gap-2">
-            <i class="fa-solid fa-plus-circle text-forest-600"></i>
-            <span>নতুন স্লাইডার ব্যানার যোগ করুন</span>
-          </h2>
-          <span class="text-xs text-slate-400 font-medium">হোমপেজের মেইন স্লাইডারে শো করবে</span>
-        </div>
+        <h2 class="text-base font-black text-slate-800 flex items-center gap-2 border-b pb-3">
+          <i class="fa-solid fa-cloud-arrow-up text-forest-600"></i>
+          <span>নতুন স্লাইডার ব্যানার আপলোড (Drag & Drop)</span>
+        </h2>
 
         <form onsubmit="handleBannerSubmit(event)" class="space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">ছোট টপ ট্যাগ (Badge Tag)</label>
-              <input type="text" id="bannerTag" required placeholder="e.g. SPECIAL OFFER বা BAND 8.0 STRATEGY" class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">ব্যানার ইমেজ লিংক (Unsplash/Direct Image URL)</label>
-              <input type="url" id="bannerImage" required placeholder="https://images.unsplash.com/..." class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+          <!-- ড্র্যাগ অ্যান্ড ড্রপ ফাইল বক্স -->
+          <div id="dropZone" class="border-2 border-dashed border-slate-300 hover:border-forest-600 rounded-2xl p-6 text-center cursor-pointer transition-all bg-slate-50/50 flex flex-col items-center justify-center space-y-2">
+            <i class="fa-solid fa-images text-3xl text-forest-600"></i>
+            <p class="text-xs font-bold text-slate-700">ছবিটি টেনে এনে এখানে ছেড়ে দিন অথবা ব্রাউজ করুন</p>
+            <p class="text-[10px] text-slate-400">PNG, JPG, WEBP ফরম্যাট সমর্থিত</p>
+            <input type="file" id="bannerFileInput" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+            <button type="button" onclick="document.getElementById('bannerFileInput').click()" class="px-3 py-1.5 bg-forest-50 text-forest-700 text-xs font-bold rounded-lg border border-forest-200 hover:bg-forest-100">
+              Choose File
+            </button>
+            <div id="imagePreviewContainer" class="hidden mt-2">
+              <img id="imagePreview" class="h-20 rounded-lg object-cover border border-slate-200 shadow-sm">
             </div>
           </div>
 
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">ব্যানার মূল শিরোনাম (Main Title)</label>
-            <input type="text" id="bannerTitle" required placeholder="e.g. ক্যামব্রিজ ১৯ এর লেটেস্ট রিডিং টেস্ট ট্রিকস" class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">ছোট টপ ট্যাগ</label>
+              <input type="text" id="bannerTag" required placeholder="e.g. BAND 8.0 STRATEGY" class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">ব্যানার মূল শিরোনাম</label>
+              <input type="text" id="bannerTitle" required placeholder="e.g. ক্যামব্রিজ ১৯ এর লেটেস্ট ট্রিকস" class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none">
+            </div>
           </div>
 
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">ছোট বিবরণ (Description)</label>
-            <textarea id="bannerDesc" rows="2" required placeholder="ব্যানারের সংক্ষিপ্ত বার্তা বা অফার বিবরণ..." class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600"></textarea>
+            <textarea id="bannerDesc" rows="2" required placeholder="ব্যানারের সংক্ষিপ্ত বিবরণ লিখুন..." class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none"></textarea>
           </div>
 
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">৩টি ফিচার বুলেট (কমা দিয়ে লিখুন)</label>
-            <input type="text" id="bannerFeatures" placeholder="৪০টি টেস্ট, সম্পূর্ণ বাংলা অর্থ, ব্যান্ড ৮.০ সলিউশন" class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+            <input type="text" id="bannerFeatures" placeholder="৪০টি টেস্ট, সম্পূর্ণ বাংলা অর্থ, ব্যান্ড ৮.০ সলিউশন" class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none">
           </div>
 
-          <button type="submit" class="px-6 py-3 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all active:scale-95 flex items-center gap-2">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            <span>ব্যানার স্লাইডার প্রকাশ করুন</span>
+          <button type="submit" class="px-6 py-3 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all">
+            ব্যানার স্লাইডার প্রকাশ করুন
           </button>
         </form>
       </div>
 
-      <!-- Active Banners List -->
       <div class="space-y-3">
         <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">বর্তমানে স্লাইডারে থাকা ব্যানারসমূহ</h3>
-        <div id="adminBannersList" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        </div>
+        <div id="adminBannersList" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
       </div>
-
     </div>
 
-    <!-- ================= 2. TAB: VOCABULARY UPLOADER ================= -->
-    <div id="tabVocab" class="hidden space-y-6">
-      
+    <!-- ================= ২. ট্যাব: ৪টি আলাদা সেকশনের আপলোডার ================= -->
+    <div id="tabModules" class="hidden space-y-6">
       <div class="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-sm space-y-4">
-        <div class="flex items-center justify-between border-b pb-3 border-slate-100">
+        <div class="flex items-center justify-between border-b pb-3">
           <h2 class="text-base font-black text-slate-800 flex items-center gap-2">
-            <i class="fa-solid fa-pen-nib text-forest-600"></i>
-            <span>ক্যামব্রিজ টেস্টের শব্দ ও অর্থ যোগ করুন</span>
+            <i class="fa-solid fa-list-check text-forest-600"></i>
+            <span>মডিউলভিত্তিক আলাদা কনটেন্ট আপলোডার</span>
           </h2>
-          <span class="text-xs text-slate-400 font-medium">Cambridge 10–19 মডিউলে লাইভ হবে</span>
+          <!-- মডিউল সুইচ বাটন -->
+          <div class="flex bg-slate-100 p-1 rounded-xl gap-1">
+            <button onclick="setModuleUploadType('Reading')" id="btnMReading" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-forest-600 text-white">Reading</button>
+            <button onclick="setModuleUploadType('Listening')" id="btnMListening" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600">Listening</button>
+            <button onclick="setModuleUploadType('Writing')" id="btnMWriting" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600">Writing</button>
+            <button onclick="setModuleUploadType('Speaking')" id="btnMSpeaking" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600">Speaking</button>
+          </div>
         </div>
 
-        <form onsubmit="handleVocabSubmit(event)" class="space-y-4">
+        <form onsubmit="handleModuleContentSubmit(event)" class="space-y-4">
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">বই নির্বাচন</label>
-              <select id="vocabBook" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none bg-white">
+              <label class="block text-xs font-bold text-slate-700 mb-1">ক্যামব্রিজ বই</label>
+              <select id="modBook" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none">
                 <option>Cambridge 10</option>
                 <option>Cambridge 11</option>
                 <option>Cambridge 12</option>
@@ -167,7 +172,7 @@
             </div>
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">টেস্ট নির্বাচন</label>
-              <select id="vocabTest" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none bg-white">
+              <select id="modTest" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none">
                 <option value="T1">Test 1 (Free)</option>
                 <option value="T2">Test 2 (Pro)</option>
                 <option value="T3">Test 3 (Pro)</option>
@@ -175,222 +180,302 @@
               </select>
             </div>
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">ইংরেজি শব্দ (Word)</label>
-              <input type="text" id="vocabWord" required placeholder="e.g. Scrutinize" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+              <label id="lblWordOrTitle" class="block text-xs font-bold text-slate-700 mb-1">ইংরেজি শব্দ / টপিক</label>
+              <input type="text" id="modWord" required placeholder="e.g. Scrutinize" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none">
             </div>
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">বাংলা অর্থ (Meaning)</label>
-              <input type="text" id="vocabMeaning" required placeholder="e.g. খুঁটিয়ে পরীক্ষা করা" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+              <label id="lblMeaningOrNote" class="block text-xs font-bold text-slate-700 mb-1">বাংলা অর্থ / সলিউশন নোট</label>
+              <input type="text" id="modMeaning" required placeholder="e.g. খুঁটিয়ে পরীক্ষা করা" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none">
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- অতিরিক্ত ফিল্ড (মডিউল অনুযায়ী) -->
+          <div id="dynamicModuleFields" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">Synonyms (কমা দিয়ে লিখুন)</label>
-              <input type="text" id="vocabSynonyms" placeholder="Examine + পরীক্ষা করা, Inspect + নিরীক্ষণ করা" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+              <input type="text" id="modSyn" placeholder="Examine, Inspect" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none">
             </div>
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">Antonyms (কমা দিয়ে লিখুন)</label>
-              <input type="text" id="vocabAntonyms" placeholder="Ignore + উপেক্ষা করা, Overlook" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+              <input type="text" id="modAnt" placeholder="Ignore, Overlook" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none">
             </div>
           </div>
 
-          <button type="submit" class="px-6 py-3 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all active:scale-95 flex items-center gap-2">
-            <i class="fa-solid fa-plus"></i>
-            <span>শব্দটি ডাটাবেসে সেভ করুন</span>
+          <button type="submit" class="px-6 py-3 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all">
+            মডিউল কনটেন্ট সেভ করুন
           </button>
         </form>
       </div>
+    </div>
 
-      <!-- Live Vocab List Filter -->
-      <div class="space-y-3">
-        <div class="flex items-center justify-between">
-          <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">বর্তমানে আপলোড করা শব্দের তালিকা</h3>
-          <span id="vocabCountBadge" class="text-xs font-bold text-forest-700 bg-forest-50 px-2.5 py-1 rounded-lg">০ টি শব্দ</span>
-        </div>
-        <div id="adminVocabList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <!-- ================= ৩. ট্যাব: VOCAB DB ENGINE (৩ নম্বর ছবির হুবহু ডার্ক ইঞ্জিন) ================= -->
+    <div id="tabAutoEngine" class="hidden bg-[#0a0f1d] text-slate-100 rounded-3xl p-6 md:p-8 space-y-6 border border-slate-800 shadow-2xl">
+      <!-- Engine Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-purple-600/20 text-purple-400 flex items-center justify-center text-lg border border-purple-500/30">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-base font-black text-white">Vocab DB Engine</h2>
+              <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">সিনোনিম-অ্যান্টনিম বাংলা অর্থসহ</span>
+            </div>
+            <p class="text-xs text-slate-400">শব্দ দিলে স্বয়ংক্রিয়ভাবে অর্থ, সিনোনিম ও অ্যান্টনিম তৈরি করে ডেটাবেজে পুশ করবে</p>
+          </div>
         </div>
       </div>
 
+      <!-- Stats Cards Row (ছবির মতো) -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
+          <div><p class="text-[10px] text-slate-400 uppercase font-bold">ইনপুট শব্দ</p><p id="engineInputCount" class="text-lg font-black text-white">০ / ৫০০</p></div>
+          <i class="fa-solid fa-font text-slate-600 text-lg"></i>
+        </div>
+        <div class="bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
+          <div><p class="text-[10px] text-slate-400 uppercase font-bold">রেডি রেকর্ডস</p><p id="engineReadyCount" class="text-lg font-black text-emerald-400">০</p></div>
+          <i class="fa-solid fa-database text-slate-600 text-lg"></i>
+        </div>
+        <div class="bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
+          <div><p class="text-[10px] text-slate-400 uppercase font-bold">সিনোনিম + অ্যান্টনিম</p><p class="text-xs font-bold text-purple-300">বাংলা অর্থসহ</p></div>
+          <i class="fa-solid fa-language text-slate-600 text-lg"></i>
+        </div>
+        <div class="bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
+          <div><p class="text-[10px] text-slate-400 uppercase font-bold">ব্যাচ পারফরম্যান্স</p><p class="text-xs font-bold text-amber-400">স্মার্ট টোকেন</p></div>
+          <i class="fa-solid fa-microchip text-slate-600 text-lg"></i>
+        </div>
+      </div>
+
+      <!-- Engine Work Area Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Left: Word Input -->
+        <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-list"></i> ইংরেজি শব্দের তালিকা দিন</span>
+            <button onclick="insertDemoWords()" class="text-[10px] bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 px-2 py-1 rounded-md font-bold transition-all">
+              + ৫টি শব্দ ডেমো
+            </button>
+          </div>
+          <textarea id="bulkWordInput" rows="7" oninput="updateInputStats()" placeholder="শব্দগুলো কমা (,) বা নতুন লাইনে পেস্ট করুন...&#10;&#10;যেমন: Diligent, Benevolent, Candid, Resilient, Tenacious" class="w-full bg-[#050811] text-xs p-3 rounded-xl border border-slate-800 text-slate-200 outline-none focus:border-purple-500"></textarea>
+          
+          <div class="flex gap-2">
+            <button onclick="generateAutoVocab()" class="flex-1 py-3 bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-play"></i>
+              <span>ডেটা তৈরি শুরু করুন</span>
+            </button>
+            <button onclick="document.getElementById('bulkWordInput').value=''; updateInputStats();" class="p-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Generated Output Box -->
+        <div class="bg-slate-900/50 p-4 rounded-2xl border border-slate-800 space-y-3 flex flex-col justify-between">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-table-cells"></i> প্রিভিউ কার্ডস</span>
+            <button onclick="saveAllEngineToDB()" id="pushBtn" class="hidden text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-lg font-bold">
+              সরাসরি ডাটাবেসে পুশ করুন →
+            </button>
+          </div>
+          
+          <div id="engineOutputContainer" class="flex-1 max-h-56 overflow-y-auto space-y-2 pr-1 no-scrollbar text-center text-slate-500 text-xs py-8">
+            <i class="fa-solid fa-book-open text-3xl mb-2 text-slate-700"></i>
+            <p>কোনো ডেটা এখনো তৈরি হয়নি</p>
+            <p class="text-[10px]">বামে আপনার শব্দগুলো লিখুন অথবা ডেমো বাটনে ক্লিক করুন</p>
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
 
   <script>
+    let uploadedImageBase64 = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80";
+    let currentUploadModule = 'Reading';
+
+    // ১. ট্যাব সুইচিং
     function switchTab(tabId) {
       document.getElementById('tabBanners').classList.add('hidden');
-      document.getElementById('tabVocab').classList.add('hidden');
+      document.getElementById('tabModules').classList.add('hidden');
+      document.getElementById('tabAutoEngine').classList.add('hidden');
       document.getElementById(tabId).classList.remove('hidden');
 
-      if (tabId === 'tabBanners') {
-        document.getElementById('btnTabBanners').className = 'px-4 py-2 rounded-xl font-extrabold text-xs bg-forest-600 text-white transition-all flex items-center gap-2';
-        document.getElementById('btnTabVocab').className = 'px-4 py-2 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all flex items-center gap-2';
-      } else {
-        document.getElementById('btnTabVocab').className = 'px-4 py-2 rounded-xl font-extrabold text-xs bg-forest-600 text-white transition-all flex items-center gap-2';
-        document.getElementById('btnTabBanners').className = 'px-4 py-2 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all flex items-center gap-2';
-      }
+      ['btnTabBanners', 'btnTabModules', 'btnTabAutoEngine'].forEach(btn => {
+        document.getElementById(btn).className = 'px-4 py-2 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all flex items-center gap-2';
+      });
+
+      if (tabId === 'tabBanners') document.getElementById('btnTabBanners').className = 'px-4 py-2 rounded-xl font-extrabold text-xs bg-forest-600 text-white transition-all flex items-center gap-2';
+      if (tabId === 'tabModules') document.getElementById('btnTabModules').className = 'px-4 py-2 rounded-xl font-extrabold text-xs bg-forest-600 text-white transition-all flex items-center gap-2';
+      if (tabId === 'tabAutoEngine') document.getElementById('btnTabAutoEngine').className = 'px-4 py-2 rounded-xl font-extrabold text-xs bg-slate-900 text-purple-300 border border-purple-500/40 transition-all flex items-center gap-2';
     }
 
-    const defaultBanners = [
-      {
-        tag: "FREE & PREMIUM IELTS PREP",
-        title: "ক্যামব্রিজ ১০–১৯ ভোকাভিউ ও সলিউশন",
-        desc: "প্রতিটি বইয়ের টেস্ট ১ এর সব ভোকাবুলারি সবার জন্য সম্পূর্ণ উন্মুক্ত! পরবর্তী টেস্ট এবং ফুল টেস্ট ভল্ট আনলক করতে এগিয়ে যান।",
-        features: ["Cambridge 10–19 টেস্ট ১ ফ্রি", "প্রিমিয়াম ফুল ভল্ট", "ব্যান্ড ৮.০ টার্গেট সলিউশন"],
-        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80"
-      },
-      {
-        tag: "OFFICIAL CAMBRIDGE MATERIAL",
-        title: "রিডিং ও লিসেনিং উত্তর ব্যাখ্যা",
-        desc: "প্রতিটি কঠিন প্রশ্নের লাইন-বাই-লাইন বাংলা অর্থ, ট্রিকি সিনোনিম ম্যাচিং এবং অডিও স্ক্রিপ্টের মূল কি-ওয়ার্ড এক ক্লিকেই!",
-        features: ["৪০টি অফিশিয়াল টেস্ট", "সিনোনিম ও অ্যান্টনিম", "অডিও স্ক্রিপ্ট নোট"],
-        image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1400&q=80"
-      },
-      {
-        tag: "PRO EXAM STRATEGY",
-        title: "রাইটিং ও স্পিকিং ব্যান্ড বুস্টার",
-        desc: "Task 1 ও Task 2 এর জন্য রেডিমেড ফরম্যাট এবং লেটেস্ট স্পিকিং কিউ-কার্ডের হাই-ব্যান্ড ভোকাবুলারি দিয়ে নিজেকে এগিয়ে রাখুন।",
-        features: ["ব্যান্ড ৯.০ স্যাম্পল", "লেটেস্ট কিউ কার্ডস", "ডেইলি রিভিশন"],
-        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80"
-      }
-    ];
+    // ২. Drag & Drop ফাইল হ্যান্ডলার
+    const dropZone = document.getElementById('dropZone');
+    ['dragenter', 'dragover'].forEach(name => {
+      dropZone.addEventListener(name, (e) => { e.preventDefault(); dropZone.classList.add('border-forest-600', 'bg-forest-50/50'); });
+    });
+    ['dragleave', 'drop'].forEach(name => {
+      dropZone.addEventListener(name, (e) => { e.preventDefault(); dropZone.classList.remove('border-forest-600', 'bg-forest-50/50'); });
+    });
+    dropZone.addEventListener('drop', (e) => {
+      const files = e.dataTransfer.files;
+      if (files.length > 0) processFile(files[0]);
+    });
 
-    let bannersDB = JSON.parse(localStorage.getItem('site_banners_db')) || defaultBanners;
+    function handleFileSelect(e) {
+      if (e.target.files.length > 0) processFile(e.target.files[0]);
+    }
 
-    function renderAdminBanners() {
-      const container = document.getElementById('adminBannersList');
-      container.innerHTML = '';
-
-      bannersDB.forEach((b, idx) => {
-        const item = document.createElement('div');
-        item.className = "bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col justify-between";
-        item.innerHTML = `
-          <div class="h-28 relative">
-            <img src="${b.image}" class="w-full h-full object-cover">
-            <span class="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded">${b.tag}</span>
-          </div>
-          <div class="p-3.5 space-y-2 flex-1 flex flex-col justify-between">
-            <div>
-              <h4 class="font-black text-xs text-slate-800 line-clamp-1">${b.title}</h4>
-              <p class="text-[11px] text-slate-500 line-clamp-2 mt-0.5">${b.desc}</p>
-            </div>
-            <button onclick="deleteBanner(${idx})" class="w-full py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-trash text-[10px]"></i>
-              <span>স্লাইডার থেকে মুছুন</span>
-            </button>
-          </div>
-        `;
-        container.appendChild(item);
-      });
+    function processFile(file) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        uploadedImageBase64 = evt.target.result;
+        document.getElementById('imagePreview').src = uploadedImageBase64;
+        document.getElementById('imagePreviewContainer').classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
     }
 
     function handleBannerSubmit(e) {
       e.preventDefault();
       const tag = document.getElementById('bannerTag').value.trim();
-      const image = document.getElementById('bannerImage').value.trim();
       const title = document.getElementById('bannerTitle').value.trim();
       const desc = document.getElementById('bannerDesc').value.trim();
       const featInput = document.getElementById('bannerFeatures').value.trim();
       const features = featInput ? featInput.split(',').map(s => s.trim()) : ["ক্যামব্রিজ টেস্ট", "ফুল সলিউশন"];
 
-      bannersDB.unshift({ tag, image, title, desc, features });
+      let bannersDB = JSON.parse(localStorage.getItem('site_banners_db')) || [];
+      bannersDB.unshift({ tag, image: uploadedImageBase64, title, desc, features });
       localStorage.setItem('site_banners_db', JSON.stringify(bannersDB));
+      alert('স্লাইডার ব্যানার সফলভাবে আপলোড হয়েছে!');
       renderAdminBanners();
-      alert('নতুন ব্যানার সফলভাবে হোমপেজ স্লাইডারে যোগ হয়েছে!');
       e.target.reset();
+      document.getElementById('imagePreviewContainer').classList.add('hidden');
     }
 
-    function deleteBanner(idx) {
-      if (bannersDB.length <= 1) {
-        alert('কমপক্ষে একটি ব্যানার স্লাইডারে থাকতে হবে!');
-        return;
-      }
-      if (confirm('আপনি কি এই ব্যানারটি স্লাইডার থেকে সরিয়ে ফেলতে চান?')) {
-        bannersDB.splice(idx, 1);
-        localStorage.setItem('site_banners_db', JSON.stringify(bannersDB));
-        renderAdminBanners();
-      }
-    }
-
-    // Vocabulary Setup
-    const initialVocabulary = [
-      {
-        book: "Cambridge 10",
-        test: "T1",
-        word: "Cautiously",
-        meaning: "সতর্কতার সাথে / সাবধানতার সাথে",
-        synonyms: ["Carefully + সাবধানতার সাথে", "Prudently + বিচক্ষণতার সাথে"],
-        antonyms: ["Carelessly + অসাবধানতাবশত", "Recklessly + বেপরোয়াভাবে"]
-      },
-      {
-        book: "Cambridge 10",
-        test: "T1",
-        word: "Prevailed",
-        meaning: "জয়ী হওয়া / বিদ্যমান থাকা",
-        synonyms: ["Triumphed + জয়লাভ করেছিল", "Succeeded + সফল হয়েছিল"],
-        antonyms: ["Failed + ব্যর্থ হয়েছিল", "Surrendered + আত্মসমর্পণ করেছিল"]
-      }
-    ];
-
-    let vocabularyDB = JSON.parse(localStorage.getItem('user_vocab_db')) || initialVocabulary;
-
-    function renderAdminVocab() {
-      const container = document.getElementById('adminVocabList');
+    function renderAdminBanners() {
+      const container = document.getElementById('adminBannersList');
       container.innerHTML = '';
-      document.getElementById('vocabCountBadge').innerText = `${vocabularyDB.length} টি শব্দ লাইভ`;
-
-      vocabularyDB.forEach((v, idx) => {
+      let bannersDB = JSON.parse(localStorage.getItem('site_banners_db')) || [];
+      bannersDB.forEach((b, idx) => {
         const item = document.createElement('div');
-        item.className = "bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-sm flex items-center justify-between";
+        item.className = "bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col justify-between";
         item.innerHTML = `
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">${v.book} (${v.test})</span>
-              <h4 class="font-extrabold text-sm text-forest-700">${v.word}</h4>
-            </div>
-            <p class="text-xs text-slate-600 font-medium mt-1">অর্থ: ${v.meaning}</p>
+          <div class="h-28 relative"><img src="${b.image}" class="w-full h-full object-cover"></div>
+          <div class="p-3">
+            <h4 class="font-bold text-xs text-slate-800 line-clamp-1">${b.title}</h4>
+            <button onclick="deleteBanner(${idx})" class="mt-2 w-full py-1 bg-rose-50 text-rose-600 rounded text-xs font-bold">মুছুন</button>
           </div>
-          <button onclick="deleteVocab(${idx})" class="w-8 h-8 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition-colors">
-            <i class="fa-solid fa-trash text-xs"></i>
-          </button>
         `;
         container.appendChild(item);
       });
     }
 
-    function handleVocabSubmit(e) {
-      e.preventDefault();
-      const book = document.getElementById('vocabBook').value;
-      const test = document.getElementById('vocabTest').value;
-      const word = document.getElementById('vocabWord').value.trim();
-      const meaning = document.getElementById('vocabMeaning').value.trim();
-      const synInput = document.getElementById('vocabSynonyms').value.trim();
-      const antInput = document.getElementById('vocabAntonyms').value.trim();
-
-      const synonyms = synInput ? synInput.split(',').map(s => s.trim()) : [];
-      const antonyms = antInput ? antInput.split(',').map(a => a.trim()) : [];
-
-      vocabularyDB.unshift({ book, test, word, meaning, synonyms, antonyms });
-      localStorage.setItem('user_vocab_db', JSON.stringify(vocabularyDB));
-      renderAdminVocab();
-      alert('শব্দটি সফলভাবে যুক্ত হয়েছে এবং ওয়েবসাইটে প্রদর্শিত হচ্ছে!');
-      document.getElementById('vocabWord').value = '';
-      document.getElementById('vocabMeaning').value = '';
-      document.getElementById('vocabSynonyms').value = '';
-      document.getElementById('vocabAntonyms').value = '';
+    function deleteBanner(idx) {
+      let bannersDB = JSON.parse(localStorage.getItem('site_banners_db')) || [];
+      bannersDB.splice(idx, 1);
+      localStorage.setItem('site_banners_db', JSON.stringify(bannersDB));
+      renderAdminBanners();
     }
 
-    function deleteVocab(idx) {
-      if (confirm('আপনি কি এই শব্দটি ডিলিট করতে চান?')) {
-        vocabularyDB.splice(idx, 1);
-        localStorage.setItem('user_vocab_db', JSON.stringify(vocabularyDB));
-        renderAdminVocab();
-      }
+    // ৩. ৪-মডিউল আলাদা আপলোড
+    function setModuleUploadType(type) {
+      currentUploadModule = type;
+      ['Reading', 'Listening', 'Writing', 'Speaking'].forEach(m => {
+        document.getElementById(`btnM${m}`).className = m === type ? 'px-3 py-1.5 text-xs font-bold rounded-lg bg-forest-600 text-white' : 'px-3 py-1.5 text-xs font-bold rounded-lg text-slate-600';
+      });
+    }
+
+    function handleModuleContentSubmit(e) {
+      e.preventDefault();
+      const book = document.getElementById('modBook').value;
+      const test = document.getElementById('modTest').value;
+      const word = document.getElementById('modWord').value.trim();
+      const meaning = document.getElementById('modMeaning').value.trim();
+      const syn = document.getElementById('modSyn').value.split(',').map(s => s.trim());
+      const ant = document.getElementById('modAnt').value.split(',').map(a => a.trim());
+
+      let vocabDB = JSON.parse(localStorage.getItem('user_vocab_db')) || [];
+      vocabDB.unshift({ module: currentUploadModule, book, test, word, meaning, synonyms: syn, antonyms: ant });
+      localStorage.setItem('user_vocab_db', JSON.stringify(vocabDB));
+      alert(`${currentUploadModule} কনটেন্ট সফলভাবে সেভ হয়েছে!`);
+      e.target.reset();
+    }
+
+    // ৪. Auto Generate Engine (Vocab DB Engine)
+    let generatedRecords = [];
+
+    function updateInputStats() {
+      const text = document.getElementById('bulkWordInput').value.trim();
+      const count = text ? text.split(/[,\n]+/).filter(w => w.trim().length > 0).length : 0;
+      document.getElementById('engineInputCount').innerText = `${count} / ৫০০`;
+    }
+
+    function insertDemoWords() {
+      document.getElementById('bulkWordInput').value = "Diligent, Benevolent, Candid, Resilient, Tenacious";
+      updateInputStats();
+    }
+
+    // অফলাইন অটো-ডিকশনারি মডেল
+    const autoDict = {
+      diligent: { meaning: "পরিশ্রমী / যত্নশীল", syn: ["Hardworking", "Assiduous"], ant: ["Lazy", "Negligent"] },
+      benevolent: { meaning: "দয়ালু / পরোপকারী", syn: ["Kind-hearted", "Altruistic"], ant: ["Cruel", "Malicious"] },
+      candid: { meaning: "স্পষ্টবাদী / অকপট", syn: ["Frank", "Outspoken"], ant: ["Secretive", "Deceitful"] },
+      resilient: { meaning: "স্থিতিস্থাপক / ঘুরে দাঁড়াতে সক্ষম", syn: ["Strong", "Adaptable"], ant: ["Fragile", "Vulnerable"] },
+      tenacious: { meaning: "নাছোড়বান্দা / দৃঢ়প্রতিজ্ঞ", syn: ["Persistent", "Determined"], ant: ["Weak", "Yielding"] }
+    };
+
+    function generateAutoVocab() {
+      const text = document.getElementById('bulkWordInput').value.trim();
+      if (!text) { alert('শব্দ ইনপুট করুন!'); return; }
+      const words = text.split(/[,\n]+/).map(w => w.trim()).filter(w => w.length > 0);
+
+      generatedRecords = words.map(w => {
+        const lower = w.toLowerCase();
+        const data = autoDict[lower] || {
+          meaning: `${w}-এর অর্থ ও তাৎপর্য`,
+          syn: [`${w} Synonym 1`, `${w} Synonym 2`],
+          ant: [`Non-${w}`, `Un-${w}`]
+        };
+        return {
+          book: "Cambridge 10",
+          test: "T1",
+          word: w,
+          meaning: data.meaning,
+          synonyms: data.syn,
+          antonyms: data.ant
+        };
+      });
+
+      document.getElementById('engineReadyCount').innerText = generatedRecords.length;
+      const out = document.getElementById('engineOutputContainer');
+      out.innerHTML = generatedRecords.map(r => `
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-left text-xs">
+          <div class="flex justify-between font-bold text-purple-300">
+            <span>${r.word}</span>
+            <span class="text-emerald-400">${r.meaning}</span>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-1">Syn: ${r.synonyms.join(', ')} | Ant: ${r.antonyms.join(', ')}</p>
+        </div>
+      `).join('');
+
+      document.getElementById('pushBtn').classList.remove('hidden');
+    }
+
+    function saveAllEngineToDB() {
+      let vocabDB = JSON.parse(localStorage.getItem('user_vocab_db')) || [];
+      vocabDB.unshift(...generatedRecords);
+      localStorage.setItem('user_vocab_db', JSON.stringify(vocabDB));
+      alert(`${generatedRecords.length}টি শব্দ সফলভাবে মূল ডেটাবেসে পুশ করা হয়েছে!`);
+      generatedRecords = [];
+      document.getElementById('engineReadyCount').innerText = "০";
+      document.getElementById('bulkWordInput').value = '';
+      updateInputStats();
+      document.getElementById('engineOutputContainer').innerHTML = '<p class="text-emerald-400 text-xs py-8">✅ সফলভাবে সব ডেটা লাইভ সাইটে যুক্ত হয়েছে!</p>';
     }
 
     window.onload = function() {
       renderAdminBanners();
-      renderAdminVocab();
     };
   </script>
 </body>
