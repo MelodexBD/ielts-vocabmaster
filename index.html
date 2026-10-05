@@ -46,14 +46,16 @@
       transform: rotate(-90deg);
       transform-origin: 50% 50%;
     }
+    .slide-item {
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
   </style>
 </head>
 <body class="bg-[#f4f7f5] text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-forest-600 selection:text-white">
 
-  <!-- ================= TOP HEADER (DYNAMIC FOR GUEST & USER) ================= -->
+  <!-- ================= TOP HEADER ================= -->
   <header class="bg-white border-b border-slate-200/80 sticky top-0 z-40 px-4 md:px-8 py-3 shadow-sm flex items-center justify-between">
     
-    <!-- Brand Logo -->
     <div class="flex items-center gap-3">
       <a href="javascript:void(0)" onclick="showView('viewHome')" class="flex items-center gap-2.5">
         <div class="w-10 h-10 rounded-xl bg-forest-600 text-white flex items-center justify-center font-black text-sm shadow-md shadow-forest-900/20">
@@ -66,10 +68,10 @@
       </a>
     </div>
 
-    <!-- Right Header: Logged Out vs Logged In Dynamic Views -->
+    <!-- Right Header Group -->
     <div class="flex items-center gap-3">
       
-      <!-- ১. গেস্ট ভিজিটরদের জন্য বাটন (লগইন না থাকলে দেখাবে) -->
+      <!-- Guest Controls -->
       <div id="guestNavGroup" class="flex items-center gap-2">
         <a href="signup.html" class="px-4 py-2 text-xs font-bold text-forest-700 hover:bg-forest-50 rounded-xl transition-all">লগইন</a>
         <a href="signup.html" class="px-4 py-2 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold rounded-xl shadow-md shadow-forest-900/20 transition-all flex items-center gap-1.5">
@@ -78,7 +80,7 @@
         </a>
       </div>
 
-      <!-- ২. লগইন করা ইউজারের প্রোফাইল মেনু (লগইন থাকলে দেখাবে) -->
+      <!-- User Profile Controls -->
       <div id="userProfileGroup" class="hidden relative">
         <button onclick="toggleProfileDropdown(event)" class="flex items-center gap-3 p-1 rounded-2xl hover:bg-slate-50 transition-colors focus:outline-none">
           <div class="relative">
@@ -102,7 +104,11 @@
             <p class="text-xs text-slate-400 font-bold uppercase">ইউজার অ্যাকাউন্ট</p>
             <p id="dropdownUserEmail" class="text-sm font-black text-slate-800 truncate">tanbir.ahmed@example.com</p>
           </div>
-          <button onclick="openPricingModal(); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-xl transition-all text-left">
+          <a href="admin.html" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-forest-700 bg-forest-50/70 hover:bg-forest-100 rounded-xl transition-all text-left">
+            <i class="fa-solid fa-screwdriver-wrench text-sm text-forest-600"></i>
+            <span>অ্যাডমিন প্যানেল (কন্ট্রোল)</span>
+          </a>
+          <button onclick="openPricingModal(); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-amber-600 hover:bg-amber-50 rounded-xl transition-all text-left">
             <i class="fa-solid fa-crown text-sm"></i>
             <span>প্রিমিয়াম আপগ্রেড করুন</span>
           </button>
@@ -154,7 +160,6 @@
         <span>Speaking Cue Cards</span>
       </button>
 
-      <!-- Sidebar Mini Progress Card -->
       <div class="pt-4 border-t border-slate-100">
         <div class="bg-forest-50/80 border border-forest-100 p-4 rounded-2xl flex items-center gap-3">
           <div class="w-10 h-10 rounded-full bg-forest-600 text-white flex items-center justify-center font-bold text-xs">
@@ -171,42 +176,28 @@
     <!-- CONTENT DISPLAY VIEWPORT -->
     <main class="flex-1 w-full flex flex-col min-w-0">
 
-      <!-- ================= 1. HOME VIEW (LANDING & OVERVIEW) ================= -->
+      <!-- ================= 1. HOME VIEW ================= -->
       <div id="viewHome" class="view-screen w-full flex flex-col space-y-6 p-4 md:p-0">
         
-        <!-- Deep Forest Green Hero Banner -->
-        <section class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-forest-800 via-forest-600 to-emerald-700 text-white p-5 md:p-12 shadow-xl shadow-forest-900/15 md:min-h-[290px] flex flex-col justify-between">
-          <div class="relative z-10 space-y-2 md:space-y-4 max-w-2xl">
-            <span class="inline-block px-3 py-0.5 md:px-3.5 md:py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] md:text-xs font-extrabold tracking-wider uppercase">
-              Free & Premium IELTS Prep
-            </span>
-            <h1 class="text-xl md:text-4xl lg:text-5xl font-black leading-tight tracking-tight">
-              ক্যামব্রিজ ১০–১৯ ভোকাভিউ ও সলিউশন
-            </h1>
-            <p class="text-xs md:text-base text-forest-100/90 font-medium leading-relaxed max-w-xl">
-              প্রতিটি বইয়ের টেস্ট ১ এর সব ভোকাবুলারি সবার জন্য সম্পূর্ণ উন্মুক্ত! পরবর্তী টেস্ট এবং ফুল টেস্ট ভল্ট আনলক করতে এগিয়ে যান।
-            </p>
+        <!-- ================= HERO SLIDER SECTION ================= -->
+        <section class="relative rounded-3xl overflow-hidden shadow-xl shadow-forest-900/15 md:min-h-[300px] h-[320px] md:h-[310px] select-none group">
+          
+          <!-- Slider Slides Container -->
+          <div id="sliderWrapper" class="relative w-full h-full">
+            <!-- Rendered Dynamically from site_banners_db -->
           </div>
 
-          <div class="relative z-10 pt-3 md:pt-6 mt-3 border-t border-white/15 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] md:text-xs text-forest-100 font-semibold">
-            <div class="flex items-center gap-1">
-              <i class="fa-solid fa-circle-check text-emerald-300 text-[10px]"></i>
-              <span>Cambridge 10–19 টেস্ট ১ ফ্রি</span>
-            </div>
-            <span class="text-white/30 hidden sm:inline">•</span>
-            <div class="flex items-center gap-1">
-              <i class="fa-solid fa-lock text-amber-300 text-[10px]"></i>
-              <span>প্রিমিয়াম ফুল ভল্ট</span>
-            </div>
-            <span class="text-white/30 hidden sm:inline">•</span>
-            <div class="flex items-center gap-1">
-              <i class="fa-solid fa-bolt text-yellow-300 text-[10px]"></i>
-              <span>ব্যান্ড ৮.০ টার্গেট সলিউশন</span>
-            </div>
-          </div>
+          <!-- Slider Navigation Arrows -->
+          <button onclick="prevSlide()" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/30 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-80 md:opacity-0 group-hover:opacity-100 z-20">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
+          </button>
+          <button onclick="nextSlide()" class="absolute right-3.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/30 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-80 md:opacity-0 group-hover:opacity-100 z-20">
+            <i class="fa-solid fa-chevron-right text-xs"></i>
+          </button>
 
-          <div class="absolute -right-3 -bottom-5 md:-right-6 md:-bottom-8 text-white/[0.06] text-[95px] md:text-[180px] font-black select-none pointer-events-none leading-none">
-            IELTS
+          <!-- Slider Dots Indicator -->
+          <div id="sliderDots" class="absolute bottom-3.5 inset-x-0 flex justify-center items-center gap-1.5 z-20">
+            <!-- Dots generated dynamically -->
           </div>
         </section>
 
@@ -333,7 +324,7 @@
         </div>
       </div>
 
-      <!-- ================= 3. WORDS & DETAILS VIEW WITH LOCK SYSTEM ================= -->
+      <!-- ================= 3. WORDS & DETAILS VIEW ================= -->
       <div id="viewBookDetails" class="view-screen w-full hidden flex-col space-y-4 p-4 md:p-0">
         <div class="bg-white border border-slate-200/80 p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm flex items-center justify-between">
           <div class="flex items-center gap-3">
@@ -343,26 +334,22 @@
             <h2 id="selectedBookHeader" class="text-base md:text-xl font-black text-slate-800">Cambridge 10</h2>
           </div>
 
-          <!-- T1 (Free) and T2-T4 (Locked) Selector Bar for Desktop -->
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold text-slate-400 hidden md:inline mr-2">টেস্ট নির্বাচন:</span>
             <div class="inline-flex bg-slate-100 p-1 rounded-xl">
-              <!-- T1 is Free -->
               <button onclick="selectTest('T1')" id="deskBtnT1" class="px-3 py-1.5 text-xs font-bold rounded-lg border border-forest-600 bg-forest-600 text-white transition-all flex items-center gap-1">
                 <span>T1</span>
                 <span class="text-[9px] bg-white/20 px-1 rounded">FREE</span>
               </button>
-              
-              <!-- T2, T3, T4 are Locked -->
-              <button onclick="handleLockedContentClick('T2')" id="deskBtnT2" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
+              <button onclick="handleLockedContentClick('T2')" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
                 <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
                 <span>T2</span>
               </button>
-              <button onclick="handleLockedContentClick('T3')" id="deskBtnT3" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
+              <button onclick="handleLockedContentClick('T3')" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
                 <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
                 <span>T3</span>
               </button>
-              <button onclick="handleLockedContentClick('T4')" id="deskBtnT4" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
+              <button onclick="handleLockedContentClick('T4')" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
                 <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
                 <span>T4</span>
               </button>
@@ -370,14 +357,12 @@
           </div>
         </div>
 
-        <!-- Word Cards Grid -->
         <div id="wordsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         </div>
 
-        <!-- Mobile Only Sticky Bottom T1-T4 Bar with Lock -->
         <div class="md:hidden fixed bottom-[62px] inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 z-20 shadow-lg">
           <div class="grid grid-cols-4 gap-2 max-w-sm mx-auto">
-            <button onclick="selectTest('T1')" id="btnT1" class="py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white shadow-sm flex items-center justify-center gap-1">
+            <button onclick="selectTest('T1')" class="py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white shadow-sm flex items-center justify-center gap-1">
               <span>T1</span>
               <span class="text-[9px] bg-white/20 px-1 rounded">FREE</span>
             </button>
@@ -429,8 +414,7 @@
         <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">সাবস্ক্রিপশন ও অফার</h4>
         <ul class="space-y-2 text-xs font-medium">
           <li><a href="javascript:void(0)" onclick="openPricingModal()" class="text-amber-600 font-bold hover:underline">✨ প্রিমিয়াম প্ল্যান দেখুন</a></li>
-          <li><a href="javascript:void(0)" onclick="openModal('aboutModal')" class="hover:text-forest-600">About Us</a></li>
-          <li><a href="javascript:void(0)" onclick="openModal('privacyModal')" class="hover:text-forest-600">Privacy Policy</a></li>
+          <li><a href="admin.html" class="hover:text-forest-600 font-semibold">অ্যাডমিন ড্যাশবোর্ড</a></li>
         </ul>
       </div>
 
@@ -450,7 +434,7 @@
     </div>
   </footer>
 
-  <!-- ================= MOBILE ONLY BOTTOM NAVBAR ================= -->
+  <!-- ================= MOBILE BOTTOM NAVBAR ================= -->
   <nav class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 px-2 py-1.5 z-30 select-none shadow-lg">
     <div class="grid grid-cols-5 items-center justify-items-center w-full max-w-md mx-auto">
       <button onclick="showView('viewHome')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-forest-600 transition-all">
@@ -482,9 +466,9 @@
     </div>
   </nav>
 
-  <!-- ================= POPUP 1: REGISTER PROMPT MODAL (লগআউট ইউজারের জন্য) ================= -->
+  <!-- ================= POPUP 1: REGISTER PROMPT MODAL ================= -->
   <div id="authPromptModal" class="hidden fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-md shadow-2xl text-center space-y-5 animate-fade-in">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-md shadow-2xl text-center space-y-5">
       <div class="w-16 h-16 rounded-3xl bg-forest-50 text-forest-600 border border-forest-100 flex items-center justify-center mx-auto text-2xl shadow-inner">
         <i class="fa-solid fa-lock"></i>
       </div>
@@ -506,11 +490,9 @@
     </div>
   </div>
 
-  <!-- ================= POPUP 2: PREMIUM PRICING MODAL (১ মাস, ৩ মাস, ৬ মাস, ১ বছর) ================= -->
+  <!-- ================= POPUP 2: PRICING MODAL ================= -->
   <div id="pricingModal" class="hidden fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto no-scrollbar">
     <div class="bg-white rounded-3xl p-6 sm:p-8 w-full max-w-xl shadow-2xl space-y-6 my-auto">
-      
-      <!-- Modal Header -->
       <div class="flex items-center justify-between border-b pb-4 border-slate-100">
         <div>
           <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[11px] font-black">
@@ -524,11 +506,8 @@
         </button>
       </div>
 
-      <!-- Pricing Plans Grid (1 Month, 3 Months, 6 Months, 1 Year) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-        
-        <!-- ১ মাস প্ল্যান -->
-        <div class="p-4 rounded-2xl border-2 border-slate-200 hover:border-forest-600 transition-all cursor-pointer relative bg-slate-50/50 hover:bg-forest-50/30 group">
+        <div class="p-4 rounded-2xl border-2 border-slate-200 hover:border-forest-600 transition-all cursor-pointer bg-slate-50/50 hover:bg-forest-50/30 group">
           <div class="flex justify-between items-start">
             <span class="font-extrabold text-sm text-slate-800">১ মাস প্ল্যান</span>
             <span class="text-xs font-black text-forest-700">২৯০৳</span>
@@ -539,7 +518,6 @@
           </button>
         </div>
 
-        <!-- ৩ মাস প্ল্যান (জনপ্রিয়) -->
         <div class="p-4 rounded-2xl border-2 border-forest-600 bg-forest-50/40 relative shadow-sm cursor-pointer group">
           <span class="absolute -top-2.5 right-3 bg-forest-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">সবচেয়ে জনপ্রিয়</span>
           <div class="flex justify-between items-start">
@@ -552,7 +530,6 @@
           </button>
         </div>
 
-        <!-- ৬ মাস প্ল্যান -->
         <div class="p-4 rounded-2xl border-2 border-slate-200 hover:border-forest-600 transition-all cursor-pointer bg-slate-50/50 hover:bg-forest-50/30 group">
           <div class="flex justify-between items-start">
             <span class="font-extrabold text-sm text-slate-800">৬ মাস প্ল্যান</span>
@@ -564,11 +541,10 @@
           </button>
         </div>
 
-        <!-- ১ বছর প্ল্যান (সেরা ভ্যালু) -->
         <div class="p-4 rounded-2xl border-2 border-amber-400 bg-amber-50/40 relative shadow-sm cursor-pointer group">
           <span class="absolute -top-2.5 right-3 bg-amber-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">বেস্ট ভ্যালু</span>
           <div class="flex justify-between items-start">
-            <span class="font-extrabold text-sm text-slate-800">১ বছর (লাইফটাইম আপডেট)</span>
+            <span class="font-extrabold text-sm text-slate-800">১ বছর (লাইফটাইম)</span>
             <span class="text-xs font-black text-amber-700">১৯৫০৳</span>
           </div>
           <p class="text-[11px] text-slate-500 mt-1">সব নতুন বইসহ ফুল অ্যাক্সেস</p>
@@ -576,42 +552,145 @@
             আনলক করুন
           </button>
         </div>
-
-      </div>
-
-      <!-- Features Checklist -->
-      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-1.5 text-xs text-slate-600 font-medium">
-        <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-forest-600"></i><span>Cambridge 10-19 এর সব টেস্ট (T1, T2, T3, T4) ফুল অ্যাক্সেস</span></div>
-        <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-forest-600"></i><span>প্রতিটি কঠিন শব্দের বাংলা অনুবাদ, সিনোনিম ও অ্যান্টনিম ভল্ট</span></div>
-        <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-forest-600"></i><span>বিকাশ, নগদ বা কার্ডের মাধ্যমে তাৎক্ষণিক অ্যাক্সেস</span></div>
       </div>
     </div>
   </div>
 
-  <!-- Toast -->
   <div id="toast" class="hidden fixed top-12 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xl z-50">
     বিজ্ঞপ্তি
   </div>
 
-  <!-- ================= LOGIC ENGINE ================= -->
+  <!-- ================= JAVASCRIPT & SLIDER LOGIC ================= -->
   <script>
     let isLoggedIn = false;
     let currentModule = 'Reading';
     let currentBook = 'Cambridge 10';
     let currentTest = 'T1';
 
-    // 1. Initial State Check on Page Load
+    // ------------------------------------------------------------------
+    // DYNAMIC BANNER SLIDER SYSTEM (3 PREMIUM PRESET SLIDES)
+    // ------------------------------------------------------------------
+    const defaultBanners = [
+      {
+        tag: "FREE & PREMIUM IELTS PREP",
+        title: "ক্যামব্রিজ ১০–১৯ ভোকাভিউ ও সলিউশন",
+        desc: "প্রতিটি বইয়ের টেস্ট ১ এর সব ভোকাবুলারি সবার জন্য সম্পূর্ণ উন্মুক্ত! পরবর্তী টেস্ট এবং ফুল টেস্ট ভল্ট আনলক করতে এগিয়ে যান।",
+        features: ["Cambridge 10–19 টেস্ট ১ ফ্রি", "প্রিমিয়াম ফুল ভল্ট", "ব্যান্ড ৮.০ টার্গেট সলিউশন"],
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80"
+      },
+      {
+        tag: "OFFICIAL CAMBRIDGE MATERIAL",
+        title: "রিডিং ও লিসেনিং উত্তর ব্যাখ্যা",
+        desc: "প্রতিটি কঠিন প্রশ্নের লাইন-বাই-লাইন বাংলা অর্থ, ট্রিকি সিনোনিম ম্যাচিং এবং অডিও স্ক্রিপ্টের মূল কি-ওয়ার্ড এক ক্লিকেই!",
+        features: ["৪০টি অফিশিয়াল টেস্ট", "সিনোনিম ও অ্যান্টনিম", "অডিও স্ক্রিপ্ট নোট"],
+        image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1400&q=80"
+      },
+      {
+        tag: "PRO EXAM STRATEGY",
+        title: "রাইটিং ও স্পিকিং ব্যান্ড বুস্টার",
+        desc: "Task 1 ও Task 2 এর জন্য রেডিমেড ফরম্যাট এবং লেটেস্ট স্পিকিং কিউ-কার্ডের হাই-ব্যান্ড ভোকাবুলারি দিয়ে নিজেকে এগিয়ে রাখুন।",
+        features: ["ব্যান্ড ৯.০ স্যাম্পল", "লেটেস্ট কিউ কার্ডস", "ডেইলি রিভিশন"],
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80"
+      }
+    ];
+
+    let bannersDB = JSON.parse(localStorage.getItem('site_banners_db')) || defaultBanners;
+    let currentSlideIdx = 0;
+    let sliderTimer = null;
+
+    function renderSlider() {
+      const wrapper = document.getElementById('sliderWrapper');
+      const dotsContainer = document.getElementById('sliderDots');
+      wrapper.innerHTML = '';
+      dotsContainer.innerHTML = '';
+
+      bannersDB.forEach((banner, idx) => {
+        const slide = document.createElement('div');
+        slide.className = `slide-item absolute inset-0 w-full h-full p-5 md:p-12 flex flex-col justify-between text-white ${idx === currentSlideIdx ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none z-0'}`;
+        
+        slide.innerHTML = `
+          <!-- Premium Backdrop Image with Deep Green Gradient -->
+          <div class="absolute inset-0 z-0 overflow-hidden">
+            <img src="${banner.image}" alt="Slide Image" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-forest-900/95 via-forest-800/85 to-forest-950/70"></div>
+          </div>
+
+          <div class="relative z-10 space-y-2 md:space-y-4 max-w-2xl">
+            <span class="inline-block px-3 py-0.5 md:px-3.5 md:py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] md:text-xs font-extrabold tracking-wider uppercase text-emerald-200">
+              ${banner.tag}
+            </span>
+            <h1 class="text-xl md:text-3xl lg:text-4xl font-black leading-tight tracking-tight drop-shadow-sm">
+              ${banner.title}
+            </h1>
+            <p class="text-xs md:text-sm text-forest-100/90 font-medium leading-relaxed max-w-xl line-clamp-2 md:line-clamp-none">
+              ${banner.desc}
+            </p>
+          </div>
+
+          <div class="relative z-10 pt-3 md:pt-4 border-t border-white/15 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] md:text-xs text-forest-100 font-semibold">
+            ${banner.features.map((f, i) => `
+              <div class="flex items-center gap-1">
+                <i class="fa-solid fa-circle-check text-emerald-300 text-[10px]"></i>
+                <span>${f}</span>
+              </div>
+              ${i < banner.features.length - 1 ? '<span class="text-white/30 hidden sm:inline">•</span>' : ''}
+            `).join('')}
+          </div>
+
+          <div class="absolute -right-3 -bottom-5 md:-right-6 md:-bottom-8 text-white/[0.05] text-[95px] md:text-[180px] font-black select-none pointer-events-none leading-none z-0">
+            IELTS
+          </div>
+        `;
+        wrapper.appendChild(slide);
+
+        // Dot
+        const dot = document.createElement('button');
+        dot.className = `w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all ${idx === currentSlideIdx ? 'bg-white w-6 md:w-7' : 'bg-white/40 hover:bg-white/70'}`;
+        dot.onclick = () => goToSlide(idx);
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function goToSlide(idx) {
+      currentSlideIdx = idx;
+      renderSlider();
+      restartSliderTimer();
+    }
+
+    function nextSlide() {
+      currentSlideIdx = (currentSlideIdx + 1) % bannersDB.length;
+      renderSlider();
+      restartSliderTimer();
+    }
+
+    function prevSlide() {
+      currentSlideIdx = (currentSlideIdx - 1 + bannersDB.length) % bannersDB.length;
+      renderSlider();
+      restartSliderTimer();
+    }
+
+    function startSliderTimer() {
+      sliderTimer = setInterval(nextSlide, 5000); // প্রতি ৫ সেকেন্ডে স্লাইড ঘুরবে
+    }
+
+    function restartSliderTimer() {
+      clearInterval(sliderTimer);
+      startSliderTimer();
+    }
+
+    // ------------------------------------------------------------------
+    // APPLICATION INITIALIZATION
+    // ------------------------------------------------------------------
     window.addEventListener('DOMContentLoaded', () => {
       const authToken = localStorage.getItem('user_auth_token');
       isLoggedIn = !!authToken;
 
       if (isLoggedIn) {
-        // লগইন থাকলে প্রোফাইল মেনু অন হবে এবং গেস্ট বাটন হাইড হবে
         document.getElementById('guestNavGroup').classList.add('hidden');
         document.getElementById('userProfileGroup').classList.remove('hidden');
 
-        const savedName = localStorage.getItem('user_name') || 'Tanbir Ahmed';
-        const savedEmail = localStorage.getItem('user_email') || 'tanbir.ahmed@example.com';
+        const savedName = localStorage.getItem('user_name') || 'Tanbir Ahmed (Google)';
+        const savedEmail = localStorage.getItem('user_email') || 'tanbir.google@gmail.com';
         
         document.getElementById('headerUserName').innerText = savedName;
         document.getElementById('dropdownUserEmail').innerText = savedEmail;
@@ -619,32 +698,29 @@
         const initials = savedName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'TA';
         document.getElementById('userAvatarPill').innerText = initials;
       } else {
-        // লগআউট থাকলে গেস্ট বাটন অন থাকবে
         document.getElementById('guestNavGroup').classList.remove('hidden');
         document.getElementById('userProfileGroup').classList.add('hidden');
       }
 
+      renderSlider();
+      startSliderTimer();
       selectTest('T1');
     });
 
-    // 2. Lock System Interceptor (লক কনটেন্টে ক্লিক করলে যে লজিক চলবে)
+    // Content Lock Handler
     function handleLockedContentClick(testName) {
       if (!isLoggedIn) {
-        // ইউজার লগইন না থাকলে: ফ্রি অ্যাকাউন্ট রেজিস্ট্রেশন পপ-আপ দেখাবে
         openModal('authPromptModal');
       } else {
-        // ইউজার ইতিমধ্যে লগইন করা থাকলে: সরাসরি সাবস্ক্রিপশন প্ল্যান দেখাবে
         openModal('pricingModal');
       }
     }
 
-    // 3. Subscription Selection Handler
     function handleSubscribe(planName, price) {
-      alert(`আপনি ${planName} (${price}) সিলেক্ট করেছেন। বিকাশ/নগদ পেমেন্ট গেটওয়ে সংযুক্তির পর এটি স্বয়ংক্রিয়ভাবে সক্রিয় হবে!`);
+      alert(`আপনি ${planName} (${price}) সিলেক্ট করেছেন। বিকাশ/নগদ গেটওয়ে সংযোগের পর স্বয়ংক্রিয়ভাবে সক্রিয় হবে!`);
       closeModal('pricingModal');
     }
 
-    // 4. View Handlers
     function showView(viewId) {
       document.getElementById('viewHome').classList.add('hidden');
       document.getElementById('viewCambridgeList').classList.add('hidden');
@@ -663,7 +739,6 @@
     }
 
     function openBookDetails(bookName) {
-      // Cambridge 11-19 ক্লিক করলেও লগইন/প্রাইসিং ইন্টারসেপ্ট করবে
       if (bookName !== 'Cambridge 10' && !isLoggedIn) {
         openModal('authPromptModal');
         return;
@@ -683,7 +758,7 @@
       renderWords();
     }
 
-    // 5. Sample Vocabulary DB
+    // Initial Vocabulary DB
     const initialVocabulary = [
       {
         book: "Cambridge 10",
@@ -703,11 +778,24 @@
       }
     ];
 
+    let vocabularyDB = JSON.parse(localStorage.getItem('user_vocab_db')) || initialVocabulary;
+
     function renderWords() {
       const container = document.getElementById('wordsContainer');
       container.innerHTML = '';
 
-      const filtered = initialVocabulary.filter(item => item.book === currentBook && item.test === currentTest);
+      const filtered = vocabularyDB.filter(item => item.book === currentBook && item.test === currentTest);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full bg-white rounded-2xl md:rounded-3xl p-8 md:p-12 text-center space-y-2 border border-slate-200 my-4 shadow-sm">
+            <i class="fa-solid fa-folder-open text-4xl text-slate-300"></i>
+            <p class="text-sm font-bold text-slate-700">${currentBook} (${currentTest}) এর জন্য কোনো শব্দ পাওয়া যায়নি</p>
+            <p class="text-xs text-slate-400">অ্যাডমিন প্যানেল থেকে নতুন শব্দ যোগ করুন।</p>
+          </div>
+        `;
+        return;
+      }
 
       filtered.forEach(data => {
         const card = document.createElement('div');
@@ -727,13 +815,13 @@
             <div class="bg-forest-50/50 p-3 rounded-xl border border-forest-100">
               <h4 class="text-xs font-bold text-forest-700 uppercase tracking-wider mb-2 border-b border-forest-200 pb-1">Synonym:</h4>
               <ul class="space-y-1 list-disc list-inside text-slate-700">
-                ${synHTML}
+                ${synHTML || '<li class="text-[11px] text-slate-400">নেই</li>'}
               </ul>
             </div>
             <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-100">
               <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1">Antonym:</h4>
               <ul class="space-y-1 list-disc list-inside text-slate-700">
-                ${antHTML}
+                ${antHTML || '<li class="text-[11px] text-slate-400">নেই</li>'}
               </ul>
             </div>
           </div>
@@ -742,7 +830,6 @@
       });
     }
 
-    // 6. Generic Modals & Utilities
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
     function openPricingModal() { openModal('pricingModal'); }
