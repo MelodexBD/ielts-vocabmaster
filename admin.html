@@ -29,6 +29,23 @@
       }
     }
   </script>
+  <!-- Admin Security Guard: অনুমতি ছাড়া ঢুকলে আটকে দেবে -->
+  <script>
+    const ADMIN_EMAILS = [
+      'admin@ieltsvocabmaster.com',
+      'tanbir.google@gmail.com',
+      'tanbir.ahmed@example.com'
+    ];
+
+    const currentAuth = localStorage.getItem('user_auth_token');
+    const currentEmail = (localStorage.getItem('user_email') || '').trim().toLowerCase();
+
+    // ইউজার যদি লগইন না থাকে অথবা ইমেইল যদি অ্যাডমিন না হয়, তাহলে হোমপেজে পাঠিয়ে দেবে
+    if (!currentAuth || !ADMIN_EMAILS.includes(currentEmail)) {
+      alert("অননুমোদিত অ্যাক্সেস! এই পেজটি শুধুমাত্র অ্যাডমিনের জন্য সংরক্ষিত।");
+      window.location.replace("index.html");
+    }
+  </script>
 </head>
 <body class="bg-[#f4f7f5] text-slate-800 min-h-screen flex flex-col font-sans antialiased">
 
