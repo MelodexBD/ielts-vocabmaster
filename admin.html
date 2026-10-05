@@ -1,283 +1,388 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="dark">
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - IELTS Vocab Master</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
+  <title>Admin Dashboard - IELTS VocabMaster</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Hind Siliguri', 'sans-serif'],
+          },
+          colors: {
+            forest: {
+              50: '#f2f7f4',
+              100: '#e1ede6',
+              600: '#2d5a43',
+              700: '#234935',
+              800: '#1c392b',
+            }
+          }
+        }
+      }
     }
-    .metric-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-    }
-    .metric-title {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .metric-value {
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--text-main);
-      margin-top: 8px;
-    }
-    .admin-form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-    }
-    .form-group-full { grid-column: 1 / -1; }
-    
-    .table-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow-x: auto;
-      margin-top: 16px;
-    }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
-    th { background: var(--bg-secondary); padding: 14px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); }
-    td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
-    tr:last-child td { border-bottom: none; }
-    .banner-thumb { width: 70px; height: 42px; border-radius: 6px; object-fit: cover; }
-  </style>
+  </script>
 </head>
-<body>
+<body class="bg-[#f4f7f5] text-slate-800 min-h-screen flex flex-col font-sans antialiased">
 
-  <!-- Top Bar -->
-  <header class="navbar">
-    <a href="admin.html" class="brand-title">
-      IELTS <span>Admin Panel</span>
-    </a>
-    <div class="nav-actions">
-      <button class="theme-toggle" id="themeBtn">🌓 Theme</button>
-      <a href="index.html" class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;">View Website</a>
+  <!-- Admin Top Bar -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 px-5 md:px-10 py-3.5 shadow-sm flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-forest-600 text-white flex items-center justify-center font-black text-sm">
+        IV
+      </div>
+      <div>
+        <h1 class="text-base font-black text-slate-900 leading-tight">Admin <span class="text-forest-600">Control Center</span></h1>
+        <p class="text-[11px] text-slate-400 font-semibold">IELTS VocabMaster Platform</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a href="index.html" class="px-3.5 py-1.5 rounded-xl border border-forest-600 text-forest-700 hover:bg-forest-50 text-xs font-bold transition-all flex items-center gap-1.5">
+        <i class="fa-solid fa-arrow-left text-[10px]"></i>
+        <span>লাইভ সাইট দেখুন</span>
+      </a>
     </div>
   </header>
 
-  <div class="app-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <a href="#" class="nav-link active" onclick="switchAdminTab('bannersTab', this)">🖼️ Banner Slider</a>
-      <a href="#" class="nav-link" onclick="switchAdminTab('vocabTab', this)">📖 Vocab Management</a>
-      <a href="#" class="nav-link" onclick="switchAdminTab('booksTab', this)">📚 Books & Tests</a>
-      <a href="#" class="nav-link" onclick="switchAdminTab('usersTab', this)">👥 Users & Payments</a>
-      <a href="#" class="nav-link" onclick="switchAdminTab('plansTab', this)">💎 Premium Plans</a>
-    </aside>
+  <!-- Admin Main Workspace -->
+  <main class="max-w-6xl w-full mx-auto p-4 md:p-8 space-y-8">
+    
+    <!-- Tab Controls -->
+    <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
+      <button onclick="switchTab('tabBanners')" id="btnTabBanners" class="px-4 py-2 rounded-xl font-extrabold text-xs bg-forest-600 text-white transition-all flex items-center gap-2">
+        <i class="fa-solid fa-images text-xs"></i>
+        <span>ব্যানার স্লাইডার কন্ট্রোল</span>
+      </button>
+      <button onclick="switchTab('tabVocab')" id="btnTabVocab" class="px-4 py-2 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all flex items-center gap-2">
+        <i class="fa-solid fa-book-bookmark text-xs"></i>
+        <span>ভোকাবুলারি ও টেস্ট আপলোডার</span>
+      </button>
+    </div>
 
-    <main class="main-content">
-      <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 24px; font-weight: 700;">Admin Management Control</h1>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
-          ওয়েবসাইটের ব্যানার স্লাইডার, ভোকাবুলারি এবং ইউজার ম্যানেজমেন্ট কন্ট্রোল করুন।
-        </p>
-      </div>
+    <!-- ================= 1. TAB: BANNER SLIDER MANAGER ================= -->
+    <div id="tabBanners" class="space-y-6">
+      
+      <!-- New Banner Form Card -->
+      <div class="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b pb-3 border-slate-100">
+          <h2 class="text-base font-black text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-plus-circle text-forest-600"></i>
+            <span>নতুন স্লাইডার ব্যানার যোগ করুন</span>
+          </h2>
+          <span class="text-xs text-slate-400 font-medium">হোমপেজের মেইন স্লাইডারে শো করবে</span>
+        </div>
 
-      <!-- Quick Metrics -->
-      <div class="metric-grid">
-        <div class="metric-card">
-          <div class="metric-title">Total Users</div>
-          <div class="metric-value">1,248</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-title">Premium Users</div>
-          <div class="metric-value" style="color: #eab308;">312</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-title">Total Vocabulary</div>
-          <div class="metric-value" style="color: var(--accent);">4,520</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-title">Active Banners</div>
-          <div class="metric-value" id="totalBannersCount" style="color: var(--success);">3</div>
-        </div>
-      </div>
-
-      <!-- TAB 1: BANNER SLIDER MANAGEMENT -->
-      <div id="bannersTab">
-        <div class="card">
-          <h2 style="font-size: 18px; margin-bottom: 16px;">➕ Add New Slide Banner</h2>
-          <form onsubmit="handleBannerAdd(event)">
-            <div class="admin-form-grid">
-              <div class="form-group">
-                <label style="font-size: 13px; font-weight: 600;">Badge Title</label>
-                <input type="text" id="bBadge" class="filter-select" placeholder="e.g. Masterclass or New Book" required>
-              </div>
-              <div class="form-group">
-                <label style="font-size: 13px; font-weight: 600;">Slide Heading</label>
-                <input type="text" id="bTitle" class="filter-select" placeholder="e.g. Cambridge 20 Released" required>
-              </div>
-              <div class="form-group-full">
-                <label style="font-size: 13px; font-weight: 600;">Image URL</label>
-                <input type="url" id="bImage" class="filter-select" placeholder="https://example.com/banner.jpg" required>
-              </div>
-              <div class="form-group-full">
-                <label style="font-size: 13px; font-weight: 600;">Short Description</label>
-                <textarea id="bDesc" class="filter-select" style="height: 60px;" placeholder="ব্যানারের সংক্ষিপ্ত বর্ণনা..."></textarea>
-              </div>
+        <form onsubmit="handleBannerSubmit(event)" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">ছোট টপ ট্যাগ (Badge Tag)</label>
+              <input type="text" id="bannerTag" required placeholder="e.g. SPECIAL OFFER বা BAND 8.0 STRATEGY" class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
             </div>
-            <button type="submit" class="btn btn-primary" style="margin-top: 16px;">Add Slide Banner</button>
-          </form>
-        </div>
-
-        <div class="card">
-          <h2 style="font-size: 18px; margin-bottom: 12px;">Active Slides List</h2>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Preview</th>
-                  <th>Badge</th>
-                  <th>Title</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="bannerTableBody">
-                <!-- Rendered dynamically -->
-              </tbody>
-            </table>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">ব্যানার ইমেজ লিংক (Unsplash/Direct Image URL)</label>
+              <input type="url" id="bannerImage" required placeholder="https://images.unsplash.com/..." class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+            </div>
           </div>
-        </div>
-      </div>
 
-      <!-- TAB 2: VOCABULARY MANAGEMENT -->
-      <div id="vocabTab" style="display: none;">
-        <div class="card">
-          <h2 style="font-size: 18px; margin-bottom: 16px;">➕ Add Vocabulary Word</h2>
-          <div class="admin-form-grid">
-            <div class="form-group"><input type="text" class="filter-select" placeholder="Word (e.g. MITIGATE)"></div>
-            <div class="form-group"><input type="text" class="filter-select" placeholder="Meaning in Bengali"></div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">ব্যানার মূল শিরোনাম (Main Title)</label>
+            <input type="text" id="bannerTitle" required placeholder="e.g. ক্যামব্রিজ ১৯ এর লেটেস্ট রিডিং টেস্ট ট্রিকস" class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
           </div>
-          <button class="btn btn-primary" style="margin-top: 14px;">Publish Vocabulary</button>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">ছোট বিবরণ (Description)</label>
+            <textarea id="bannerDesc" rows="2" required placeholder="ব্যানারের সংক্ষিপ্ত বার্তা বা অফার বিবরণ..." class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">৩টি ফিচার বুলেট (কমা দিয়ে লিখুন)</label>
+            <input type="text" id="bannerFeatures" placeholder="৪০টি টেস্ট, সম্পূর্ণ বাংলা অর্থ, ব্যান্ড ৮.০ সলিউশন" class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+          </div>
+
+          <button type="submit" class="px-6 py-3 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all active:scale-95 flex items-center gap-2">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span>ব্যানার স্লাইডার প্রকাশ করুন</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Active Banners List -->
+      <div class="space-y-3">
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">বর্তমানে স্লাইডারে থাকা ব্যানারসমূহ</h3>
+        <div id="adminBannersList" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Rendered dynamically -->
         </div>
       </div>
 
-      <!-- TAB 3: BOOKS (Placeholder) -->
-      <div id="booksTab" style="display: none;">
-        <div class="card">
-          <h2>📚 Books Configuration</h2>
-          <p style="color: var(--text-muted); margin-top: 6px;">Cambridge 10-19 Books Management</p>
+    </div>
+
+    <!-- ================= 2. TAB: VOCABULARY UPLOADER ================= -->
+    <div id="tabVocab" class="hidden space-y-6">
+      
+      <div class="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b pb-3 border-slate-100">
+          <h2 class="text-base font-black text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-pen-nib text-forest-600"></i>
+            <span>ক্যামব্রিজ টেস্টের শব্দ ও অর্থ যোগ করুন</span>
+          </h2>
+          <span class="text-xs text-slate-400 font-medium">Cambridge 10–19 মডিউলে লাইভ হবে</span>
+        </div>
+
+        <form onsubmit="handleVocabSubmit(event)" class="space-y-4">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">বই নির্বাচন</label>
+              <select id="vocabBook" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none bg-white">
+                <option>Cambridge 10</option>
+                <option>Cambridge 11</option>
+                <option>Cambridge 12</option>
+                <option>Cambridge 13</option>
+                <option>Cambridge 14</option>
+                <option>Cambridge 15</option>
+                <option>Cambridge 16</option>
+                <option>Cambridge 17</option>
+                <option>Cambridge 18</option>
+                <option>Cambridge 19</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">টেস্ট নির্বাচন</label>
+              <select id="vocabTest" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none bg-white">
+                <option value="T1">Test 1 (Free)</option>
+                <option value="T2">Test 2 (Pro)</option>
+                <option value="T3">Test 3 (Pro)</option>
+                <option value="T4">Test 4 (Pro)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">ইংরেজি শব্দ (Word)</label>
+              <input type="text" id="vocabWord" required placeholder="e.g. Scrutinize" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">বাংলা অর্থ (Meaning)</label>
+              <input type="text" id="vocabMeaning" required placeholder="e.g. খুঁটিয়ে পরীক্ষা করা" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Synonyms (কমা দিয়ে লিখুন)</label>
+              <input type="text" id="vocabSynonyms" placeholder="Examine + পরীক্ষা করা, Inspect + নিরীক্ষণ করা" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Antonyms (কমা দিয়ে লিখুন)</label>
+              <input type="text" id="vocabAntonyms" placeholder="Ignore + উপেক্ষা করা, Overlook" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl outline-none focus:bg-white focus:border-forest-600">
+            </div>
+          </div>
+
+          <button type="submit" class="px-6 py-3 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-all active:scale-95 flex items-center gap-2">
+            <i class="fa-solid fa-plus"></i>
+            <span>শব্দটি ডাটাবেসে সেভ করুন</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Live Vocab List Filter -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">বর্তমানে আপলোড করা শব্দের তালিকা</h3>
+          <span id="vocabCountBadge" class="text-xs font-bold text-forest-700 bg-forest-50 px-2.5 py-1 rounded-lg">০ টি শব্দ</span>
+        </div>
+        <div id="adminVocabList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <!-- Rendered dynamically -->
         </div>
       </div>
 
-      <!-- TAB 4: USERS (Placeholder) -->
-      <div id="usersTab" style="display: none;">
-        <div class="card">
-          <h2>👥 Subscriptions & Payments</h2>
-          <p style="color: var(--text-muted); margin-top: 6px;">Manage bKash/Nagad transactions.</p>
-        </div>
-      </div>
+    </div>
 
-      <!-- TAB 5: PLANS (Placeholder) -->
-      <div id="plansTab" style="display: none;">
-        <div class="card">
-          <h2>💎 Premium Plans</h2>
-          <p style="color: var(--text-muted); margin-top: 6px;">Update pricing plans.</p>
-        </div>
-      </div>
-
-    </main>
-  </div>
+  </main>
 
   <script>
-    // Theme toggle
-    const themeBtn = document.getElementById('themeBtn');
-    themeBtn.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-    });
+    // Tab Switching
+    function switchTab(tabId) {
+      document.getElementById('tabBanners').classList.add('hidden');
+      document.getElementById('tabVocab').classList.add('hidden');
+      document.getElementById(tabId).classList.remove('hidden');
 
-    // Tab switcher
-    function switchAdminTab(tabId, el) {
-      document.querySelectorAll('#bannersTab, #vocabTab, #booksTab, #usersTab, #plansTab').forEach(tab => tab.style.display = 'none');
-      document.getElementById(tabId).style.display = 'block';
-      document.querySelectorAll('.sidebar .nav-link').forEach(link => link.classList.remove('active'));
-      el.classList.add('active');
+      if (tabId === 'tabBanners') {
+        document.getElementById('btnTabBanners').className = 'px-4 py-2 rounded-xl font-extrabold text-xs bg-forest-600 text-white transition-all flex items-center gap-2';
+        document.getElementById('btnTabVocab').className = 'px-4 py-2 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all flex items-center gap-2';
+      } else {
+        document.getElementById('btnTabVocab').className = 'px-4 py-2 rounded-xl font-extrabold text-xs bg-forest-600 text-white transition-all flex items-center gap-2';
+        document.getElementById('btnTabBanners').className = 'px-4 py-2 rounded-xl font-bold text-xs bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all flex items-center gap-2';
+      }
     }
 
-    // Default banners
-    const defaultSlides = [
+    // Default Banners Setup
+    const defaultBanners = [
       {
-        id: 1,
-        badge: "Special Masterclass",
-        title: "Cambridge 10–19 Vocabulary & High-Band Solutions",
-        desc: "প্রতিটি টেস্টের গুরুত্বপূর্ণ সিনোনিম, অ্যান্টনিম ও এক্সপ্ল্যানেশনসহ রিভিশন করুন।",
-        image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80"
+        tag: "FREE & PREMIUM IELTS PREP",
+        title: "ক্যামব্রিজ ১০–১৯ ভোকাভিউ ও সলিউশন",
+        desc: "প্রতিটি বইয়ের টেস্ট ১ এর সব ভোকাবুলারি সবার জন্য সম্পূর্ণ উন্মুক্ত! পরবর্তী টেস্ট এবং ফুল টেস্ট ভল্ট আনলক করতে এগিয়ে যান।",
+        features: ["Cambridge 10–19 টেস্ট ১ ফ্রি", "প্রিমিয়াম ফুল ভল্ট", "ব্যান্ড ৮.০ টার্গেট সলিউশন"],
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80"
       },
       {
-        id: 2,
-        badge: "Band 8.0 Strategy",
-        title: "Target Band 8.0: Intensive Reading & Listening Practice",
-        desc: "আসল পরীক্ষার মতো টাইমড প্র্যাকটিস ও অডিও ট্র্যাক প্লেয়ার নিয়ে প্রস্তুতি নিন।",
-        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
+        tag: "OFFICIAL CAMBRIDGE MATERIAL",
+        title: "রিডিং ও লিসেনিং উত্তর ব্যাখ্যা",
+        desc: "প্রতিটি কঠিন প্রশ্নের লাইন-বাই-লাইন বাংলা অর্থ, ট্রিকি সিনোনিম ম্যাচিং এবং অডিও স্ক্রিপ্টের মূল কি-ওয়ার্ড এক ক্লিকেই!",
+        features: ["৪০টি অফিশিয়াল টেস্ট", "সিনোনিম ও অ্যান্টনিম", "অডিও স্ক্রিপ্ট নোট"],
+        image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1400&q=80"
       },
       {
-        id: 3,
-        badge: "Speaking & Writing Vault",
-        title: "Latest Cue Cards & Task 2 Essay Outlines",
-        desc: "স্মার্ট ভোকাবুলারি পিল ও মডেল উত্তরের মাধ্যমে আপনার রাইটিং স্কিল বাড়ান।",
-        image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1200&q=80"
+        tag: "PRO EXAM STRATEGY",
+        title: "রাইটিং ও স্পিকিং ব্যান্ড বুস্টার",
+        desc: "Task 1 ও Task 2 এর জন্য রেডিমেড ফরম্যাট এবং লেটেস্ট স্পিকিং কিউ-কার্ডের হাই-ব্যান্ড ভোকাবুলারি দিয়ে নিজেকে এগিয়ে রাখুন।",
+        features: ["ব্যান্ড ৯.০ স্যাম্পল", "লেটেস্ট কিউ কার্ডস", "ডেইলি রিভিশন"],
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80"
       }
     ];
 
-    let currentBanners = JSON.parse(localStorage.getItem('hero_banners')) || defaultSlides;
+    let bannersDB = JSON.parse(localStorage.getItem('site_banners_db')) || defaultBanners;
 
-    function renderBannerTable() {
-      const tbody = document.getElementById('bannerTableBody');
-      tbody.innerHTML = '';
-      document.getElementById('totalBannersCount').innerText = currentBanners.length;
+    function renderAdminBanners() {
+      const container = document.getElementById('adminBannersList');
+      container.innerHTML = '';
 
-      currentBanners.forEach((b, i) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><img src="${b.image}" class="banner-thumb"></td>
-          <td><span class="badge">${b.badge}</span></td>
-          <td><strong>${b.title}</strong></td>
-          <td>
-            <button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px; color: #ef4444; border-color: #ef4444;" onclick="deleteBanner(${i})">Delete</button>
-          </td>
+      bannersDB.forEach((b, idx) => {
+        const item = document.createElement('div');
+        item.className = "bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col justify-between";
+        item.innerHTML = `
+          <div class="h-28 relative">
+            <img src="${b.image}" class="w-full h-full object-cover">
+            <span class="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded">${b.tag}</span>
+          </div>
+          <div class="p-3.5 space-y-2 flex-1 flex flex-col justify-between">
+            <div>
+              <h4 class="font-black text-xs text-slate-800 line-clamp-1">${b.title}</h4>
+              <p class="text-[11px] text-slate-500 line-clamp-2 mt-0.5">${b.desc}</p>
+            </div>
+            <button onclick="deleteBanner(${idx})" class="w-full py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-trash text-[10px]"></i>
+              <span>স্লাইডার থেকে মুছুন</span>
+            </button>
+          </div>
         `;
-        tbody.appendChild(tr);
+        container.appendChild(item);
       });
     }
 
-    function handleBannerAdd(e) {
+    function handleBannerSubmit(e) {
       e.preventDefault();
-      const newSlide = {
-        id: Date.now(),
-        badge: document.getElementById('bBadge').value,
-        title: document.getElementById('bTitle').value,
-        image: document.getElementById('bImage').value,
-        desc: document.getElementById('bDesc').value
-      };
-      currentBanners.push(newSlide);
-      localStorage.setItem('hero_banners', JSON.stringify(currentBanners));
-      renderBannerTable();
+      const tag = document.getElementById('bannerTag').value.trim();
+      const image = document.getElementById('bannerImage').value.trim();
+      const title = document.getElementById('bannerTitle').value.trim();
+      const desc = document.getElementById('bannerDesc').value.trim();
+      const featInput = document.getElementById('bannerFeatures').value.trim();
+      const features = featInput ? featInput.split(',').map(s => s.trim()) : ["ক্যামব্রিজ টেস্ট", "ফুল সলিউশন"];
+
+      bannersDB.unshift({ tag, image, title, desc, features });
+      localStorage.setItem('site_banners_db', JSON.stringify(bannersDB));
+      renderAdminBanners();
+      alert('নতুন ব্যানার সফলভাবে হোমপেজ স্লাইডারে যোগ হয়েছে!');
       e.target.reset();
-      alert('নতুন ব্যানার সফলভাবে হোমপেজে যুক্ত হয়েছে!');
     }
 
-    function deleteBanner(index) {
-      if (confirm('আপনি কি এই স্লাইডটি ডিলিট করতে চান?')) {
-        currentBanners.splice(index, 1);
-        localStorage.setItem('hero_banners', JSON.stringify(currentBanners));
-        renderBannerTable();
+    function deleteBanner(idx) {
+      if (bannersDB.length <= 1) {
+        alert('কমপক্ষে একটি ব্যানার স্লাইডারে থাকতে হবে!');
+        return;
+      }
+      if (confirm('আপনি কি এই ব্যানারটি স্লাইডার থেকে সরিয়ে ফেলতে চান?')) {
+        bannersDB.splice(idx, 1);
+        localStorage.setItem('site_banners_db', JSON.stringify(bannersDB));
+        renderAdminBanners();
       }
     }
 
-    renderBannerTable();
+    // Vocabulary Setup
+    const initialVocabulary = [
+      {
+        book: "Cambridge 10",
+        test: "T1",
+        word: "Cautiously",
+        meaning: "সতর্কতার সাথে / সাবধানতার সাথে",
+        synonyms: ["Carefully + সাবধানতার সাথে", "Prudently + বিচক্ষণতার সাথে"],
+        antonyms: ["Carelessly + অসাবধানতাবশত", "Recklessly + বেপরোয়াভাবে"]
+      },
+      {
+        book: "Cambridge 10",
+        test: "T1",
+        word: "Prevailed",
+        meaning: "জয়ী হওয়া / বিদ্যমান থাকা",
+        synonyms: ["Triumphed + জয়লাভ করেছিল", "Succeeded + সফল হয়েছিল"],
+        antonyms: ["Failed + ব্যর্থ হয়েছিল", "Surrendered + আত্মসমর্পণ করেছিল"]
+      }
+    ];
+
+    let vocabularyDB = JSON.parse(localStorage.getItem('user_vocab_db')) || initialVocabulary;
+
+    function renderAdminVocab() {
+      const container = document.getElementById('adminVocabList');
+      container.innerHTML = '';
+      document.getElementById('vocabCountBadge').innerText = `${vocabularyDB.length} টি শব্দ লাইভ`;
+
+      vocabularyDB.forEach((v, idx) => {
+        const item = document.createElement('div');
+        item.className = "bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-sm flex items-center justify-between";
+        item.innerHTML = `
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">${v.book} (${v.test})</span>
+              <h4 class="font-extrabold text-sm text-forest-700">${v.word}</h4>
+            </div>
+            <p class="text-xs text-slate-600 font-medium mt-1">অর্থ: ${v.meaning}</p>
+          </div>
+          <button onclick="deleteVocab(${idx})" class="w-8 h-8 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition-colors">
+            <i class="fa-solid fa-trash text-xs"></i>
+          </button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function handleVocabSubmit(e) {
+      e.preventDefault();
+      const book = document.getElementById('vocabBook').value;
+      const test = document.getElementById('vocabTest').value;
+      const word = document.getElementById('vocabWord').value.trim();
+      const meaning = document.getElementById('vocabMeaning').value.trim();
+      const synInput = document.getElementById('vocabSynonyms').value.trim();
+      const antInput = document.getElementById('vocabAntonyms').value.trim();
+
+      const synonyms = synInput ? synInput.split(',').map(s => s.trim()) : [];
+      const antonyms = antInput ? antInput.split(',').map(a => a.trim()) : [];
+
+      vocabularyDB.unshift({ book, test, word, meaning, synonyms, antonyms });
+      localStorage.setItem('user_vocab_db', JSON.stringify(vocabularyDB));
+      renderAdminVocab();
+      alert('শব্দটি সফলভাবে যুক্ত হয়েছে এবং ওয়েবসাইটে প্রদর্শিত হচ্ছে!');
+      document.getElementById('vocabWord').value = '';
+      document.getElementById('vocabMeaning').value = '';
+      document.getElementById('vocabSynonyms').value = '';
+      document.getElementById('vocabAntonyms').value = '';
+    }
+
+    function deleteVocab(idx) {
+      if (confirm('আপনি কি এই শব্দটি ডিলিট করতে চান?')) {
+        vocabularyDB.splice(idx, 1);
+        localStorage.setItem('user_vocab_db', JSON.stringify(vocabularyDB));
+        renderAdminVocab();
+      }
+    }
+
+    window.onload = function() {
+      renderAdminBanners();
+      renderAdminVocab();
+    };
   </script>
 </body>
 </html>
