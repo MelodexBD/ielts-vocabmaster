@@ -511,7 +511,7 @@
       </button>
 
       <button id="mobileProfileButton" onclick="handleProfileOrLoginClick(event)" aria-label="প্রোফাইল ও মেনু খুলুন" aria-haspopup="menu" aria-controls="mobileAccountMenu" aria-expanded="false" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
-        <i id="mobileProfileIcon" class="fa-solid fa-user text-lg"></i>
+        <i class="fa-solid fa-user text-lg"></i>
         <span class="text-[10px] font-medium mt-0.5">প্রোফাইল</span>
       </button>
     </div>
@@ -836,7 +836,6 @@
       if (isLoggedIn) {
         document.getElementById('guestNavGroup').classList.add('hidden');
         document.getElementById('headerModuleMenuContainer').classList.remove('hidden');
-        document.getElementById('mobileProfileIcon').className = 'fa-solid fa-bars text-lg';
         document.getElementById('mobileProfileButton').classList.replace('text-slate-400', 'text-forest-600');
 
         const savedName = localStorage.getItem('user_name') || 'Tanbir Ahmed (Google)';
@@ -866,7 +865,6 @@
         document.getElementById('guestNavGroup').classList.remove('hidden');
         document.getElementById('userProfileGroup').classList.add('hidden');
         document.getElementById('headerModuleMenuContainer').classList.add('hidden');
-        document.getElementById('mobileProfileIcon').className = 'fa-solid fa-user text-lg';
         document.getElementById('mobileProfileButton').classList.replace('text-forest-600', 'text-slate-400');
       }
 
