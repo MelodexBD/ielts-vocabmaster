@@ -131,23 +131,6 @@
     </div>
   </header>
 
-  <nav id="mobileModuleNav" aria-label="IELTS modules" class="md:hidden sticky top-[72px] z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-    <div class="flex gap-2 overflow-x-auto px-3 py-2 no-scrollbar">
-      <button data-module-nav="Reading" onclick="openExercise('Reading')" class="shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-forest-50">
-        <i class="fa-solid fa-book-open-reader"></i> Reading
-      </button>
-      <button data-module-nav="Listening" onclick="openExercise('Listening')" class="shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-forest-50">
-        <i class="fa-solid fa-headphones"></i> Listening
-      </button>
-      <button data-module-nav="Writing" onclick="openExercise('Writing')" class="shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-forest-50">
-        <i class="fa-solid fa-pen-to-square"></i> Writing
-      </button>
-      <button data-module-nav="Speaking" onclick="openExercise('Speaking')" class="shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-forest-50">
-        <i class="fa-solid fa-microphone-lines"></i> Speaking
-      </button>
-    </div>
-  </nav>
-
   <!-- ================= MAIN LAYOUT WRAPPER ================= -->
   <div class="flex-1 flex max-w-7xl w-full mx-auto md:px-6 md:py-6 gap-6">
 
@@ -259,7 +242,29 @@
         <section class="space-y-3.5">
           <div class="flex items-center justify-between">
             <h3 class="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">প্রধান মডিউলসমূহ</h3>
-            <span class="text-xs text-slate-400 font-semibold hidden md:inline">মডিউল ক্লিক করে বই নির্বাচন করুন</span>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-slate-400 font-semibold hidden md:inline">মডিউল ক্লিক করে বই নির্বাচন করুন</span>
+              <div id="mobileModuleMenu" class="relative md:hidden">
+                <button id="mobileModuleMenuButton" type="button" onclick="toggleModuleMenu(event)" aria-label="মডিউল মেনু খুলুন" aria-haspopup="menu" aria-controls="mobileModuleMenuOptions" aria-expanded="false" class="w-9 h-9 rounded-xl border border-slate-200 bg-white text-slate-600 hover:border-forest-500 hover:text-forest-700 flex items-center justify-center shadow-sm">
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <div id="mobileModuleMenuOptions" role="menu" class="hidden absolute right-0 top-11 w-56 p-2 rounded-2xl border border-slate-200 bg-white shadow-xl z-40">
+                  <p class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">নেভিগেশন মেনু</p>
+                  <button data-module-nav="Reading" role="menuitem" onclick="openExercise('Reading')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-xs font-bold text-slate-600 hover:bg-forest-50 hover:text-forest-700">
+                    <i class="fa-solid fa-book-open-reader w-4 text-slate-400"></i><span>Reading Vault</span>
+                  </button>
+                  <button data-module-nav="Listening" role="menuitem" onclick="openExercise('Listening')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-xs font-bold text-slate-600 hover:bg-forest-50 hover:text-forest-700">
+                    <i class="fa-solid fa-headphones w-4 text-slate-400"></i><span>Listening Audio</span>
+                  </button>
+                  <button data-module-nav="Writing" role="menuitem" onclick="openExercise('Writing')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-xs font-bold text-slate-600 hover:bg-forest-50 hover:text-forest-700">
+                    <i class="fa-solid fa-pen-to-square w-4 text-slate-400"></i><span>Writing Tasks</span>
+                  </button>
+                  <button data-module-nav="Speaking" role="menuitem" onclick="openExercise('Speaking')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-xs font-bold text-slate-600 hover:bg-forest-50 hover:text-forest-700">
+                    <i class="fa-solid fa-microphone-lines w-4 text-slate-400"></i><span>Speaking Cue Cards</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 md:gap-5">
@@ -456,8 +461,8 @@
         <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">মডিউলসমূহ</h4>
         <ul class="space-y-2 text-xs font-medium">
           <li><a href="javascript:void(0)" onclick="openExercise('Reading')" class="hover:text-forest-600">Reading Vault</a></li>
-          <li><a href="javascript:void(0)" onclick="openExercise('Listening')" class="hover:text-forest-600">Listening Station</a></li>
-          <li><a href="javascript:void(0)" onclick="openExercise('Writing')" class="hover:text-forest-600">Writing Tasks 1 & 2</a></li>
+          <li><a href="javascript:void(0)" onclick="openExercise('Listening')" class="hover:text-forest-600">Listening Audio</a></li>
+          <li><a href="javascript:void(0)" onclick="openExercise('Writing')" class="hover:text-forest-600">Writing Tasks</a></li>
           <li><a href="javascript:void(0)" onclick="openExercise('Speaking')" class="hover:text-forest-600">Speaking Cue Cards</a></li>
         </ul>
       </div>
@@ -796,14 +801,13 @@
       document.getElementById('viewCambridgeList').classList.add('hidden');
       document.getElementById('viewBookDetails').classList.add('hidden');
       document.getElementById('viewModuleExercise').classList.add('hidden');
+      closeModuleMenu();
 
       const target = document.getElementById(viewId);
       target.classList.remove('hidden');
       target.classList.add('flex');
       if (viewId === 'viewHome') {
         setActiveModuleNav('home');
-      } else if (viewId === 'viewModuleExercise') {
-        setActiveModuleNav(currentModule);
       } else {
         setActiveModuleNav(currentModule);
       }
@@ -813,24 +817,35 @@
     function setActiveModuleNav(activeModule) {
       document.querySelectorAll('[data-module-nav]').forEach(button => {
         const active = button.dataset.moduleNav === activeModule;
-        if (button.closest('#mobileModuleNav')) {
-          button.classList.toggle('bg-forest-600', active);
-          button.classList.toggle('text-white', active);
-          button.classList.toggle('bg-slate-50', !active);
-          button.classList.toggle('text-slate-600', !active);
-        } else {
-          button.classList.toggle('bg-forest-50', active);
-          button.classList.toggle('text-forest-700', active);
-          button.classList.toggle('border', active);
-          button.classList.toggle('border-forest-100', active);
-          button.classList.toggle('text-slate-600', !active);
-          const icon = button.querySelector('i');
-          if (icon) {
-            icon.classList.toggle('text-slate-400', !active);
-            icon.classList.toggle('text-forest-600', active);
-          }
+        button.classList.toggle('bg-forest-50', active);
+        button.classList.toggle('text-forest-700', active);
+        button.classList.toggle('border', active && button.closest('aside') !== null);
+        button.classList.toggle('border-forest-100', active && button.closest('aside') !== null);
+        button.classList.toggle('text-slate-600', !active);
+        const icon = button.querySelector('i');
+        if (icon) {
+          icon.classList.toggle('text-slate-400', !active);
+          icon.classList.toggle('text-forest-600', active);
         }
       });
+    }
+
+    function toggleModuleMenu(event) {
+      event.stopPropagation();
+      const menu = document.getElementById('mobileModuleMenuOptions');
+      const button = document.getElementById('mobileModuleMenuButton');
+      const isOpening = menu.classList.contains('hidden');
+      menu.classList.toggle('hidden', !isOpening);
+      button.setAttribute('aria-expanded', String(isOpening));
+    }
+
+    function closeModuleMenu() {
+      const menu = document.getElementById('mobileModuleMenuOptions');
+      const button = document.getElementById('mobileModuleMenuButton');
+      if (menu && button) {
+        menu.classList.add('hidden');
+        button.setAttribute('aria-expanded', 'false');
+      }
     }
 
     function openCambridgeList(moduleName) {
@@ -1187,6 +1202,7 @@
     window.addEventListener('click', (e) => {
       const dd = document.getElementById('profileDropdown');
       if (dd && !dd.classList.contains('hidden')) dd.classList.add('hidden');
+      if (!e.target.closest('#mobileModuleMenu')) closeModuleMenu();
     });
   </script>
 </body>
