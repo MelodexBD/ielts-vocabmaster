@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IELTS Cambridge Prep & Vocabulary Master</title>
-  
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome 6 Icons CDN -->
@@ -181,23 +181,47 @@
 
       <!-- ================= 1. HOME VIEW ================= -->
       <div id="viewHome" class="view-screen w-full flex flex-col space-y-6 p-4 md:p-0">
-        
+
         <!-- ================= HERO SLIDER SECTION ================= -->
-        <section class="relative rounded-3xl overflow-hidden shadow-xl shadow-forest-900/15 md:min-h-[300px] h-[320px] md:h-[310px] select-none group">
-          
-          <div id="sliderWrapper" class="relative w-full h-full">
+        <div class="relative">
+          <div id="mobileModuleMenu" class="relative mb-2 flex justify-end md:hidden">
+            <button id="mobileModuleMenuButton" type="button" onclick="toggleModuleMenu(event)" aria-label="মডিউল মেনু খুলুন" aria-haspopup="menu" aria-controls="mobileModuleMenuOptions" aria-expanded="false" class="w-10 h-10 rounded-xl border border-white/70 bg-white/95 text-slate-700 hover:border-forest-500 hover:text-forest-700 flex items-center justify-center shadow-md backdrop-blur-sm transition-colors">
+              <i class="fa-solid fa-bars text-base" aria-hidden="true"></i>
+            </button>
+            <div id="mobileModuleMenuOptions" role="menu" aria-label="মডিউল নেভিগেশন" class="hidden absolute right-0 top-12 w-64 p-2.5 rounded-2xl border border-slate-200 bg-white shadow-xl z-30">
+              <p class="px-3 py-2 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">নেভিগেশন মেনু</p>
+              <button data-module-nav="Reading" role="menuitem" onclick="openExercise('Reading')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
+                <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-book-open-reader text-base"></i></span><span>Reading Vault</span>
+              </button>
+              <button data-module-nav="Listening" role="menuitem" onclick="openExercise('Listening')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
+                <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-headphones text-base"></i></span><span>Listening Audio</span>
+              </button>
+              <button data-module-nav="Writing" role="menuitem" onclick="openExercise('Writing')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
+                <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-pen-to-square text-base"></i></span><span>Writing Tasks</span>
+              </button>
+              <button data-module-nav="Speaking" role="menuitem" onclick="openExercise('Speaking')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
+                <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-microphone-lines text-base"></i></span><span>Speaking Cue Cards</span>
+              </button>
+            </div>
           </div>
 
-          <button onclick="prevSlide()" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/30 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-80 md:opacity-0 group-hover:opacity-100 z-20">
-            <i class="fa-solid fa-chevron-left text-xs"></i>
-          </button>
-          <button onclick="nextSlide()" class="absolute right-3.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/30 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-80 md:opacity-0 group-hover:opacity-100 z-20">
-            <i class="fa-solid fa-chevron-right text-xs"></i>
-          </button>
+          <section class="relative rounded-3xl overflow-hidden shadow-xl shadow-forest-900/15 md:min-h-[300px] h-[320px] md:h-[310px] select-none group">
 
-          <div id="sliderDots" class="absolute bottom-3.5 inset-x-0 flex justify-center items-center gap-1.5 z-20">
-          </div>
-        </section>
+            <div id="sliderWrapper" class="relative w-full h-full">
+            </div>
+
+            <button onclick="prevSlide()" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/30 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-80 md:opacity-0 group-hover:opacity-100 z-20">
+              <i class="fa-solid fa-chevron-left text-xs"></i>
+            </button>
+            <button onclick="nextSlide()" class="absolute right-3.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/30 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-80 md:opacity-0 group-hover:opacity-100 z-20">
+              <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+
+            <div id="sliderDots" class="absolute bottom-3.5 inset-x-0 flex justify-center items-center gap-1.5 z-20">
+            </div>
+          </section>
+
+        </div>
 
         <!-- ================= CIRCULAR PROGRESS RING SECTION ================= -->
         <section class="bg-white border border-slate-200/80 rounded-3xl p-5 md:p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
@@ -244,26 +268,6 @@
             <h3 class="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">প্রধান মডিউলসমূহ</h3>
             <div class="flex items-center gap-2">
               <span class="text-xs text-slate-400 font-semibold hidden md:inline">মডিউল ক্লিক করে বই নির্বাচন করুন</span>
-              <div id="mobileModuleMenu" class="relative md:hidden">
-                <button id="mobileModuleMenuButton" type="button" onclick="toggleModuleMenu(event)" aria-label="মডিউল মেনু খুলুন" aria-haspopup="menu" aria-controls="mobileModuleMenuOptions" aria-expanded="false" class="w-10 h-10 rounded-xl border border-slate-200 bg-white text-slate-600 hover:border-forest-500 hover:text-forest-700 flex items-center justify-center shadow-sm transition-colors">
-                  <i class="fa-solid fa-bars text-base" aria-hidden="true"></i>
-                </button>
-                <div id="mobileModuleMenuOptions" role="menu" aria-label="মডিউল নেভিগেশন" class="hidden absolute right-0 top-12 w-64 p-2.5 rounded-2xl border border-slate-200 bg-white shadow-xl z-40">
-                  <p class="px-3 py-2 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">নেভিগেশন মেনু</p>
-                  <button data-module-nav="Reading" role="menuitem" onclick="openExercise('Reading')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
-                    <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-book-open-reader text-base"></i></span><span>Reading Vault</span>
-                  </button>
-                  <button data-module-nav="Listening" role="menuitem" onclick="openExercise('Listening')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
-                    <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-headphones text-base"></i></span><span>Listening Audio</span>
-                  </button>
-                  <button data-module-nav="Writing" role="menuitem" onclick="openExercise('Writing')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
-                    <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-pen-to-square text-base"></i></span><span>Writing Tasks</span>
-                  </button>
-                  <button data-module-nav="Speaking" role="menuitem" onclick="openExercise('Speaking')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
-                    <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-microphone-lines text-base"></i></span><span>Speaking Cue Cards</span>
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
 
