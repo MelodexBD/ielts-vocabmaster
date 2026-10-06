@@ -170,7 +170,7 @@
           </div>
           <div>
             <p class="text-xs font-extrabold text-forest-800">ফ্রি প্রস্তুতি অগ্রগতি</p>
-            <p class="text-[10px] font-semibold text-forest-600">১/৪ টেস্ট আনলকড</p>
+            <p class="text-[10px] font-semibold text-forest-600">চার মডিউলের গড় অগ্রগতি</p>
           </div>
         </div>
       </div>
@@ -218,7 +218,7 @@
                 <i class="fa-solid fa-chart-line"></i> লার্নিং ড্যাশবোর্ড
               </div>
               <h3 class="text-base md:text-lg font-black text-slate-800">ক্যামব্রিজ টেস্ট প্রস্তুতি অগ্রগতি</h3>
-              <p class="text-xs text-slate-400 font-medium">ফ্রি কোটায় টেস্ট ১ শেষ করেছেন। বাকি টেস্টগুলো আনলক করে পুরো প্রস্তুতি সম্পন্ন করুন।</p>
+              <p class="text-xs text-slate-400 font-medium">প্রতিটি মডিউলে সম্পন্ন Cambridge 10 টেস্টের ভিত্তিতে অগ্রগতি হিসাব করা হয়।</p>
             </div>
           </div>
 
@@ -246,7 +246,14 @@
           </div>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 md:gap-5">
-            <button onclick="openCambridgeList('Reading')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+            <button onclick="openCambridgeList('Reading')" class="relative p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+              <div class="absolute top-3 right-3 w-11 h-11" role="img" aria-label="Reading progress">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                  <circle id="readingProgressRing" cx="18" cy="18" r="16" fill="none" stroke="#2d5a43" stroke-width="3" stroke-dasharray="100.53" stroke-dashoffset="100.53" stroke-linecap="round"/>
+                </svg>
+                <span id="readingProgressText" class="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-slate-700">0%</span>
+              </div>
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-book-open-reader"></i>
               </div>
@@ -256,7 +263,14 @@
               </div>
             </button>
 
-            <button onclick="openCambridgeList('Listening')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+            <button onclick="openCambridgeList('Listening')" class="relative p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+              <div class="absolute top-3 right-3 w-11 h-11" role="img" aria-label="Listening progress">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                  <circle id="listeningProgressRing" cx="18" cy="18" r="16" fill="none" stroke="#2d5a43" stroke-width="3" stroke-dasharray="100.53" stroke-dashoffset="100.53" stroke-linecap="round"/>
+                </svg>
+                <span id="listeningProgressText" class="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-slate-700">0%</span>
+              </div>
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-headphones"></i>
               </div>
@@ -266,7 +280,14 @@
               </div>
             </button>
 
-            <button onclick="openCambridgeList('Writing')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+            <button onclick="openCambridgeList('Writing')" class="relative p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+              <div class="absolute top-3 right-3 w-11 h-11" role="img" aria-label="Writing progress">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                  <circle id="writingProgressRing" cx="18" cy="18" r="16" fill="none" stroke="#2d5a43" stroke-width="3" stroke-dasharray="100.53" stroke-dashoffset="100.53" stroke-linecap="round"/>
+                </svg>
+                <span id="writingProgressText" class="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-slate-700">0%</span>
+              </div>
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-pen-to-square"></i>
               </div>
@@ -276,7 +297,14 @@
               </div>
             </button>
 
-            <button onclick="openCambridgeList('Speaking')" class="p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+            <button onclick="openCambridgeList('Speaking')" class="relative p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
+              <div class="absolute top-3 right-3 w-11 h-11" role="img" aria-label="Speaking progress">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                  <circle id="speakingProgressRing" cx="18" cy="18" r="16" fill="none" stroke="#2d5a43" stroke-width="3" stroke-dasharray="100.53" stroke-dashoffset="100.53" stroke-linecap="round"/>
+                </svg>
+                <span id="speakingProgressText" class="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-slate-700">0%</span>
+              </div>
               <div class="w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-forest-50 text-forest-600 flex items-center justify-center text-xl md:text-2xl group-hover:bg-forest-600 group-hover:text-white transition-all shadow-sm">
                 <i class="fa-solid fa-microphone-lines"></i>
               </div>
@@ -356,6 +384,11 @@
         </div>
 
         <div id="wordsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        </div>
+        <div class="flex justify-end">
+          <button id="completeTestBtn" onclick="toggleCurrentTestCompletion()" class="px-4 py-2.5 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all">
+            এই টেস্ট সম্পন্ন হিসেবে চিহ্নিত করুন
+          </button>
         </div>
 
         <div class="md:hidden fixed bottom-[62px] inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 z-20 shadow-lg">
@@ -564,6 +597,11 @@
     let currentModule = 'Reading';
     let currentBook = 'Cambridge 10';
     let currentTest = 'T1';
+    const completedTests = JSON.parse(localStorage.getItem('module_test_progress') || '{}');
+    const progressModules = ['Reading', 'Listening', 'Writing', 'Speaking'];
+    const progressTests = ['T1', 'T2', 'T3', 'T4'];
+    const progressCircumference = 2 * Math.PI * 16;
+    const overallRingCircumference = 2 * Math.PI * 40;
 
     // ------------------------------------------------------------------
     // DYNAMIC BANNER SLIDER SYSTEM (3 PREMIUM PRESET SLIDES)
@@ -713,6 +751,7 @@
       renderSlider();
       startSliderTimer();
       selectTest('T1');
+      renderProgress();
     });
 
     // Content Lock Handler
@@ -758,12 +797,63 @@
       currentBook = bookName;
       document.getElementById('selectedBookHeader').innerText = bookName;
       renderWords();
+      renderCompletionButton();
       showView('viewBookDetails');
     }
 
     function selectTest(testId) {
       currentTest = testId;
       renderWords();
+      renderCompletionButton();
+    }
+
+    function getModuleCompletedTests(moduleName) {
+      const tests = completedTests[moduleName];
+      return Array.isArray(tests) ? [...new Set(tests.filter(test => progressTests.includes(test)))] : [];
+    }
+
+    function updateProgressRing(ringId, textId, percentage) {
+      document.getElementById(ringId).setAttribute(
+        'stroke-dashoffset',
+        String(progressCircumference * (1 - percentage / 100))
+      );
+      document.getElementById(textId).innerText = `${percentage}%`;
+    }
+
+    function renderProgress() {
+      let totalProgress = 0;
+      progressModules.forEach(moduleName => {
+        const percentage = Math.round(getModuleCompletedTests(moduleName).length / progressTests.length * 100);
+        const moduleId = moduleName.toLowerCase();
+        updateProgressRing(`${moduleId}ProgressRing`, `${moduleId}ProgressText`, percentage);
+        totalProgress += percentage;
+      });
+
+      const overallPercentage = Math.round(totalProgress / progressModules.length);
+      document.getElementById('progressPercentDisplay').innerText = `${overallPercentage}%`;
+      document.getElementById('progressRing').setAttribute(
+        'stroke-dashoffset',
+        String(overallRingCircumference * (1 - overallPercentage / 100))
+      );
+      document.getElementById('sidePercentText').innerText = `${overallPercentage}%`;
+    }
+
+    function renderCompletionButton() {
+      const button = document.getElementById('completeTestBtn');
+      const completed = getModuleCompletedTests(currentModule).includes(currentTest);
+      button.innerText = completed ? '✓ টেস্ট সম্পন্ন — আনমার্ক করুন' : 'এই টেস্ট সম্পন্ন হিসেবে চিহ্নিত করুন';
+      button.setAttribute('aria-pressed', String(completed));
+    }
+
+    function toggleCurrentTestCompletion() {
+      const tests = getModuleCompletedTests(currentModule);
+      const completed = tests.includes(currentTest);
+      completedTests[currentModule] = completed
+        ? tests.filter(test => test !== currentTest)
+        : [...tests, currentTest];
+      localStorage.setItem('module_test_progress', JSON.stringify(completedTests));
+      renderProgress();
+      renderCompletionButton();
     }
 
     // Initial Vocabulary DB
