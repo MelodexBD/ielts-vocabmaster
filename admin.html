@@ -40,30 +40,40 @@
     </a>
   </header>
 
-  <main class="mx-auto w-full max-w-6xl space-y-6 p-4 md:p-8">
-    <section class="rounded-3xl border border-forest-100 bg-forest-50/70 p-5 md:p-6">
-      <div class="flex flex-col gap-4 md:flex-row md:items-end">
-        <div class="flex-1">
-          <h2 class="font-black text-slate-800">Cambridge বইয়ের পরিসর</h2>
-          <p class="mt-1 text-xs text-slate-600">এখানে পরিবর্তন করলে লাইভ সাইটের বইয়ের তালিকাও আপডেট হবে। প্রতিটি বইয়ে Test 1–4 থাকবে।</p>
-        </div>
-        <label class="text-xs font-bold text-slate-700">শুরু
-          <input id="bookRangeStart" type="number" min="1" max="99" class="ml-2 w-20 rounded-xl border border-slate-200 bg-white px-3 py-2">
-        </label>
-        <label class="text-xs font-bold text-slate-700">শেষ
-          <input id="bookRangeEnd" type="number" min="1" max="99" class="ml-2 w-20 rounded-xl border border-slate-200 bg-white px-3 py-2">
-        </label>
-        <button type="button" onclick="saveBookRange()" class="rounded-xl bg-forest-600 px-4 py-2.5 text-xs font-extrabold text-white hover:bg-forest-700">পরিসর সেভ করুন</button>
+  <main class="mx-auto w-full max-w-6xl space-y-5 p-4 md:p-8">
+    <section class="rounded-3xl border border-slate-200/90 bg-white p-5 shadow-sm md:p-6">
+      <div class="mb-5">
+        <p class="text-[10px] font-extrabold uppercase tracking-[0.18em] text-forest-600">Admin workspace</p>
+        <h2 class="mt-1 text-lg font-black text-slate-900">কনটেন্ট ও সাইট ব্যবস্থাপনা</h2>
+        <p class="mt-1 text-xs text-slate-500">প্রথমে Cambridge বইয়ের পরিসর ঠিক করুন, তারপর ব্যানার বা মডিউল কনটেন্ট পরিচালনা করুন।</p>
       </div>
-      <p id="bookRangeFeedback" aria-live="polite" class="mt-3 text-xs font-semibold text-slate-500"></p>
+      <div class="rounded-2xl border border-forest-100 bg-forest-50/70 p-4 md:p-5">
+        <div class="mb-4 flex items-start gap-3">
+          <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-forest-600 text-xs font-black text-white">1</span>
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-800">Cambridge বইয়ের পরিসর</h3>
+            <p class="mt-0.5 text-xs leading-5 text-slate-600">এখানে পরিবর্তন করলে লাইভ সাইটের বইয়ের তালিকাও আপডেট হবে। প্রতিটি বইয়ে Test 1–4 থাকবে।</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 items-end gap-3 sm:grid-cols-[1fr_1fr_auto]">
+          <label class="block text-xs font-bold text-slate-700">শুরু নম্বর
+            <input id="bookRangeStart" type="number" min="1" max="99" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5">
+          </label>
+          <label class="block text-xs font-bold text-slate-700">শেষ নম্বর
+            <input id="bookRangeEnd" type="number" min="1" max="99" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5">
+          </label>
+          <button type="button" onclick="saveBookRange()" class="rounded-xl bg-forest-600 px-5 py-2.5 text-xs font-extrabold text-white hover:bg-forest-700">পরিসর সেভ করুন</button>
+        </div>
+        <p id="bookRangeFeedback" aria-live="polite" class="mt-3 text-xs font-semibold text-slate-500"></p>
+      </div>
     </section>
 
-    <nav class="flex items-center gap-2 overflow-x-auto border-b border-slate-200 pb-3">
-      <button type="button" onclick="switchTab('tabBanners')" id="btnTabBanners" class="flex items-center gap-2 rounded-xl bg-forest-600 px-4 py-2 text-xs font-extrabold text-white"><i class="fa-solid fa-images"></i> স্লাইডার ব্যানার</button>
-      <button type="button" onclick="switchTab('tabModules')" id="btnTabModules" class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50"><i class="fa-solid fa-layer-group"></i> মডিউল কনটেন্ট</button>
+    <nav role="tablist" aria-label="অ্যাডমিন কাজ নির্বাচন" class="flex w-fit max-w-full items-center gap-1 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm">
+      <button type="button" role="tab" aria-selected="true" aria-controls="tabBanners" onclick="switchTab('tabBanners')" id="btnTabBanners" class="flex items-center gap-2 rounded-xl bg-forest-600 px-4 py-2.5 text-xs font-extrabold text-white"><i class="fa-solid fa-images"></i> স্লাইডার ব্যানার</button>
+      <button type="button" role="tab" aria-selected="false" aria-controls="tabModules" onclick="switchTab('tabModules')" id="btnTabModules" class="flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50"><i class="fa-solid fa-layer-group"></i> মডিউল কনটেন্ট</button>
     </nav>
 
-    <section id="tabBanners" class="space-y-6">
+    <section id="tabBanners" role="tabpanel" aria-labelledby="btnTabBanners" class="space-y-6">
       <div class="space-y-4 rounded-3xl border border-slate-200/90 bg-white p-5 shadow-sm md:p-6">
         <div class="border-b border-slate-100 pb-3">
           <h2 class="flex items-center gap-2 text-base font-black text-slate-800"><i class="fa-solid fa-cloud-arrow-up text-forest-600"></i> স্লাইডার ব্যানার তৈরি করুন</h2>
@@ -104,32 +114,38 @@
       </div>
     </section>
 
-    <section id="tabModules" class="hidden">
+    <section id="tabModules" role="tabpanel" aria-labelledby="btnTabModules" class="hidden">
       <div class="space-y-5 rounded-3xl border border-slate-200/90 bg-white p-5 shadow-sm md:p-6">
-        <div class="space-y-4 border-b border-slate-100 pb-4">
+        <div class="space-y-5 border-b border-slate-100 pb-5">
           <div>
             <h2 class="flex items-center gap-2 text-base font-black text-slate-800"><i class="fa-solid fa-list-check text-forest-600"></i> মডিউল অনুযায়ী কনটেন্ট আপলোড</h2>
             <p class="mt-1 text-xs text-slate-500">প্রতিটি মডিউলের জন্য আলাদা ফর্ম। কনটেন্ট নির্বাচিত Cambridge বই ও টেস্টে সেভ হবে।</p>
           </div>
-          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4" role="tablist" aria-label="কনটেন্ট মডিউল">
-            <button type="button" onclick="setModuleUploadType('Reading')" id="btnMReading" class="rounded-xl border border-forest-600 bg-forest-600 px-3 py-2.5 text-xs font-extrabold text-white">Reading</button>
-            <button type="button" onclick="setModuleUploadType('Listening')" id="btnMListening" class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 hover:bg-forest-50">Listening</button>
-            <button type="button" onclick="setModuleUploadType('Writing')" id="btnMWriting" class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 hover:bg-forest-50">Writing</button>
-            <button type="button" onclick="setModuleUploadType('Speaking')" id="btnMSpeaking" class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 hover:bg-forest-50">Speaking</button>
+          <div class="rounded-2xl border border-forest-100 bg-forest-50/60 p-4">
+            <p class="mb-3 text-[10px] font-extrabold uppercase tracking-wider text-forest-700">ধাপ ১ · কনটেন্টের গন্তব্য</p>
+            <div class="grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-2">
+              <label class="block text-xs font-bold text-slate-700">Cambridge বই
+                <select id="modBook" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs outline-none focus:border-forest-500"></select>
+              </label>
+              <label class="block text-xs font-bold text-slate-700">Test (সবসময় ৪টি)
+                <select id="modTest" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs outline-none focus:border-forest-500">
+                  <option value="T1">Test 1 (Free)</option><option value="T2">Test 2 (Pro)</option><option value="T3">Test 3 (Pro)</option><option value="T4">Test 4 (Pro)</option>
+                </select>
+              </label>
+            </div>
           </div>
-          <div class="grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-2">
-            <label class="block text-xs font-bold text-slate-700">Cambridge বই
-              <select id="modBook" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs outline-none focus:border-forest-500"></select>
-            </label>
-            <label class="block text-xs font-bold text-slate-700">Test (সবসময় ৪টি)
-              <select id="modTest" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs outline-none focus:border-forest-500">
-                <option value="T1">Test 1 (Free)</option><option value="T2">Test 2 (Pro)</option><option value="T3">Test 3 (Pro)</option><option value="T4">Test 4 (Pro)</option>
-              </select>
-            </label>
+          <div>
+            <p class="mb-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-500">ধাপ ২ · মডিউল নির্বাচন</p>
+            <div class="grid grid-cols-2 gap-2 sm:grid-cols-4" role="tablist" aria-label="কনটেন্ট মডিউল">
+              <button type="button" role="tab" aria-selected="true" aria-controls="uploaderReading" onclick="setModuleUploadType('Reading')" id="btnMReading" class="rounded-xl border border-forest-600 bg-forest-600 px-3 py-2.5 text-xs font-extrabold text-white">Reading</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="uploaderListening" onclick="setModuleUploadType('Listening')" id="btnMListening" class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 hover:bg-forest-50">Listening</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="uploaderWriting" onclick="setModuleUploadType('Writing')" id="btnMWriting" class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 hover:bg-forest-50">Writing</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="uploaderSpeaking" onclick="setModuleUploadType('Speaking')" id="btnMSpeaking" class="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-600 hover:bg-forest-50">Speaking</button>
+            </div>
           </div>
         </div>
 
-        <section id="uploaderReading" class="module-uploader space-y-5">
+        <section id="uploaderReading" role="tabpanel" aria-labelledby="btnMReading" class="module-uploader space-y-5">
           <div>
             <h3 class="font-extrabold text-slate-800">Reading · Bulk vocabulary</h3>
             <p class="mt-1 text-xs leading-5 text-slate-500">কমা বা নতুন লাইনে শব্দ দিন। ডেমো ডিকশনারিতে নেই এমন শব্দ অর্থ ও synonym/antonym ছাড়া review হিসেবে দেখাবে—প্রকাশের আগে পূরণ করুন। এটি AI জেনারেটর নয়।</p>
@@ -155,7 +171,7 @@
           </div>
         </section>
 
-        <form id="uploaderListening" class="module-uploader hidden space-y-4" onsubmit="handleModuleContentSubmit(event, 'Listening')">
+        <form id="uploaderListening" role="tabpanel" aria-labelledby="btnMListening" class="module-uploader hidden space-y-4" onsubmit="handleModuleContentSubmit(event, 'Listening')">
           <div><h3 class="font-extrabold text-slate-800">Listening · Audio & question set</h3><p class="mt-1 text-xs text-slate-500">অডিও লিংক, নির্দেশনা, transcript ও প্রশ্ন-উত্তর সংরক্ষণ করুন।</p></div>
           <label class="block text-xs font-bold text-slate-700">সেটের শিরোনাম<input name="title" required class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm" placeholder="যেমন: Section 1 · Campus registration"></label>
           <label class="block text-xs font-bold text-slate-700">Audio URL / ফাইলের রেফারেন্স<input name="audioUrl" type="url" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm" placeholder="https://..."></label>
@@ -164,7 +180,7 @@
           <button class="rounded-xl bg-forest-600 px-5 py-3 text-xs font-extrabold text-white hover:bg-forest-700">Listening কনটেন্ট সেভ করুন</button>
         </form>
 
-        <form id="uploaderWriting" class="module-uploader hidden space-y-4" onsubmit="handleModuleContentSubmit(event, 'Writing')">
+        <form id="uploaderWriting" role="tabpanel" aria-labelledby="btnMWriting" class="module-uploader hidden space-y-4" onsubmit="handleModuleContentSubmit(event, 'Writing')">
           <div><h3 class="font-extrabold text-slate-800">Writing · Task prompt</h3><p class="mt-1 text-xs text-slate-500">Task type, প্রশ্ন, model answer বা examiner notes যোগ করুন।</p></div>
           <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label class="block text-xs font-bold text-slate-700">Task type<select name="taskType" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm"><option>Task 1 · Academic</option><option>Task 1 · General Training</option><option>Task 2</option></select></label>
@@ -175,7 +191,7 @@
           <button class="rounded-xl bg-forest-600 px-5 py-3 text-xs font-extrabold text-white hover:bg-forest-700">Writing কনটেন্ট সেভ করুন</button>
         </form>
 
-        <form id="uploaderSpeaking" class="module-uploader hidden space-y-4" onsubmit="handleModuleContentSubmit(event, 'Speaking')">
+        <form id="uploaderSpeaking" role="tabpanel" aria-labelledby="btnMSpeaking" class="module-uploader hidden space-y-4" onsubmit="handleModuleContentSubmit(event, 'Speaking')">
           <div><h3 class="font-extrabold text-slate-800">Speaking · Cue card</h3><p class="mt-1 text-xs text-slate-500">Cue-card topic, bullet points, model response ও vocabulary নোট করুন।</p></div>
           <label class="block text-xs font-bold text-slate-700">Cue-card topic<input name="title" required class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm" placeholder="Describe a place you enjoy visiting"></label>
           <label class="block text-xs font-bold text-slate-700">Bullet points<textarea name="bulletPoints" rows="4" class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm" placeholder="What it is; when you go; who you go with; why you enjoy it"></textarea></label>
@@ -242,11 +258,13 @@
     function switchTab(tabId) {
       ['tabBanners', 'tabModules'].forEach(id => document.getElementById(id).classList.toggle('hidden', id !== tabId));
       document.getElementById('btnTabBanners').className = tabId === 'tabBanners'
-        ? 'flex items-center gap-2 rounded-xl bg-forest-600 px-4 py-2 text-xs font-extrabold text-white'
-        : 'flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50';
+        ? 'flex items-center gap-2 rounded-xl bg-forest-600 px-4 py-2.5 text-xs font-extrabold text-white'
+        : 'flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50';
       document.getElementById('btnTabModules').className = tabId === 'tabModules'
-        ? 'flex items-center gap-2 rounded-xl bg-forest-600 px-4 py-2 text-xs font-extrabold text-white'
-        : 'flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50';
+        ? 'flex items-center gap-2 rounded-xl bg-forest-600 px-4 py-2.5 text-xs font-extrabold text-white'
+        : 'flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50';
+      document.getElementById('btnTabBanners').setAttribute('aria-selected', String(tabId === 'tabBanners'));
+      document.getElementById('btnTabModules').setAttribute('aria-selected', String(tabId === 'tabModules'));
     }
 
     function setModuleUploadType(module) {
