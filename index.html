@@ -131,6 +131,23 @@
     </div>
   </header>
 
+  <nav id="mobileModuleNav" aria-label="IELTS modules" class="md:hidden sticky top-[72px] z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <div class="flex gap-2 overflow-x-auto px-3 py-2 no-scrollbar">
+      <button data-module-nav="Reading" onclick="openExercise('Reading')" class="shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-forest-50">
+        <i class="fa-solid fa-book-open-reader"></i> Reading
+      </button>
+      <button data-module-nav="Listening" onclick="openExercise('Listening')" class="shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-forest-50">
+        <i class="fa-solid fa-headphones"></i> Listening
+      </button>
+      <button data-module-nav="Writing" onclick="openExercise('Writing')" class="shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-forest-50">
+        <i class="fa-solid fa-pen-to-square"></i> Writing
+      </button>
+      <button data-module-nav="Speaking" onclick="openExercise('Speaking')" class="shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-forest-50">
+        <i class="fa-solid fa-microphone-lines"></i> Speaking
+      </button>
+    </div>
+  </nav>
+
   <!-- ================= MAIN LAYOUT WRAPPER ================= -->
   <div class="flex-1 flex max-w-7xl w-full mx-auto md:px-6 md:py-6 gap-6">
 
@@ -138,34 +155,34 @@
     <aside class="hidden md:flex flex-col w-64 bg-white border border-slate-200/80 rounded-3xl p-5 shadow-sm shrink-0 h-fit sticky top-24 space-y-2">
       <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1">নেভিগেশন মেনু</span>
       
-      <button onclick="showView('viewHome')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-forest-700 bg-forest-50 border border-forest-100 transition-all text-left">
+      <button data-module-nav="home" onclick="showView('viewHome')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-forest-700 bg-forest-50 border border-forest-100 transition-all text-left">
         <i class="fa-solid fa-house text-base"></i>
         <span>হোম ল্যান্ডিং</span>
       </button>
 
-      <button onclick="openCambridgeList('Reading')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
+      <button data-module-nav="Reading" onclick="openExercise('Reading')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
         <i class="fa-solid fa-book-open-reader text-base text-slate-400"></i>
         <span>Reading Vault</span>
       </button>
 
-      <button onclick="openCambridgeList('Listening')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
+      <button data-module-nav="Listening" onclick="openExercise('Listening')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
         <i class="fa-solid fa-headphones text-base text-slate-400"></i>
         <span>Listening Audio</span>
       </button>
 
-      <button onclick="openCambridgeList('Writing')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
+      <button data-module-nav="Writing" onclick="openExercise('Writing')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
         <i class="fa-solid fa-pen-to-square text-base text-slate-400"></i>
         <span>Writing Tasks</span>
       </button>
 
-      <button onclick="openCambridgeList('Speaking')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
+      <button data-module-nav="Speaking" onclick="openExercise('Speaking')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
         <i class="fa-solid fa-microphone-lines text-base text-slate-400"></i>
         <span>Speaking Cue Cards</span>
       </button>
 
       <div class="pt-4 border-t border-slate-100">
         <div class="bg-forest-50/80 border border-forest-100 p-4 rounded-2xl flex items-center gap-3">
-          <div data-auth-only-progress class="w-10 h-10 rounded-full bg-forest-600 text-white flex items-center justify-center font-bold text-xs">
+          <div data-auth-only-progress class="hidden w-10 h-10 rounded-full bg-forest-600 text-white flex items-center justify-center font-bold text-xs">
             <span id="sidePercentText">25%</span>
           </div>
           <div>
@@ -202,7 +219,7 @@
         <!-- ================= CIRCULAR PROGRESS RING SECTION ================= -->
         <section class="bg-white border border-slate-200/80 rounded-3xl p-5 md:p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
           <div class="flex items-center gap-5 w-full md:w-auto">
-            <div data-auth-only-progress class="relative w-24 h-24 md:w-28 md:h-28 shrink-0 flex items-center justify-center">
+            <div data-auth-only-progress class="hidden relative w-24 h-24 md:w-28 md:h-28 shrink-0 flex items-center justify-center">
               <svg class="w-full h-full" viewBox="0 0 100 100">
                 <circle class="text-slate-100" stroke-width="9" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50"/>
                 <circle id="progressRing" class="progress-ring-circle text-forest-600" stroke-width="9" stroke-dasharray="251.2" stroke-dashoffset="188.4" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50"/>
@@ -247,7 +264,7 @@
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 md:gap-5">
             <button onclick="openCambridgeList('Reading')" class="relative p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
-              <div data-auth-only-progress class="absolute top-3 right-3 w-11 h-11" role="img" aria-label="Reading progress">
+              <div data-auth-only-progress class="hidden absolute top-3 right-3 w-11 h-11" role="img" aria-label="Reading progress">
                 <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
                   <circle cx="18" cy="18" r="16" fill="none" stroke="#e2e8f0" stroke-width="3"/>
                   <circle id="readingProgressRing" cx="18" cy="18" r="16" fill="none" stroke="#2d5a43" stroke-width="3" stroke-dasharray="100.53" stroke-dashoffset="100.53" stroke-linecap="round"/>
@@ -264,7 +281,7 @@
             </button>
 
             <button onclick="openCambridgeList('Listening')" class="relative p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
-              <div data-auth-only-progress class="absolute top-3 right-3 w-11 h-11" role="img" aria-label="Listening progress">
+              <div data-auth-only-progress class="hidden absolute top-3 right-3 w-11 h-11" role="img" aria-label="Listening progress">
                 <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
                   <circle cx="18" cy="18" r="16" fill="none" stroke="#e2e8f0" stroke-width="3"/>
                   <circle id="listeningProgressRing" cx="18" cy="18" r="16" fill="none" stroke="#2d5a43" stroke-width="3" stroke-dasharray="100.53" stroke-dashoffset="100.53" stroke-linecap="round"/>
@@ -281,7 +298,7 @@
             </button>
 
             <button onclick="openCambridgeList('Writing')" class="relative p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
-              <div data-auth-only-progress class="absolute top-3 right-3 w-11 h-11" role="img" aria-label="Writing progress">
+              <div data-auth-only-progress class="hidden absolute top-3 right-3 w-11 h-11" role="img" aria-label="Writing progress">
                 <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
                   <circle cx="18" cy="18" r="16" fill="none" stroke="#e2e8f0" stroke-width="3"/>
                   <circle id="writingProgressRing" cx="18" cy="18" r="16" fill="none" stroke="#2d5a43" stroke-width="3" stroke-dasharray="100.53" stroke-dashoffset="100.53" stroke-linecap="round"/>
@@ -298,7 +315,7 @@
             </button>
 
             <button onclick="openCambridgeList('Speaking')" class="relative p-4 md:p-6 bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-forest-500 transition-all text-left flex flex-col justify-between h-36 md:h-48 active:scale-95 group">
-              <div data-auth-only-progress class="absolute top-3 right-3 w-11 h-11" role="img" aria-label="Speaking progress">
+              <div data-auth-only-progress class="hidden absolute top-3 right-3 w-11 h-11" role="img" aria-label="Speaking progress">
                 <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
                   <circle cx="18" cy="18" r="16" fill="none" stroke="#e2e8f0" stroke-width="3"/>
                   <circle id="speakingProgressRing" cx="18" cy="18" r="16" fill="none" stroke="#2d5a43" stroke-width="3" stroke-dasharray="100.53" stroke-dashoffset="100.53" stroke-linecap="round"/>
@@ -315,6 +332,10 @@
             </button>
           </div>
         </section>
+      </div>
+
+      <div id="viewModuleExercise" class="view-screen w-full hidden flex-col space-y-5 p-4 md:p-0">
+        <div id="moduleExerciseContent" class="space-y-5"></div>
       </div>
 
       <!-- ================= 2. CAMBRIDGE BOOKS GRID VIEW ================= -->
@@ -386,7 +407,7 @@
         <div id="wordsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         </div>
         <div class="flex justify-end">
-          <button data-auth-only-progress id="completeTestBtn" onclick="toggleCurrentTestCompletion()" class="px-4 py-2.5 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all">
+          <button data-auth-only-progress id="completeTestBtn" onclick="toggleCurrentTestCompletion()" class="hidden px-4 py-2.5 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all">
             এই টেস্ট সম্পন্ন হিসেবে চিহ্নিত করুন
           </button>
         </div>
@@ -434,10 +455,10 @@
       <div class="space-y-3">
         <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">মডিউলসমূহ</h4>
         <ul class="space-y-2 text-xs font-medium">
-          <li><a href="javascript:void(0)" onclick="openCambridgeList('Reading')" class="hover:text-forest-600">Reading Vault</a></li>
-          <li><a href="javascript:void(0)" onclick="openCambridgeList('Listening')" class="hover:text-forest-600">Listening Station</a></li>
-          <li><a href="javascript:void(0)" onclick="openCambridgeList('Writing')" class="hover:text-forest-600">Writing Tasks 1 & 2</a></li>
-          <li><a href="javascript:void(0)" onclick="openCambridgeList('Speaking')" class="hover:text-forest-600">Speaking Cue Cards</a></li>
+          <li><a href="javascript:void(0)" onclick="openExercise('Reading')" class="hover:text-forest-600">Reading Vault</a></li>
+          <li><a href="javascript:void(0)" onclick="openExercise('Listening')" class="hover:text-forest-600">Listening Station</a></li>
+          <li><a href="javascript:void(0)" onclick="openExercise('Writing')" class="hover:text-forest-600">Writing Tasks 1 & 2</a></li>
+          <li><a href="javascript:void(0)" onclick="openExercise('Speaking')" class="hover:text-forest-600">Speaking Cue Cards</a></li>
         </ul>
       </div>
 
@@ -753,6 +774,7 @@
       selectTest('T1');
       setProgressVisibility();
       renderProgress();
+      setActiveModuleNav('home');
     });
 
     // Content Lock Handler
@@ -773,17 +795,212 @@
       document.getElementById('viewHome').classList.add('hidden');
       document.getElementById('viewCambridgeList').classList.add('hidden');
       document.getElementById('viewBookDetails').classList.add('hidden');
+      document.getElementById('viewModuleExercise').classList.add('hidden');
 
       const target = document.getElementById(viewId);
       target.classList.remove('hidden');
       target.classList.add('flex');
+      if (viewId === 'viewHome') {
+        setActiveModuleNav('home');
+      } else if (viewId === 'viewModuleExercise') {
+        setActiveModuleNav(currentModule);
+      } else {
+        setActiveModuleNav(currentModule);
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setActiveModuleNav(activeModule) {
+      document.querySelectorAll('[data-module-nav]').forEach(button => {
+        const active = button.dataset.moduleNav === activeModule;
+        if (button.closest('#mobileModuleNav')) {
+          button.classList.toggle('bg-forest-600', active);
+          button.classList.toggle('text-white', active);
+          button.classList.toggle('bg-slate-50', !active);
+          button.classList.toggle('text-slate-600', !active);
+        } else {
+          button.classList.toggle('bg-forest-50', active);
+          button.classList.toggle('text-forest-700', active);
+          button.classList.toggle('border', active);
+          button.classList.toggle('border-forest-100', active);
+          button.classList.toggle('text-slate-600', !active);
+          const icon = button.querySelector('i');
+          if (icon) {
+            icon.classList.toggle('text-slate-400', !active);
+            icon.classList.toggle('text-forest-600', active);
+          }
+        }
+      });
     }
 
     function openCambridgeList(moduleName) {
       currentModule = moduleName;
       document.getElementById('moduleTitleHeader').innerText = moduleName + " Module";
       showView('viewCambridgeList');
+    }
+
+    const moduleLessons = {
+      Reading: {
+        icon: 'fa-book-open-reader',
+        subtitle: 'প্যাসেজ দ্রুত বুঝে নির্ভুলভাবে প্রশ্নের উত্তর দিন',
+        explanation: 'Reading-এ শুধু দ্রুত পড়লেই হয় না—প্রশ্নের ধরন বুঝে প্যাসেজে প্রমাণ খুঁজে উত্তর দিতে হয়। প্রতিটি উত্তরের জন্য প্যাসেজের নির্দিষ্ট লাইন মিলিয়ে নিন।',
+        steps: ['প্রথমে শিরোনাম ও প্রতিটি অনুচ্ছেদের প্রথম বাক্য দেখে মূল বিষয় ধরুন।', 'প্রশ্নে থাকা নাম, সংখ্যা ও মূল শব্দ চিহ্নিত করে প্যাসেজে স্ক্যান করুন।', 'প্রশ্নের বক্তব্য প্যাসেজের তথ্যের সঙ্গে মিলিয়ে TRUE, FALSE বা NOT GIVEN নির্ধারণ করুন।'],
+        practice: `
+          <h3 class="text-lg font-extrabold text-slate-800">অনুশীলন: True / False / Not Given</h3>
+          <div class="mt-4 rounded-2xl bg-slate-50 border border-slate-200 p-4 space-y-3 text-sm leading-7 text-slate-700">
+            <p><strong>Passage:</strong> Green roofs can lower building temperatures during summer. Some cities offer grants to encourage residents to install them. However, the long-term effect on local bird populations has not yet been studied.</p>
+            <p><strong>Statement:</strong> Green roofs have been proven to increase the number of birds in cities.</p>
+          </div>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <button onclick="checkReadingAnswer('TRUE')" class="px-4 py-2 rounded-xl border border-slate-200 text-sm font-bold hover:bg-forest-50">TRUE</button>
+            <button onclick="checkReadingAnswer('FALSE')" class="px-4 py-2 rounded-xl border border-slate-200 text-sm font-bold hover:bg-forest-50">FALSE</button>
+            <button onclick="checkReadingAnswer('NOT GIVEN')" class="px-4 py-2 rounded-xl border border-slate-200 text-sm font-bold hover:bg-forest-50">NOT GIVEN</button>
+          </div>
+          <p id="readingFeedback" aria-live="polite" class="mt-3 text-sm font-semibold text-slate-600">উত্তর বেছে নিয়ে নিজের ধারণা যাচাই করুন।</p>`
+      },
+      Listening: {
+        icon: 'fa-headphones',
+        subtitle: 'শুনে নির্দিষ্ট তথ্য ধরুন এবং উত্তর লেখার অভ্যাস করুন',
+        explanation: 'Listening-এ অডিও শুরুর আগে প্রশ্ন দেখে কী ধরনের উত্তর দরকার তা অনুমান করুন। বানান, একবচন-বহুবচন এবং শব্দসীমা মেনে উত্তর লিখুন।',
+        steps: ['অডিও শুরুর আগে ফাঁকা জায়গার আশপাশের শব্দ পড়ে উত্তরটি নাম, তারিখ, সময় নাকি স্থান হবে বুঝুন।', 'শোনার সময় মূল শব্দের পাশাপাশি সমার্থক শব্দ ও বক্তার সংশোধন খেয়াল করুন।', 'শেষে উত্তরগুলোর বানান ও “ONE WORD” বা “NO MORE THAN TWO WORDS” নির্দেশনা মিলিয়ে নিন।'],
+        practice: `
+          <h3 class="text-lg font-extrabold text-slate-800">অনুশীলন: Form Completion</h3>
+          <p class="mt-2 text-sm text-slate-600">নিচের অডিও একবার শুনুন। মিটিংয়ের দিনটি লিখুন।</p>
+          <button onclick="playListeningPractice()" class="mt-4 px-4 py-2.5 rounded-xl bg-forest-600 text-white text-sm font-bold hover:bg-forest-700">
+            <i class="fa-solid fa-volume-high mr-2"></i>অডিও শুনুন
+          </button>
+          <div class="mt-4 flex flex-col sm:flex-row gap-2">
+            <input id="listeningAnswer" type="text" placeholder="বারের নাম লিখুন" class="flex-1 px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-forest-500">
+            <button onclick="checkListeningAnswer()" class="px-4 py-3 rounded-xl bg-forest-600 text-white text-sm font-bold hover:bg-forest-700">উত্তর মিলিয়ে দেখুন</button>
+          </div>
+          <p id="listeningFeedback" aria-live="polite" class="mt-3 text-sm font-semibold text-slate-600">প্রয়োজনে অডিও আবার শুনে উত্তর দিন।</p>`
+      },
+      Writing: {
+        icon: 'fa-pen-to-square',
+        subtitle: 'প্রশ্ন বিশ্লেষণ করে গোছানো, প্রাসঙ্গিক উত্তর লিখুন',
+        explanation: 'Writing-এ প্রশ্নের প্রতিটি অংশের উত্তর, অনুচ্ছেদের পরিষ্কার বিন্যাস এবং ধারণার যৌক্তিক সংযোগ গুরুত্বপূর্ণ। লেখা শুরু করার আগে ৩–৫ মিনিট পরিকল্পনা করুন।',
+        steps: ['প্রশ্নের নির্দেশ—যেমন discuss, agree/disagree বা causes/solutions—চিহ্নিত করুন।', 'ভূমিকায় প্রশ্নটি নিজের ভাষায় তুলে ধরে স্পষ্ট অবস্থান জানান।', 'প্রতিটি বডি অনুচ্ছেদে একটি মূল বক্তব্য, ব্যাখ্যা ও উদাহরণ দিন; শেষে উত্তর যাচাই করুন।'],
+        practice: `
+          <h3 class="text-lg font-extrabold text-slate-800">অনুশীলন: Task 2 Essay Plan</h3>
+          <p class="mt-3 rounded-2xl bg-slate-50 border border-slate-200 p-4 text-sm leading-7 text-slate-700">
+            <strong>Question:</strong> Some people think public transport should be free in cities. To what extent do you agree or disagree?
+          </p>
+          <p class="mt-3 text-sm text-slate-600">নিজের অবস্থান এবং দুটি সমর্থনকারী কারণ নোট করুন। এটি পরিকল্পনার জায়গা; এখানে কোনো স্বয়ংক্রিয় AI মূল্যায়ন নেই।</p>
+          <textarea id="writingPlan" oninput="updateWritingWordCount()" rows="6" placeholder="ভূমিকার অবস্থান, কারণ ১, কারণ ২ এবং উপসংহার লিখুন..." class="mt-4 w-full resize-y rounded-2xl border border-slate-200 bg-white p-4 text-sm leading-6 outline-none focus:border-forest-500"></textarea>
+          <p class="mt-2 text-right text-xs font-semibold text-slate-500">পরিকল্পনার শব্দ: <span id="writingWordCount">0</span></p>
+          <button onclick="toggleWritingGuidance()" class="mt-3 px-4 py-2 rounded-xl border border-forest-200 bg-forest-50 text-sm font-bold text-forest-700">পরিকল্পনার নমুনা দেখুন</button>
+          <p id="writingGuidance" class="hidden mt-3 rounded-xl bg-emerald-50 p-4 text-sm leading-6 text-emerald-800">অবস্থান: শর্তসাপেক্ষে একমত। কারণ ১: বিনামূল্যে যাতায়াত যানজট ও ব্যক্তিগত গাড়ির ব্যবহার কমাতে পারে। কারণ ২: এতে নিম্ন-আয়ের মানুষের কর্মস্থল ও শিক্ষায় যাতায়াত সহজ হয়। বিপরীত দিক: খরচ মেটাতে কর বা সরকারি বাজেট প্রয়োজন—এটি সমাধানের অংশ হিসেবে আলোচনা করুন।</p>`
+      },
+      Speaking: {
+        icon: 'fa-microphone-lines',
+        subtitle: 'Cue card-এ এক মিনিটে পরিকল্পনা করে সাবলীলভাবে বলুন',
+        explanation: 'Speaking Part 2-তে একটি cue card নিয়ে এক মিনিট প্রস্তুতির পর এক থেকে দুই মিনিট কথা বলতে হয়। প্রতিটি bullet point স্পর্শ করে একটি ছোট গল্পের মতো উত্তর সাজান।',
+        steps: ['এক মিনিটে চারটি bullet point-এর পাশে একটি করে মূল শব্দ লিখুন।', 'অতীত, বর্তমান ও ভবিষ্যৎ—এই ধারায় কথা সাজালে উত্তর স্বাভাবিকভাবে এগোয়।', 'কারণ, অনুভূতি ও একটি নির্দিষ্ট উদাহরণ যোগ করুন; মুখস্থ উত্তরের মতো শোনানো এড়িয়ে চলুন।'],
+        practice: `
+          <h3 class="text-lg font-extrabold text-slate-800">অনুশীলন: Speaking Part 2 Cue Card</h3>
+          <div class="mt-4 rounded-2xl bg-slate-50 border border-slate-200 p-4 text-sm leading-7 text-slate-700">
+            <p class="font-bold">Describe a skill you learned that was useful to you.</p>
+            <ul class="mt-2 list-disc pl-5">
+              <li>What the skill was</li>
+              <li>When and how you learned it</li>
+              <li>Why you decided to learn it</li>
+              <li>And explain how it has helped you</li>
+            </ul>
+          </div>
+          <div class="mt-4 flex items-center gap-4">
+            <span id="speakingTimer" aria-live="polite" class="text-2xl font-black text-forest-700">01:00</span>
+            <button onclick="startSpeakingTimer()" class="px-4 py-2.5 rounded-xl bg-forest-600 text-white text-sm font-bold hover:bg-forest-700">১ মিনিট প্রস্তুতি শুরু</button>
+          </div>
+          <textarea id="speakingNotes" rows="4" placeholder="প্রস্তুতির সময় মূল শব্দগুলো লিখুন..." class="mt-4 w-full resize-y rounded-2xl border border-slate-200 bg-white p-4 text-sm leading-6 outline-none focus:border-forest-500"></textarea>
+          <p class="mt-2 text-xs text-slate-500">সময় শেষ হলে নোট না পড়ে ১–২ মিনিট নিজের উত্তর বলার অনুশীলন করুন।</p>`
+      }
+    };
+
+    function openExercise(moduleName) {
+      currentModule = moduleName;
+      const lesson = moduleLessons[moduleName];
+      const content = document.getElementById('moduleExerciseContent');
+      content.innerHTML = `
+        <section class="rounded-3xl bg-white border border-slate-200/80 p-5 md:p-8 shadow-sm">
+          <button onclick="showView('viewHome')" class="mb-5 inline-flex items-center gap-2 text-sm font-bold text-forest-700 hover:underline">
+            <i class="fa-solid fa-arrow-left"></i> ড্যাশবোর্ডে ফিরুন
+          </button>
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 shrink-0 rounded-2xl bg-forest-50 text-forest-700 flex items-center justify-center text-xl"><i class="fa-solid ${lesson.icon}"></i></div>
+            <div>
+              <p class="text-xs font-bold uppercase tracking-wider text-forest-600">IELTS ${moduleName} Practice</p>
+              <h1 class="mt-1 text-2xl font-black text-slate-900">${moduleName} Exercise Lab</h1>
+              <p class="mt-1 text-sm text-slate-500">${lesson.subtitle}</p>
+            </div>
+          </div>
+        </section>
+        <section class="rounded-3xl bg-white border border-slate-200/80 p-5 md:p-7 shadow-sm">
+          <h2 class="text-lg font-extrabold text-slate-800">কীভাবে অনুশীলন করবেন</h2>
+          <p class="mt-3 text-sm leading-7 text-slate-600">${lesson.explanation}</p>
+          <ol class="mt-4 space-y-3">
+            ${lesson.steps.map((step, index) => `<li class="flex gap-3 text-sm leading-6 text-slate-700"><span class="w-6 h-6 shrink-0 rounded-full bg-forest-100 text-forest-700 flex items-center justify-center text-xs font-extrabold">${index + 1}</span><span>${step}</span></li>`).join('')}
+          </ol>
+        </section>
+        <section class="rounded-3xl bg-white border border-slate-200/80 p-5 md:p-7 shadow-sm">
+          ${lesson.practice}
+        </section>`;
+      showView('viewModuleExercise');
+    }
+
+    function checkReadingAnswer(answer) {
+      const feedback = document.getElementById('readingFeedback');
+      const isCorrect = answer === 'NOT GIVEN';
+      feedback.className = `mt-3 text-sm font-semibold ${isCorrect ? 'text-emerald-700' : 'text-rose-600'}`;
+      feedback.innerText = isCorrect
+        ? 'সঠিক! প্যাসেজে পাখির সংখ্যার ওপর প্রভাবের কথা বলা হয়েছে “not yet been studied”—এটি বাড়ে কি না তথ্য দেওয়া নেই।'
+        : 'আবার ভাবুন: প্যাসেজে পাখির ওপর দীর্ঘমেয়াদি প্রভাব এখনও গবেষণা করা হয়নি; বাড়ে বা কমে এমন তথ্য নেই।';
+    }
+
+    function playListeningPractice() {
+      if (!('speechSynthesis' in window)) {
+        document.getElementById('listeningFeedback').innerText = 'এই ব্রাউজারে অডিও প্লেব্যাক সমর্থিত নয়।';
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance('The project meeting has been moved from Tuesday. It will now take place on Thursday at half past ten in the morning.');
+      utterance.lang = 'en-GB';
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function checkListeningAnswer() {
+      const answer = document.getElementById('listeningAnswer').value.trim().toLowerCase();
+      const feedback = document.getElementById('listeningFeedback');
+      const isCorrect = answer === 'thursday';
+      feedback.className = `mt-3 text-sm font-semibold ${isCorrect ? 'text-emerald-700' : 'text-rose-600'}`;
+      feedback.innerText = isCorrect
+        ? 'সঠিক! বক্তা প্রথমে Tuesday বললেও পরে দিন পরিবর্তন করে Thursday বলেছেন।'
+        : 'সঠিক উত্তর Thursday। বক্তা প্রথমে Tuesday বলার পর দিনটি সংশোধন করেছেন—এ ধরনের পরিবর্তন মনোযোগ দিয়ে শুনুন।';
+    }
+
+    function updateWritingWordCount() {
+      const text = document.getElementById('writingPlan').value.trim();
+      document.getElementById('writingWordCount').innerText = text ? text.split(/\s+/).length : '0';
+    }
+
+    function toggleWritingGuidance() {
+      document.getElementById('writingGuidance').classList.toggle('hidden');
+    }
+
+    let speakingTimerInterval = null;
+    function startSpeakingTimer() {
+      clearInterval(speakingTimerInterval);
+      let secondsLeft = 60;
+      const timer = document.getElementById('speakingTimer');
+      timer.innerText = '01:00';
+      speakingTimerInterval = setInterval(() => {
+        secondsLeft--;
+        timer.innerText = `00:${String(secondsLeft).padStart(2, '0')}`;
+        if (secondsLeft <= 0) {
+          clearInterval(speakingTimerInterval);
+          speakingTimerInterval = null;
+          timer.innerText = 'এবার বলুন!';
+        }
+      }, 1000);
     }
 
     function openBookDetails(bookName) {
