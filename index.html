@@ -81,25 +81,7 @@
       </div>
 
       <!-- User Profile Controls -->
-      <div id="userProfileGroup" class="hidden relative">
-          <button id="headerModuleMenuButton" type="button" onclick="toggleModuleMenu(event)" aria-label="মডিউল মেনু খুলুন" aria-haspopup="menu" aria-controls="headerModuleMenuOptions" aria-expanded="false" class="hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-forest-500 hover:text-forest-700">
-            <i class="fa-solid fa-bars text-base" aria-hidden="true"></i>
-          </button>
-          <div id="headerModuleMenuOptions" role="menu" aria-label="মডিউল নেভিগেশন" class="hidden absolute right-16 top-12 z-50 w-64 rounded-2xl border border-slate-200 bg-white p-2.5 shadow-xl">
-            <p class="px-3 py-2 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">নেভিগেশন মেনু</p>
-            <button data-module-nav="Reading" role="menuitem" onclick="openExercise('Reading')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
-              <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-book-open-reader text-base"></i></span><span>Reading Vault</span>
-            </button>
-            <button data-module-nav="Listening" role="menuitem" onclick="openExercise('Listening')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
-              <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-headphones text-base"></i></span><span>Listening Audio</span>
-            </button>
-            <button data-module-nav="Writing" role="menuitem" onclick="openExercise('Writing')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
-              <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-pen-to-square text-base"></i></span><span>Writing Tasks</span>
-            </button>
-            <button data-module-nav="Speaking" role="menuitem" onclick="openExercise('Speaking')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
-              <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-microphone-lines text-base"></i></span><span>Speaking Cue Cards</span>
-            </button>
-          </div>
+      <div id="userProfileGroup" class="hidden relative items-center gap-2">
           <button onclick="toggleProfileDropdown(event)" class="flex items-center gap-3 p-1 rounded-2xl hover:bg-slate-50 transition-colors focus:outline-none">
           <div class="relative">
             <div id="userAvatarPill" class="w-10 h-10 rounded-full bg-gradient-to-tr from-forest-700 to-forest-500 text-white font-extrabold flex items-center justify-center text-sm shadow-md ring-2 ring-forest-500/20">
@@ -143,6 +125,25 @@
               <span>লগআউট করুন</span>
             </button>
           </div>
+        </div>
+
+        <button id="headerModuleMenuButton" type="button" onclick="toggleModuleMenu(event)" aria-label="মডিউল মেনু খুলুন" aria-haspopup="menu" aria-controls="headerModuleMenuOptions" aria-expanded="false" class="hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-forest-500 hover:text-forest-700">
+          <i class="fa-solid fa-bars text-base" aria-hidden="true"></i>
+        </button>
+        <div id="headerModuleMenuOptions" role="menu" aria-label="মডিউল নেভিগেশন" class="hidden absolute right-0 top-12 z-50 w-64 rounded-2xl border border-slate-200 bg-white p-2.5 shadow-xl">
+            <p class="px-3 py-2 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">নেভিগেশন মেনু</p>
+            <button data-module-nav="Reading" role="menuitem" onclick="openExercise('Reading')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
+              <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-book-open-reader text-base"></i></span><span>Reading Vault</span>
+            </button>
+            <button data-module-nav="Listening" role="menuitem" onclick="openExercise('Listening')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
+              <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-headphones text-base"></i></span><span>Listening Audio</span>
+            </button>
+            <button data-module-nav="Writing" role="menuitem" onclick="openExercise('Writing')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
+              <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-pen-to-square text-base"></i></span><span>Writing Tasks</span>
+            </button>
+            <button data-module-nav="Speaking" role="menuitem" onclick="openExercise('Speaking')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
+              <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-microphone-lines text-base"></i></span><span>Speaking Cue Cards</span>
+            </button>
         </div>
       </div>
 
@@ -798,6 +799,7 @@
       if (isLoggedIn) {
         document.getElementById('guestNavGroup').classList.add('hidden');
         document.getElementById('userProfileGroup').classList.remove('hidden');
+        document.getElementById('userProfileGroup').classList.add('flex');
         document.getElementById('headerModuleMenuButton').classList.remove('hidden');
         document.getElementById('headerModuleMenuButton').classList.add('flex');
 
