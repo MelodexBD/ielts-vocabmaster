@@ -46,6 +46,7 @@
       opacity: 1;
     }
   </style>
+  <script src="notify.js"></script>
 </head>
 <body class="bg-[#f4f7f5] text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-forest-600 selection:text-white">
 
@@ -329,7 +330,7 @@
 
     function showAuthError(error) {
       console.error(error);
-      alert(AUTH_ERRORS[error.code] || `লগইন করা যায়নি (${error.code || error.message})।`);
+      notify(AUTH_ERRORS[error.code] || `লগইন করা যায়নি (${error.code || error.message})।`);
     }
 
     function goHome(user) {
@@ -379,7 +380,7 @@
     window.handlePasswordReset = async function () {
       const email = document.getElementById('loginEmail').value.trim();
       if (!email) {
-        alert('প্রথমে উপরের Email ঘরে আপনার ইমেইল লিখুন, তারপর আবার ক্লিক করুন।');
+        notify('প্রথমে উপরের Email ঘরে আপনার ইমেইল লিখুন, তারপর আবার ক্লিক করুন।', 'warning');
         return;
       }
       try {

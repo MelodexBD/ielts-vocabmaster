@@ -50,6 +50,7 @@
       transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
     }
   </style>
+  <script src="notify.js"></script>
 </head>
 <body class="bg-[#f4f7f5] text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-forest-600 selection:text-white">
 
@@ -1452,7 +1453,7 @@
           await window.firebaseLogOut();
         } catch (error) {
           console.error('Logout failed.', error);
-          alert('লগআউট করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
+          notify('লগআউট করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
           return;
         }
         closeModuleMenu();
@@ -1482,7 +1483,10 @@
     window.saveProgressToCloud = () => {
       const user = auth.currentUser;
       if (!user) return;
-      saveProgress(user.uid, completedTests).catch(error => console.error('Progress could not be saved to the cloud.', error));
+      saveProgress(user.uid, completedTests).catch(error => {
+        console.error('Progress could not be saved to the cloud.', error);
+        notify('অগ্রগতি সেভ করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন।');
+      });
     };
 
     onAuthStateChanged(auth, async user => {
@@ -1501,6 +1505,7 @@
         renderCompletionButton();
       } catch (error) {
         console.error('Progress could not be loaded from the cloud.', error);
+        notify('আপনার অগ্রগতি লোড করা যায়নি। পেজ রিফ্রেশ করে দেখুন।');
       }
     });
 
@@ -1517,6 +1522,7 @@
       renderWords();
     } catch (error) {
       console.error('Site content could not be loaded from Firestore.', error);
+      notify('নতুন কনটেন্ট লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে পেজ রিফ্রেশ করুন।');
     }
   </script>
 </body>

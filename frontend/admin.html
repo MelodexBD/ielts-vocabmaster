@@ -17,11 +17,12 @@
       }
     }
   </script>
+  <script src="notify.js"></script>
   <script>
     const currentAuth = localStorage.getItem('user_auth_token');
     const currentEmail = (localStorage.getItem('user_email') || '').trim().toLowerCase();
     if (!currentAuth || currentEmail !== 'ieltsvocabmaster@gmail.com') {
-      alert("অননুমোদিত অ্যাক্সেস! এই পেজটি শুধুমাত্র অ্যাডমিনের জন্য সংরক্ষিত।");
+      notify.later("অননুমোদিত অ্যাক্সেস! এই পেজটি শুধুমাত্র অ্যাডমিনের জন্য সংরক্ষিত।");
       window.location.replace("index.html");
     }
   </script>
@@ -411,21 +412,21 @@
 
     function processFile(file) {
       if (!file.type.startsWith('image/')) {
-        alert('শুধু image ফাইল নির্বাচন করুন।');
+        notify('শুধু image ফাইল নির্বাচন করুন।');
         return;
       }
       if (file.size > 15 * 1024 * 1024) {
-        alert('ছবির আকার ১৫ MB-এর কম করুন।');
+        notify('ছবির আকার ১৫ MB-এর কম করুন।');
         return;
       }
       const reader = new FileReader();
-      reader.onerror = () => alert('ছবিটি পড়া যায়নি। অন্য একটি ফাইল চেষ্টা করুন।');
+      reader.onerror = () => notify('ছবিটি পড়া যায়নি। অন্য একটি ফাইল চেষ্টা করুন।');
       reader.onload = async event => {
         try {
           uploadedImageBase64 = await compressBannerImage(event.target.result);
         } catch (error) {
           console.error('Banner image could not be compressed.', error);
-          alert(error.message);
+          notify(error.message);
           return;
         }
         document.getElementById('imagePreview').src = uploadedImageBase64;
@@ -488,7 +489,7 @@
       event.preventDefault();
       const sections = readStoredObject('site_module_sections_db');
       if (!sections) {
-        alert('আগের মডিউল সেকশনের ডেটা পড়া যায়নি, তাই কোনো ডেটা পরিবর্তন করা হয়নি।');
+        notify('আগের মডিউল সেকশনের ডেটা পড়া যায়নি, তাই কোনো ডেটা পরিবর্তন করা হয়নি।');
         return;
       }
       sections[module] = {
@@ -499,7 +500,7 @@
       try {
         await window.cloud.saveModuleSections(sections);
       } catch (error) {
-        alert(cloudErrorMessage('মডিউল সেকশন সেভ করা যায়নি।', error));
+        notify(cloudErrorMessage('মডিউল সেকশন সেভ করা যায়নি।', error));
         console.error(`${module} section content could not be saved.`, error);
         return;
       }
@@ -520,7 +521,7 @@
       try {
         await window.cloud.addBanner(banner);
       } catch (error) {
-        alert(cloudErrorMessage('ব্যানার সেভ করা যায়নি।', error));
+        notify(cloudErrorMessage('ব্যানার সেভ করা যায়নি।', error));
         console.error('Banner could not be saved.', error);
         return;
       }
@@ -559,13 +560,13 @@
     async function deleteBanner(index) {
       const banners = readStoredArray('site_banners_db');
       if (!banners || !banners[index] || !banners[index].id) {
-        alert('ব্যানারটি খুঁজে পাওয়া যায়নি। পেজ রিফ্রেশ করে আবার চেষ্টা করুন।');
+        notify('ব্যানারটি খুঁজে পাওয়া যায়নি। পেজ রিফ্রেশ করে আবার চেষ্টা করুন।');
         return;
       }
       try {
         await window.cloud.deleteBanner(banners[index].id);
       } catch (error) {
-        alert(cloudErrorMessage('ব্যানার মোছা যায়নি।', error));
+        notify(cloudErrorMessage('ব্যানার মোছা যায়নি।', error));
         console.error('Banner could not be deleted.', error);
         return;
       }
@@ -640,11 +641,11 @@
     function generateAutoVocab() {
       const words = document.getElementById('bulkWordInput').value.split(/[,\n]+/).map(word => word.trim()).filter(Boolean);
       if (!words.length) {
-        alert('এক বা একাধিক ইংরেজি শব্দ ইনপুট করুন।');
+        notify('এক বা একাধিক ইংরেজি শব্দ ইনপুট করুন।', 'warning');
         return;
       }
       if (words.length > 200) {
-        alert('একবারে সর্বোচ্চ ২০০টি শব্দের Preview তৈরি করা যাবে।');
+        notify('একবারে সর্বোচ্চ ২০০টি শব্দের Preview তৈরি করা যাবে।', 'warning');
         return;
       }
       generatedRecords = words.map(word => {
@@ -671,20 +672,20 @@
       if (!generatedRecords.length) return;
       const incomplete = generatedRecords.find(record => !record.meaning.trim());
       if (incomplete) {
-        alert(`“${incomplete.word}” শব্দটির বাংলা অর্থ যোগ করুন, তারপর সবগুলো প্রকাশ করুন।`);
+        notify(`“${incomplete.word}” শব্দটির বাংলা অর্থ যোগ করুন, তারপর সবগুলো প্রকাশ করুন।`, 'warning');
         return;
       }
       const book = document.getElementById('modBook').value;
       const test = document.getElementById('modTest').value;
       if (!book || !TESTS.includes(test)) {
-        alert('প্রকাশের আগে Cambridge বই ও T1–T4 test নির্বাচন করুন।');
+        notify('প্রকাশের আগে Cambridge বই ও T1–T4 test নির্বাচন করুন।', 'warning');
         return;
       }
       const records = generatedRecords.map(({ needsReview, ...record }) => ({ ...record, book, test }));
       try {
         await window.cloud.addContent(records);
       } catch (error) {
-        alert(cloudErrorMessage('শব্দগুলো সেভ করা যায়নি।', error));
+        notify(cloudErrorMessage('শব্দগুলো সেভ করা যায়নি।', error));
         console.error('Reading vocabulary could not be saved.', error);
         return;
       }
@@ -700,7 +701,7 @@
       const book = document.getElementById('modBook').value;
       const test = document.getElementById('modTest').value;
       if (!book || !TESTS.includes(test)) {
-        alert('Cambridge বই ও T1–T4 test নির্বাচন করুন।');
+        notify('Cambridge বই ও T1–T4 test নির্বাচন করুন।', 'warning');
         return;
       }
       const form = event.currentTarget;
@@ -709,7 +710,7 @@
       try {
         await window.cloud.addContent([record]);
       } catch (error) {
-        alert(cloudErrorMessage('কনটেন্ট সেভ করা যায়নি।', error));
+        notify(cloudErrorMessage('কনটেন্ট সেভ করা যায়নি।', error));
         console.error(`${module} content could not be saved.`, error);
         return;
       }
@@ -754,7 +755,7 @@
     const user = await waitForUser();
     mirrorUser(user);
     if (!isAdmin(user)) {
-      alert(user && !user.emailVerified
+      notify.later(user && !user.emailVerified
         ? 'অ্যাডমিন ইমেইল এখনো যাচাই (verify) করা হয়নি। ইমেইলের যাচাই লিংকে ক্লিক করুন অথবা Google দিয়ে লগইন করুন।'
         : 'অননুমোদিত অ্যাক্সেস! এই পেজটি শুধুমাত্র অ্যাডমিনের জন্য সংরক্ষিত।');
       window.location.replace('index.html');
@@ -765,7 +766,7 @@
         loadAdminForms();
       } catch (error) {
         console.error('Admin data could not be loaded from Firestore.', error);
-        alert('Firestore থেকে ডেটা লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে পেজ রিফ্রেশ করুন।');
+        notify('Firestore থেকে ডেটা লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে পেজ রিফ্রেশ করুন।');
       }
     }
   </script>
