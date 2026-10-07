@@ -65,18 +65,20 @@ export function waitForUser() {
 // Keeps the old localStorage login keys in step with Firebase Auth.
 // Returns true when they changed, so the page can re-render its header.
 export function mirrorUser(user) {
-  const before = [localStorage.getItem('user_auth_token'), localStorage.getItem('user_name'), localStorage.getItem('user_email')];
+  const keys = ['user_auth_token', 'user_name', 'user_email', 'user_photo'];
+  const before = keys.map(key => localStorage.getItem(key));
   if (user) {
     const email = user.email || '';
     localStorage.setItem('user_auth_token', 'firebase');
     localStorage.setItem('user_name', user.displayName || email.split('@')[0] || 'User');
     localStorage.setItem('user_email', email);
+    // Google accounts come with a profile photo; email/password accounts have none.
+    if (user.photoURL) localStorage.setItem('user_photo', user.photoURL);
+    else localStorage.removeItem('user_photo');
   } else {
-    localStorage.removeItem('user_auth_token');
-    localStorage.removeItem('user_name');
-    localStorage.removeItem('user_email');
+    keys.forEach(key => localStorage.removeItem(key));
   }
-  const after = [localStorage.getItem('user_auth_token'), localStorage.getItem('user_name'), localStorage.getItem('user_email')];
+  const after = keys.map(key => localStorage.getItem(key));
   return before.some((value, index) => value !== after[index]);
 }
 

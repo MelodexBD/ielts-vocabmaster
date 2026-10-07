@@ -954,7 +954,20 @@
         document.getElementById('mobileDropdownUserEmail').innerText = profileEmail;
         
         const initials = savedName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'TA';
-        document.getElementById('userAvatarPill').innerText = initials;
+        const avatar = document.getElementById('userAvatarPill');
+        avatar.innerText = initials;
+        const photoUrl = localStorage.getItem('user_photo');
+        if (photoUrl) {
+          // Show the Google account photo; fall back to initials if it fails to load.
+          const photo = document.createElement('img');
+          photo.src = photoUrl;
+          photo.alt = savedName;
+          photo.referrerPolicy = 'no-referrer';
+          photo.className = 'h-full w-full rounded-full object-cover';
+          photo.onerror = () => { avatar.innerText = initials; };
+          avatar.replaceChildren(photo);
+        }
+        renderMembershipBadge();
 
     // The admin option is visible only for ieltsvocabmaster@gmail.com
         const adminLink = document.getElementById('adminMenuLink');
@@ -991,6 +1004,18 @@
       renderProgress();
       setActiveModuleNav('home');
     });
+
+    function renderMembershipBadge() {
+      const badge = document.getElementById('userSubscriptionBadge');
+      const [text, color] = isAdminUser
+        ? ['Admin', 'text-forest-600']
+        : isPremiumUser
+          ? ['Premium Member', 'text-emerald-600']
+          : ['Free Tier Member', 'text-amber-600'];
+      badge.innerText = text;
+      badge.classList.remove('text-forest-600', 'text-emerald-600', 'text-amber-600');
+      badge.classList.add(color);
+    }
 
     // Content Lock Handler
     function handleLockedContentClick(testName) {
@@ -1514,6 +1539,7 @@
           isPremiumUser = true;
           renderCambridgeBookGrid();
           renderTestAccessButtons();
+          renderMembershipBadge();
         }
       } catch (error) {
         console.error('Progress could not be loaded from the cloud.', error);
