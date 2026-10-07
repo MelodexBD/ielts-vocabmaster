@@ -966,7 +966,9 @@
         }
       } else {
         document.getElementById('guestNavGroup').classList.remove('hidden');
+        // md:flex would otherwise override "hidden" on desktop and show the profile to guests.
         document.getElementById('userProfileGroup').classList.add('hidden');
+        document.getElementById('userProfileGroup').classList.remove('md:flex');
         document.getElementById('headerModuleMenuContainer').classList.add('hidden');
         document.getElementById('mobileProfileButton').classList.replace('text-forest-600', 'text-slate-400');
       }
