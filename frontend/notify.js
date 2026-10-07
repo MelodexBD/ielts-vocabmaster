@@ -3,7 +3,7 @@
 // notify.later(message, type) shows the toast on the next page, for messages followed by a redirect.
 (function () {
   const STYLES = {
-    error: { bg: '#fef2f2', border: '#fecaca', text: '#9f1239', icon: '⚠' },
+    error: { bg: '#dc2626', border: '#b91c1c', text: '#ffffff', icon: '⚠', iconBg: '#ffffff', iconText: '#dc2626' },
     warning: { bg: '#fffbeb', border: '#fde68a', text: '#92400e', icon: '!' },
     success: { bg: '#ecfdf5', border: '#a7f3d0', text: '#065f46', icon: '✓' },
     info: { bg: '#f8fafc', border: '#cbd5e1', text: '#1e293b', icon: 'i' }
@@ -33,7 +33,7 @@
 
     const icon = document.createElement('span');
     icon.textContent = style.icon;
-    icon.style.cssText = `flex-shrink:0;width:20px;height:20px;border-radius:50%;background:${style.text};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;`;
+    icon.style.cssText = `flex-shrink:0;width:20px;height:20px;border-radius:50%;background:${style.iconBg || style.text};color:${style.iconText || '#fff'};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;`;
 
     const text = document.createElement('span');
     text.textContent = message;
