@@ -152,7 +152,7 @@
               <input type="checkbox" class="w-4 h-4 rounded text-forest-600 focus:ring-forest-500 border-slate-300">
               <span>Remember me</span>
             </label>
-            <a href="javascript:void(0)" onclick="alert('পাসওয়ার্ড রিসেট লিঙ্ক আপনার ইমেইলে পাঠানো হবে।')" class="font-bold text-forest-600 hover:text-forest-700 hover:underline">
+            <a href="javascript:void(0)" onclick="handlePasswordReset()" class="font-bold text-forest-600 hover:text-forest-700 hover:underline">
               Forgot your password?
             </a>
           </div>
@@ -305,30 +305,90 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function handleGoogleAuth() {
-      localStorage.setItem('user_auth_token', 'loggedIn_google');
-      localStorage.setItem('user_name', 'Tanbir Ahmed (Google)');
-      localStorage.setItem('user_email', 'tanbir.google@gmail.com');
-      window.location.href = "index.html";
+  </script>
+  <script type="module">
+    import { auth, mirrorUser, saveUserProfile } from './firebase.js';
+    import {
+      createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider,
+      updateProfile, sendEmailVerification, sendPasswordResetEmail
+    } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
+
+    const AUTH_ERRORS = {
+      'auth/email-already-in-use': 'এই ইমেইল দিয়ে আগেই অ্যাকাউন্ট খোলা হয়েছে। Log In করুন।',
+      'auth/invalid-email': 'ইমেইল ঠিকানাটি সঠিক নয়।',
+      'auth/weak-password': 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।',
+      'auth/invalid-credential': 'ইমেইল বা পাসওয়ার্ড ভুল।',
+      'auth/user-not-found': 'এই ইমেইলে কোনো অ্যাকাউন্ট নেই।',
+      'auth/wrong-password': 'ইমেইল বা পাসওয়ার্ড ভুল।',
+      'auth/too-many-requests': 'অনেকবার চেষ্টা করা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।',
+      'auth/popup-closed-by-user': 'Google লগইন উইন্ডো বন্ধ করা হয়েছে।',
+      'auth/popup-blocked': 'ব্রাউজার পপআপ ব্লক করেছে। পপআপ অনুমতি দিয়ে আবার চেষ্টা করুন।',
+      'auth/unauthorized-domain': 'এই ডোমেইন Firebase-এ অনুমোদিত নয়। Authentication → Settings → Authorized domains-এ যোগ করুন।',
+      'auth/network-request-failed': 'ইন্টারনেট সংযোগ পরীক্ষা করুন।'
+    };
+
+    function showAuthError(error) {
+      console.error(error);
+      alert(AUTH_ERRORS[error.code] || `লগইন করা যায়নি (${error.code || error.message})।`);
     }
 
-    function handleLoginSubmit(e) {
+    function goHome(user) {
+      mirrorUser(user);
+      window.location.href = 'index.html';
+    }
+
+    window.handleGoogleAuth = async function () {
+      try {
+        const { user } = await signInWithPopup(auth, new GoogleAuthProvider());
+        await saveUserProfile(user);
+        goHome(user);
+      } catch (error) {
+        showAuthError(error);
+      }
+    };
+
+    window.handleLoginSubmit = async function (e) {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
-      localStorage.setItem('user_auth_token', 'loggedIn');
-      localStorage.setItem('user_email', email);
-      window.location.href = "index.html";
-    }
+      const password = document.getElementById('loginPassword').value;
+      try {
+        const { user } = await signInWithEmailAndPassword(auth, email, password);
+        goHome(user);
+      } catch (error) {
+        showAuthError(error);
+      }
+    };
 
-    function handleSignupSubmit(e) {
+    window.handleSignupSubmit = async function (e) {
       e.preventDefault();
       const name = document.getElementById('signupName').value.trim();
       const email = document.getElementById('signupEmail').value.trim();
-      localStorage.setItem('user_auth_token', 'loggedIn');
-      localStorage.setItem('user_name', name);
-      localStorage.setItem('user_email', email);
-      window.location.href = "index.html";
-    }
+      const password = document.getElementById('signupPassword').value;
+      try {
+        const { user } = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(user, { displayName: name });
+        await saveUserProfile(user, { createdAt: new Date().toISOString() });
+        await sendEmailVerification(user);
+        alert('অ্যাকাউন্ট তৈরি হয়েছে! আপনার ইমেইলে একটি যাচাই (verification) লিংক পাঠানো হয়েছে।');
+        goHome(user);
+      } catch (error) {
+        showAuthError(error);
+      }
+    };
+
+    window.handlePasswordReset = async function () {
+      const email = document.getElementById('loginEmail').value.trim();
+      if (!email) {
+        alert('প্রথমে উপরের Email ঘরে আপনার ইমেইল লিখুন, তারপর আবার ক্লিক করুন।');
+        return;
+      }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert('পাসওয়ার্ড রিসেট লিংক আপনার ইমেইলে পাঠানো হয়েছে।');
+      } catch (error) {
+        showAuthError(error);
+      }
+    };
   </script>
 </body>
 </html>

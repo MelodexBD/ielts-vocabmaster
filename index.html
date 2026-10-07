@@ -1340,6 +1340,7 @@
         ? tests.filter(test => test !== currentTest)
         : [...tests, currentTest];
       localStorage.setItem('module_test_progress', JSON.stringify(completedTests));
+      if (window.saveProgressToCloud) window.saveProgressToCloud();
       renderProgress();
       renderCompletionButton();
     }
@@ -1443,11 +1444,15 @@
       toggleMobileAccountMenu(event);
     }
 
-    function handleLogout() {
+    async function handleLogout() {
       if (confirm("আপনি কি নিশ্চিতভাবে লগআউট করতে চান?")) {
-        localStorage.removeItem('user_auth_token');
-        localStorage.removeItem('user_name');
-        localStorage.removeItem('user_email');
+        try {
+          await window.firebaseLogOut();
+        } catch (error) {
+          console.error('Logout failed.', error);
+          alert('লগআউট করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
+          return;
+        }
         closeModuleMenu();
         closeMobileAccountMenu();
         window.location.reload();
@@ -1460,6 +1465,57 @@
       if (!e.target.closest('#headerModuleMenuButton, #headerModuleMenuOptions')) closeModuleMenu();
       if (!e.target.closest('#mobileProfileButton, #mobileAccountMenu')) closeMobileAccountMenu();
     });
+  </script>
+  <script type="module">
+    import { auth, mirrorUser, logOut, pullSiteData, loadProgress, saveProgress } from './firebase.js';
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
+
+    // Re-render only after the page's own DOMContentLoaded setup has run.
+    const pageReady = document.readyState === 'loading'
+      ? new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }))
+      : Promise.resolve();
+
+    window.firebaseLogOut = logOut;
+
+    window.saveProgressToCloud = () => {
+      const user = auth.currentUser;
+      if (!user) return;
+      saveProgress(user.uid, completedTests).catch(error => console.error('Progress could not be saved to the cloud.', error));
+    };
+
+    onAuthStateChanged(auth, async user => {
+      // The header and access checks are built from these keys on load, so reload when the login state changes.
+      if (mirrorUser(user)) {
+        window.location.reload();
+        return;
+      }
+      if (!user) return;
+      try {
+        const progress = await loadProgress(user.uid);
+        await pageReady;
+        Object.keys(completedTests).forEach(key => delete completedTests[key]);
+        Object.assign(completedTests, progress);
+        renderProgress();
+        renderCompletionButton();
+      } catch (error) {
+        console.error('Progress could not be loaded from the cloud.', error);
+      }
+    });
+
+    try {
+      await pullSiteData();
+      await pageReady;
+      bannersDB = JSON.parse(localStorage.getItem('site_banners_db')) || defaultBanners;
+      currentSlideIdx = 0;
+      renderSlider();
+      renderModuleSectionTeasers();
+      renderCambridgeBookGrid();
+      updateAccessSummary();
+      vocabularyDB = JSON.parse(localStorage.getItem('user_vocab_db')) || initialVocabulary;
+      renderWords();
+    } catch (error) {
+      console.error('Site content could not be loaded from Firestore.', error);
+    }
   </script>
 </body>
 </html>
