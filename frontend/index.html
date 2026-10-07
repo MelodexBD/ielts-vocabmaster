@@ -112,7 +112,7 @@
             <span>Admin panel (control)</span>
           </a>
 
-          <button onclick="openPricingModal(); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-amber-600 hover:bg-amber-50 rounded-xl transition-all text-left">
+          <button id="premiumMenuItem" onclick="openPricingModal(); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-amber-600 hover:bg-amber-50 rounded-xl transition-all text-left">
             <i class="fa-solid fa-crown text-sm"></i>
             <span>Upgrade to Premium</span>
           </button>
@@ -527,7 +527,7 @@
       <a href="admin.html" id="mobileAdminMenuLink" class="hidden w-full items-center gap-3 rounded-xl bg-forest-50/70 px-3 py-2.5 text-xs font-bold text-forest-700 hover:bg-forest-100">
         <i class="fa-solid fa-screwdriver-wrench w-5 text-center text-forest-600"></i><span>Admin panel</span>
       </a>
-      <button onclick="closeMobileAccountMenu(); openPricingModal()" class="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-amber-600 hover:bg-amber-50">
+      <button id="mobilePremiumMenuItem" onclick="closeMobileAccountMenu(); openPricingModal()" class="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-amber-600 hover:bg-amber-50">
         <i class="fa-solid fa-crown w-5 text-center"></i><span>Upgrade to Premium</span>
       </button>
       <button onclick="closeMobileAccountMenu(); showView('viewHome')" class="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700">
@@ -959,6 +959,9 @@
             adminLink.classList.remove('hidden');
             document.getElementById('mobileAdminMenuLink').classList.remove('hidden');
             document.getElementById('mobileAdminMenuLink').classList.add('flex');
+            // The admin already has full access, so the premium upgrade options are hidden.
+            document.getElementById('premiumMenuItem').classList.replace('flex', 'hidden');
+            document.getElementById('mobilePremiumMenuItem').classList.replace('flex', 'hidden');
           } else {
             adminLink.classList.add('hidden');
             document.getElementById('mobileAdminMenuLink').classList.add('hidden');
