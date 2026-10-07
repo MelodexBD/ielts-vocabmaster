@@ -637,6 +637,7 @@
   <script>
     let isLoggedIn = false;
     let isAdminUser = false;
+    let isPremiumUser = false;
     let currentModule = 'Reading';
     let currentBook = 'Cambridge 10';
     let currentTest = 'T1';
@@ -788,7 +789,10 @@
         button.type = 'button';
         button.className = 'relative flex h-28 flex-col items-center justify-center rounded-2xl border border-slate-200/90 bg-white p-5 text-center shadow-sm transition-all hover:border-forest-500 hover:bg-forest-50/60 hover:shadow-lg active:scale-95 md:h-36 md:rounded-3xl group';
         button.addEventListener('click', () => openBookDetails(`Cambridge ${number}`));
+        // Admin sees no badge; premium members see UNLOCKED; everyone else sees FREE / PRO.
         const badge = isAdminUser
+          ? ''
+          : isPremiumUser
           ? '<span class="absolute right-2.5 top-2.5 rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600">UNLOCKED</span>'
           : number !== 10
             ? '<span class="absolute right-2.5 top-2.5 flex items-center gap-1 rounded-md bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-500"><i class="fa-solid fa-lock text-[9px]"></i>PRO</span>'
@@ -990,7 +994,7 @@
 
     // Content Lock Handler
     function handleLockedContentClick(testName) {
-      if (isAdminUser) {
+      if (isAdminUser || isPremiumUser) {
         selectTest(testName);
         return;
       }
@@ -1259,7 +1263,7 @@
     }
 
     function openBookDetails(bookName) {
-      if (bookName !== 'Cambridge 10' && !isAdminUser) {
+      if (bookName !== 'Cambridge 10' && !isAdminUser && !isPremiumUser) {
         openModal(isLoggedIn ? 'pricingModal' : 'authPromptModal');
         return;
       }
@@ -1279,7 +1283,7 @@
     }
 
     function renderTestAccessButtons() {
-      if (!isAdminUser) return;
+      if (!isAdminUser && !isPremiumUser) return;
       document.querySelectorAll('[data-test-access]').forEach(button => {
         const testId = button.dataset.testAccess;
         const isDesktop = button.dataset.testLayout === 'desktop';
@@ -1473,7 +1477,7 @@
     });
   </script>
   <script type="module">
-    import { auth, mirrorUser, logOut, pullSiteData, loadProgress, saveProgress } from './firebase.js';
+    import { auth, mirrorUser, logOut, pullSiteData, loadUserData, saveProgress } from './firebase.js';
     import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
 
     // Re-render only after the page's own DOMContentLoaded setup has run.
@@ -1500,12 +1504,17 @@
       }
       if (!user) return;
       try {
-        const progress = await loadProgress(user.uid);
+        const { progress, premium } = await loadUserData(user.uid);
         await pageReady;
         Object.keys(completedTests).forEach(key => delete completedTests[key]);
         Object.assign(completedTests, progress);
         renderProgress();
         renderCompletionButton();
+        if (premium && !isAdminUser) {
+          isPremiumUser = true;
+          renderCambridgeBookGrid();
+          renderTestAccessButtons();
+        }
       } catch (error) {
         console.error('Progress could not be loaded from the cloud.', error);
         notify('Could not load your progress. Try refreshing the page.');

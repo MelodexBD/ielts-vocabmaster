@@ -117,11 +117,13 @@ export async function pullSiteData() {
   cacheSet(CACHE_KEYS.content, content.length ? content : null);
 }
 
-export async function loadProgress(uid) {
+// Returns the user's saved progress and premium status (premium can only be set by the admin, see firestore.rules).
+export async function loadUserData(uid) {
   const snap = await getDoc(doc(db, 'users', uid));
-  const progress = snap.exists() && snap.data().progress && typeof snap.data().progress === 'object' ? snap.data().progress : {};
+  const data = snap.exists() ? snap.data() : {};
+  const progress = data.progress && typeof data.progress === 'object' ? data.progress : {};
   cacheSet(CACHE_KEYS.progress, progress);
-  return progress;
+  return { progress, premium: data.premium === true };
 }
 
 export async function saveProgress(uid, progress) {
