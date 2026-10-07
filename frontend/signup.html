@@ -370,7 +370,7 @@
         await updateProfile(user, { displayName: name });
         await saveUserProfile(user, { createdAt: new Date().toISOString() });
         await sendEmailVerification(user);
-        alert('অ্যাকাউন্ট তৈরি হয়েছে! আপনার ইমেইলে একটি যাচাই (verification) লিংক পাঠানো হয়েছে।');
+        notify.later('অ্যাকাউন্ট তৈরি হয়েছে! আপনার ইমেইলে একটি যাচাই (verification) লিংক পাঠানো হয়েছে।', 'success');
         goHome(user);
       } catch (error) {
         showAuthError(error);
@@ -380,12 +380,12 @@
     window.handlePasswordReset = async function () {
       const email = document.getElementById('loginEmail').value.trim();
       if (!email) {
-        notify('প্রথমে উপরের Email ঘরে আপনার ইমেইল লিখুন, তারপর আবার ক্লিক করুন।', 'warning');
+        notify('প্রথমে উপরের Email ঘরে আপনার ইমেইল লিখুন, তারপর আবার ক্লিক করুন।');
         return;
       }
       try {
         await sendPasswordResetEmail(auth, email);
-        alert('পাসওয়ার্ড রিসেট লিংক আপনার ইমেইলে পাঠানো হয়েছে।');
+        notify('পাসওয়ার্ড রিসেট লিংক আপনার ইমেইলে পাঠানো হয়েছে।', 'success');
       } catch (error) {
         showAuthError(error);
       }

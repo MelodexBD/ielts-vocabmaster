@@ -504,7 +504,7 @@
         console.error(`${module} section content could not be saved.`, error);
         return;
       }
-      alert(`${module} হোম সেকশনের কনটেন্ট সেভ হয়েছে। লাইভ সাইট রিফ্রেশ করলে দেখা যাবে।`);
+      notify(`${module} হোম সেকশনের কনটেন্ট সেভ হয়েছে। লাইভ সাইট রিফ্রেশ করলে দেখা যাবে।`, 'success');
     }
 
     async function handleBannerSubmit(event) {
@@ -530,7 +530,7 @@
       document.getElementById('bannerFileInput').value = '';
       document.getElementById('imagePreviewContainer').classList.add('hidden');
       renderAdminBanners();
-      alert('স্লাইডার ব্যানার সফলভাবে আপলোড হয়েছে!');
+      notify('স্লাইডার ব্যানার সফলভাবে আপলোড হয়েছে!', 'success');
     }
 
     function escapeHtml(value) {
@@ -641,11 +641,11 @@
     function generateAutoVocab() {
       const words = document.getElementById('bulkWordInput').value.split(/[,\n]+/).map(word => word.trim()).filter(Boolean);
       if (!words.length) {
-        notify('এক বা একাধিক ইংরেজি শব্দ ইনপুট করুন।', 'warning');
+        notify('এক বা একাধিক ইংরেজি শব্দ ইনপুট করুন।');
         return;
       }
       if (words.length > 200) {
-        notify('একবারে সর্বোচ্চ ২০০টি শব্দের Preview তৈরি করা যাবে।', 'warning');
+        notify('একবারে সর্বোচ্চ ২০০টি শব্দের Preview তৈরি করা যাবে।');
         return;
       }
       generatedRecords = words.map(word => {
@@ -672,13 +672,13 @@
       if (!generatedRecords.length) return;
       const incomplete = generatedRecords.find(record => !record.meaning.trim());
       if (incomplete) {
-        notify(`“${incomplete.word}” শব্দটির বাংলা অর্থ যোগ করুন, তারপর সবগুলো প্রকাশ করুন।`, 'warning');
+        notify(`“${incomplete.word}” শব্দটির বাংলা অর্থ যোগ করুন, তারপর সবগুলো প্রকাশ করুন।`);
         return;
       }
       const book = document.getElementById('modBook').value;
       const test = document.getElementById('modTest').value;
       if (!book || !TESTS.includes(test)) {
-        notify('প্রকাশের আগে Cambridge বই ও T1–T4 test নির্বাচন করুন।', 'warning');
+        notify('প্রকাশের আগে Cambridge বই ও T1–T4 test নির্বাচন করুন।');
         return;
       }
       const records = generatedRecords.map(({ needsReview, ...record }) => ({ ...record, book, test }));
@@ -689,7 +689,7 @@
         console.error('Reading vocabulary could not be saved.', error);
         return;
       }
-      alert(`${records.length}টি Reading শব্দ Cambridge ${book.replace('Cambridge ', '')} · ${test}-এ প্রকাশিত হয়েছে।`);
+      notify(`${records.length}টি Reading শব্দ Cambridge ${book.replace('Cambridge ', '')} · ${test}-এ প্রকাশিত হয়েছে।`, 'success');
       generatedRecords = [];
       document.getElementById('bulkWordInput').value = '';
       updateInputStats();
@@ -701,7 +701,7 @@
       const book = document.getElementById('modBook').value;
       const test = document.getElementById('modTest').value;
       if (!book || !TESTS.includes(test)) {
-        notify('Cambridge বই ও T1–T4 test নির্বাচন করুন।', 'warning');
+        notify('Cambridge বই ও T1–T4 test নির্বাচন করুন।');
         return;
       }
       const form = event.currentTarget;
@@ -715,7 +715,7 @@
         return;
       }
       form.reset();
-      alert(`${module} কনটেন্ট Cambridge ${book.replace('Cambridge ', '')} · ${test}-এ সেভ হয়েছে।`);
+      notify(`${module} কনটেন্ট Cambridge ${book.replace('Cambridge ', '')} · ${test}-এ সেভ হয়েছে।`, 'success');
     }
 
     window.addEventListener('DOMContentLoaded', loadAdminForms);
