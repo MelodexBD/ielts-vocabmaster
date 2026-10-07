@@ -41,7 +41,7 @@
 
     const close = document.createElement('button');
     close.type = 'button';
-    close.setAttribute('aria-label', 'বন্ধ করুন');
+    close.setAttribute('aria-label', 'Close');
     close.textContent = '×';
     close.style.cssText = `flex-shrink:0;border:0;background:none;color:${style.text};font-size:18px;line-height:1;cursor:pointer;padding:0 2px;`;
 
@@ -62,7 +62,7 @@
   }
 
   // Styled replacement for window.confirm(); resolves to true when confirmed.
-  notify.confirm = function (message, { title = 'নিশ্চিত করুন', confirmText = 'হ্যাঁ', cancelText = 'বাতিল' } = {}) {
+  notify.confirm = function (message, { title = 'Please confirm', confirmText = 'Yes', cancelText = 'Cancel' } = {}) {
     return new Promise(resolve => {
       const overlay = document.createElement('div');
       overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .15s;';

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +27,7 @@
               100: '#e1ede6',
               200: '#c5dcd0',
               500: '#3c7558',
-              600: '#2d5a43', // ডিপ ফরেস্ট গ্রিন
+              600: '#2d5a43', // deep forest green
               700: '#234935',
               800: '#1c392b',
               900: '#14291f',
@@ -74,10 +74,10 @@
       
       <!-- Guest Controls -->
       <div id="guestNavGroup" class="flex items-center gap-2">
-        <a href="signup.html" class="px-4 py-2 text-xs font-bold text-forest-700 hover:bg-forest-50 rounded-xl transition-all">লগইন</a>
+        <a href="signup.html" class="px-4 py-2 text-xs font-bold text-forest-700 hover:bg-forest-50 rounded-xl transition-all">Log in</a>
         <a href="signup.html" class="px-4 py-2 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold rounded-xl shadow-md shadow-forest-900/20 transition-all flex items-center gap-1.5">
           <i class="fa-solid fa-user-plus text-[10px]"></i>
-          <span>ফ্রি অ্যাকাউন্ট খুলুন</span>
+          <span>Create free account</span>
         </a>
       </div>
 
@@ -102,28 +102,28 @@
         <!-- Dropdown Menu -->
         <div id="profileDropdown" class="hidden absolute right-0 top-full mt-2 max-h-[calc(100vh-5rem)] w-64 overflow-y-auto bg-white border border-slate-200/90 rounded-2xl shadow-2xl z-50 p-2 space-y-1">
           <div class="px-3 py-2 border-b border-slate-100">
-            <p class="text-xs text-slate-400 font-bold uppercase">ইউজার অ্যাকাউন্ট</p>
+            <p class="text-xs text-slate-400 font-bold uppercase">User account</p>
             <p id="dropdownUserEmail" class="text-sm font-black text-slate-800 truncate">tanbir.ahmed@example.com</p>
           </div>
           
-          <!-- অ্যাডমিন লিংক (ডিফল্টভাবে লুকানো থাকবে, শুধু অ্যাডমিন ইমেইল হলে দেখাবে) -->
+          <!-- Admin link (hidden by default; shown only for the admin email) -->
           <a href="admin.html" id="adminMenuLink" class="hidden w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-forest-700 bg-forest-50/70 hover:bg-forest-100 rounded-xl transition-all text-left">
             <i class="fa-solid fa-screwdriver-wrench text-sm text-forest-600"></i>
-            <span>অ্যাডমিন প্যানেল (কন্ট্রোল)</span>
+            <span>Admin panel (control)</span>
           </a>
 
           <button onclick="openPricingModal(); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-amber-600 hover:bg-amber-50 rounded-xl transition-all text-left">
             <i class="fa-solid fa-crown text-sm"></i>
-            <span>প্রিমিয়াম আপগ্রেড করুন</span>
+            <span>Upgrade to Premium</span>
           </button>
           <button onclick="showView('viewHome'); toggleProfileDropdown();" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 rounded-xl transition-all text-left">
             <i class="fa-solid fa-gauge-high text-forest-600 text-sm"></i>
-            <span>ড্যাশবোর্ড ভিউ</span>
+            <span>Dashboard view</span>
           </button>
           <div class="pt-1 border-t border-slate-100">
             <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition-all text-left">
               <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
-              <span>লগআউট করুন</span>
+              <span>Log out</span>
             </button>
           </div>
         </div>
@@ -131,11 +131,11 @@
       </div>
 
       <div id="headerModuleMenuContainer" class="hidden relative md:hidden">
-        <button id="headerModuleMenuButton" type="button" onclick="toggleModuleMenu(event)" aria-label="মডিউল মেনু খুলুন" aria-haspopup="menu" aria-controls="headerModuleMenuOptions" aria-expanded="false" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-forest-500 hover:text-forest-700">
+        <button id="headerModuleMenuButton" type="button" onclick="toggleModuleMenu(event)" aria-label="Open module menu" aria-haspopup="menu" aria-controls="headerModuleMenuOptions" aria-expanded="false" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-forest-500 hover:text-forest-700">
           <i class="fa-solid fa-bars text-base" aria-hidden="true"></i>
         </button>
-        <div id="headerModuleMenuOptions" role="menu" aria-label="মডিউল নেভিগেশন" class="hidden absolute right-0 top-12 z-50 w-64 rounded-2xl border border-slate-200 bg-white p-2.5 shadow-xl">
-          <p class="px-3 py-2 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">নেভিগেশন মেনু</p>
+        <div id="headerModuleMenuOptions" role="menu" aria-label="Module navigation" class="hidden absolute right-0 top-12 z-50 w-64 rounded-2xl border border-slate-200 bg-white p-2.5 shadow-xl">
+          <p class="px-3 py-2 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Navigation menu</p>
           <button data-module-nav="Reading" role="menuitem" onclick="openExercise('Reading')" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700 transition-colors">
             <span class="w-10 h-10 shrink-0 rounded-xl bg-forest-50 text-forest-600 flex items-center justify-center"><i class="fa-solid fa-book-open-reader text-base"></i></span><span>Reading Vault</span>
           </button>
@@ -159,11 +159,11 @@
 
     <!-- DESKTOP SIDEBAR -->
     <aside class="hidden md:flex flex-col w-64 bg-white border border-slate-200/80 rounded-3xl p-5 shadow-sm shrink-0 h-fit sticky top-24 space-y-2">
-      <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1">নেভিগেশন মেনু</span>
+      <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1">Navigation menu</span>
       
       <button data-module-nav="home" onclick="showView('viewHome')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-forest-700 bg-forest-50 border border-forest-100 transition-all text-left">
         <i class="fa-solid fa-house text-base"></i>
-        <span>হোম ল্যান্ডিং</span>
+        <span>Home</span>
       </button>
 
       <button data-module-nav="Reading" onclick="openExercise('Reading')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm text-slate-600 hover:text-forest-700 hover:bg-forest-50/60 transition-all text-left">
@@ -192,8 +192,8 @@
             <span id="sidePercentText">25%</span>
           </div>
           <div>
-            <p class="text-xs font-extrabold text-forest-800">ফ্রি প্রস্তুতি অগ্রগতি</p>
-            <p class="text-[10px] font-semibold text-forest-600">চার মডিউলের গড় অগ্রগতি</p>
+            <p class="text-xs font-extrabold text-forest-800">Free preparation progress</p>
+            <p class="text-[10px] font-semibold text-forest-600">Average progress across four modules</p>
           </div>
         </div>
       </div>
@@ -228,9 +228,9 @@
         <!-- 4 Core Modules -->
         <section class="space-y-3.5">
           <div class="flex items-center justify-between">
-            <h3 class="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">প্রধান মডিউলসমূহ</h3>
+            <h3 class="text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">Main modules</h3>
             <div class="flex items-center gap-2">
-              <span class="text-xs text-slate-400 font-semibold hidden md:inline">মডিউল ক্লিক করে বই নির্বাচন করুন</span>
+              <span class="text-xs text-slate-400 font-semibold hidden md:inline">Click a module to choose a book</span>
             </div>
           </div>
 
@@ -315,31 +315,31 @@
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center">
                 <span id="progressPercentDisplay" class="text-xl md:text-2xl font-black text-slate-800">25%</span>
-                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tight">সম্পন্ন</span>
+                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tight">Completed</span>
               </div>
             </div>
 
             <div class="space-y-1">
               <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-forest-100 text-forest-700 text-[11px] font-bold">
-                <i class="fa-solid fa-chart-line"></i> লার্নিং ড্যাশবোর্ড
+                <i class="fa-solid fa-chart-line"></i> Learning dashboard
               </div>
-              <h3 class="text-base md:text-lg font-black text-slate-800">ক্যামব্রিজ টেস্ট প্রস্তুতি অগ্রগতি</h3>
-              <p class="text-xs text-slate-400 font-medium">প্রতিটি মডিউলে সম্পন্ন Cambridge 10 টেস্টের ভিত্তিতে অগ্রগতি হিসাব করা হয়।</p>
+              <h3 class="text-base md:text-lg font-black text-slate-800">Cambridge test preparation progress</h3>
+              <p class="text-xs text-slate-400 font-medium">Progress is calculated from the Cambridge 10 tests completed in each module.</p>
             </div>
           </div>
 
           <div class="grid grid-cols-3 gap-3 w-full md:w-auto border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
             <div class="text-center p-2 rounded-xl bg-slate-50">
-              <p class="text-xs text-slate-400 font-bold">ফ্রি শব্দ</p>
-              <p class="text-base font-black text-forest-700">৫০+</p>
+              <p class="text-xs text-slate-400 font-bold">Free words</p>
+              <p class="text-base font-black text-forest-700">50+</p>
             </div>
             <div class="text-center p-2 rounded-xl bg-slate-50">
-              <p id="lockedTestsLabel" class="text-xs text-slate-400 font-bold">লকড টেস্ট</p>
-              <p id="lockedTestsCount" class="text-base font-black text-amber-600">৩০ টি</p>
+              <p id="lockedTestsLabel" class="text-xs text-slate-400 font-bold">Locked tests</p>
+              <p id="lockedTestsCount" class="text-base font-black text-amber-600">30 tests</p>
             </div>
             <div class="text-center p-2 rounded-xl bg-slate-50">
-              <p class="text-xs text-slate-400 font-bold">টার্গেট</p>
-              <p class="text-base font-black text-emerald-600">৮.০</p>
+              <p class="text-xs text-slate-400 font-bold">Target</p>
+              <p class="text-base font-black text-emerald-600">8.0</p>
             </div>
           </div>
         </section>
@@ -361,11 +361,11 @@
               <p id="cambridgeRangeHeading" class="text-xs text-slate-400 font-medium">Cambridge Books 10 to 19</p>
             </div>
           </div>
-          <button onclick="showView('viewHome')" class="text-xs font-bold text-forest-600 hover:underline hidden md:inline-block">← ড্যাশবোর্ডে ফিরে যান</button>
+          <button onclick="showView('viewHome')" class="text-xs font-bold text-forest-600 hover:underline hidden md:inline-block">← Back to dashboard</button>
         </div>
 
         <div class="space-y-3">
-          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">বই নির্বাচন করুন</p>
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Choose a book</p>
           <div id="cambridgeBooksGrid" class="grid grid-cols-2 gap-3.5 sm:grid-cols-3 md:grid-cols-5 md:gap-4">
           </div>
         </div>
@@ -382,7 +382,7 @@
           </div>
 
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-slate-400 hidden md:inline mr-2">টেস্ট নির্বাচন:</span>
+            <span class="text-xs font-bold text-slate-400 hidden md:inline mr-2">Choose a test:</span>
             <div class="inline-flex bg-slate-100 p-1 rounded-xl">
               <button data-test-access="T1" data-test-layout="desktop" onclick="selectTest('T1')" id="deskBtnT1" class="px-3 py-1.5 text-xs font-bold rounded-lg border border-forest-600 bg-forest-600 text-white transition-all flex items-center gap-1">
                 <span>T1</span>
@@ -408,7 +408,7 @@
         </div>
         <div class="flex justify-end">
           <button data-auth-only-progress id="completeTestBtn" onclick="toggleCurrentTestCompletion()" class="hidden px-4 py-2.5 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all">
-            এই টেস্ট সম্পন্ন হিসেবে চিহ্নিত করুন
+            Mark this test as completed
           </button>
         </div>
 
@@ -448,12 +448,12 @@
           <span class="text-base font-black text-slate-800">IELTS <span class="text-forest-600">VocabMaster</span></span>
         </div>
         <p class="text-xs text-slate-500 leading-relaxed">
-          Cambridge IELTS 10–19 পরীক্ষার শতভাগ কার্যকরী প্রস্তুতি। ভোকাবুলারি ভল্ট, উত্তরপত্রের ব্যাখ্যা এবং রিয়েল টাইমড প্র্যাকটিস প্ল্যাটফর্ম।
+          Complete preparation for Cambridge IELTS 10–19: a vocabulary vault, answer explanations and a real timed practice platform.
         </p>
       </div>
 
       <div class="space-y-3">
-        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">মডিউলসমূহ</h4>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">Modules</h4>
         <ul class="space-y-2 text-xs font-medium">
           <li><a href="javascript:void(0)" onclick="openExercise('Reading')" class="hover:text-forest-600">Reading Vault</a></li>
           <li><a href="javascript:void(0)" onclick="openExercise('Listening')" class="hover:text-forest-600">Listening Audio</a></li>
@@ -463,16 +463,16 @@
       </div>
 
       <div class="space-y-3">
-        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">সাবস্ক্রিপশন ও অফার</h4>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">Subscriptions & offers</h4>
         <ul class="space-y-2 text-xs font-medium">
-          <li><a href="javascript:void(0)" onclick="openPricingModal()" class="text-amber-600 font-bold hover:underline">✨ প্রিমিয়াম প্ল্যান দেখুন</a></li>
-          <li><a href="admin.html" class="hover:text-forest-600 font-semibold">অ্যাডমিন ড্যাশবোর্ড</a></li>
+          <li><a href="javascript:void(0)" onclick="openPricingModal()" class="text-amber-600 font-bold hover:underline">✨ View premium plans</a></li>
+          <li><a href="admin.html" class="hover:text-forest-600 font-semibold">Admin dashboard</a></li>
         </ul>
       </div>
 
       <div class="space-y-3">
-        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">যোগাযোগ ও হেল্পলাইন</h4>
-        <p class="text-xs text-slate-500">যেকোনো প্রশ্ন বা পেমেন্ট সমস্যার জন্য যোগাযোগ করুন।</p>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">Contact & helpline</h4>
+        <p class="text-xs text-slate-500">Contact us with any questions or payment issues.</p>
         <div class="space-y-1.5 text-xs font-medium">
           <p><i class="fa-regular fa-envelope text-forest-600 mr-2"></i>support@ieltsvocabmaster.com</p>
           <p><i class="fa-solid fa-phone text-forest-600 mr-2"></i>+880 1757-674052</p>
@@ -481,7 +481,7 @@
     </div>
 
     <div class="max-w-7xl mx-auto mt-8 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
-      <p>© 2026 IELTS VocabMaster. সর্বস্বত্ব সংরক্ষিত।</p>
+      <p>© 2026 IELTS VocabMaster. All rights reserved.</p>
       <p>Designed with passion for IELTS candidates in Bangladesh</p>
     </div>
   </footer>
@@ -491,12 +491,12 @@
     <div class="grid grid-cols-5 items-center justify-items-center w-full max-w-md mx-auto">
       <button onclick="showView('viewHome')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-forest-600 transition-all">
         <i class="fa-solid fa-house text-lg"></i>
-        <span class="text-[10px] font-bold mt-0.5">হোম</span>
+        <span class="text-[10px] font-bold mt-0.5">Home</span>
       </button>
 
-      <button onclick="showToast('খুঁজতে শব্দ বা টেস্টের নাম লিখুন')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
+      <button onclick="showToast('Type a word or test name to search')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
         <i class="fa-solid fa-magnifying-glass text-lg"></i>
-        <span class="text-[10px] font-medium mt-0.5">সার্চ</span>
+        <span class="text-[10px] font-medium mt-0.5">Search</span>
       </button>
 
       <button onclick="openPricingModal()" class="flex flex-col items-center justify-center w-full group focus:outline-none">
@@ -506,35 +506,35 @@
         <span class="text-[10px] font-bold mt-0.5 text-amber-600">PRO</span>
       </button>
 
-      <button onclick="showToast('প্রোগ্রেস ট্র্যাকার লোড হচ্ছে...')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
+      <button onclick="showToast('Loading progress tracker...')" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
         <i class="fa-solid fa-chart-column text-lg"></i>
-        <span class="text-[10px] font-medium mt-0.5">প্রোগ্রেস</span>
+        <span class="text-[10px] font-medium mt-0.5">Progress</span>
       </button>
 
-      <button id="mobileProfileButton" onclick="handleProfileOrLoginClick(event)" aria-label="প্রোফাইল ও মেনু খুলুন" aria-haspopup="menu" aria-controls="mobileAccountMenu" aria-expanded="false" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
+      <button id="mobileProfileButton" onclick="handleProfileOrLoginClick(event)" aria-label="Open profile and menu" aria-haspopup="menu" aria-controls="mobileAccountMenu" aria-expanded="false" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
         <i class="fa-solid fa-user text-lg"></i>
-        <span class="text-[10px] font-medium mt-0.5">প্রোফাইল</span>
+        <span class="text-[10px] font-medium mt-0.5">Profile</span>
       </button>
     </div>
   </nav>
 
-  <div id="mobileAccountMenu" role="menu" aria-label="প্রোফাইল ও মডিউল মেনু" class="hidden fixed bottom-[70px] right-2 z-40 max-h-[75vh] w-72 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl md:hidden">
+  <div id="mobileAccountMenu" role="menu" aria-label="Profile and module menu" class="hidden fixed bottom-[70px] right-2 z-40 max-h-[75vh] w-72 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl md:hidden">
     <div class="border-b border-slate-100 px-3 py-2">
-      <p class="text-xs font-bold uppercase text-slate-400">ইউজার অ্যাকাউন্ট</p>
+      <p class="text-xs font-bold uppercase text-slate-400">User account</p>
       <p id="mobileDropdownUserEmail" class="truncate text-sm font-black text-slate-800"></p>
     </div>
     <div class="mt-1 border-t border-slate-100 pt-1">
       <a href="admin.html" id="mobileAdminMenuLink" class="hidden w-full items-center gap-3 rounded-xl bg-forest-50/70 px-3 py-2.5 text-xs font-bold text-forest-700 hover:bg-forest-100">
-        <i class="fa-solid fa-screwdriver-wrench w-5 text-center text-forest-600"></i><span>অ্যাডমিন প্যানেল</span>
+        <i class="fa-solid fa-screwdriver-wrench w-5 text-center text-forest-600"></i><span>Admin panel</span>
       </a>
       <button onclick="closeMobileAccountMenu(); openPricingModal()" class="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-amber-600 hover:bg-amber-50">
-        <i class="fa-solid fa-crown w-5 text-center"></i><span>প্রিমিয়াম আপগ্রেড করুন</span>
+        <i class="fa-solid fa-crown w-5 text-center"></i><span>Upgrade to Premium</span>
       </button>
       <button onclick="closeMobileAccountMenu(); showView('viewHome')" class="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700">
-        <i class="fa-solid fa-gauge-high w-5 text-center text-forest-600"></i><span>ড্যাশবোর্ড ভিউ</span>
+        <i class="fa-solid fa-gauge-high w-5 text-center text-forest-600"></i><span>Dashboard view</span>
       </button>
       <button onclick="closeMobileAccountMenu(); handleLogout()" class="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-rose-600 hover:bg-rose-50">
-        <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i><span>লগআউট করুন</span>
+        <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i><span>Log out</span>
       </button>
     </div>
   </div>
@@ -546,18 +546,18 @@
         <i class="fa-solid fa-lock"></i>
       </div>
       <div>
-        <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-[11px] font-bold uppercase tracking-wider">কনটেন্টটি লক করা</span>
-        <h3 class="text-xl font-black text-slate-900 mt-2">ফ্রি অ্যাকাউন্ট খুলে আনলক করুন</h3>
+        <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-[11px] font-bold uppercase tracking-wider">This content is locked</span>
+        <h3 class="text-xl font-black text-slate-900 mt-2">Create a free account to unlock</h3>
         <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-          ক্যামব্রিজের সব টেস্ট সলিউশন ও ভোকাবুলারি অ্যাক্সেস করতে এখনই একটি সম্পূর্ণ ফ্রি অ্যাকাউন্ট তৈরি করুন। কোনো ক্রেডিট কার্ডের প্রয়োজন নেই!
+          Create a completely free account now to access all Cambridge test solutions and vocabulary. No credit card required!
         </p>
       </div>
       <div class="space-y-2 pt-2">
         <a href="signup.html" class="w-full py-3.5 bg-forest-600 hover:bg-forest-700 text-white font-extrabold text-sm rounded-xl shadow-lg shadow-forest-900/20 block transition-all active:scale-95">
-          ফ্রি একাউন্ট খুলুন / লগইন করুন
+          Create free account / Log in
         </a>
         <button onclick="closeModal('authPromptModal')" class="w-full py-2.5 text-slate-400 hover:text-slate-600 text-xs font-bold">
-          পরে দেখব
+          Maybe later
         </button>
       </div>
     </div>
@@ -571,8 +571,8 @@
           <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[11px] font-black">
             <i class="fa-solid fa-crown text-[10px]"></i> PRO ACCESS
           </div>
-          <h3 class="text-xl font-black text-slate-900 mt-1">ক্যামব্রিজ ফুল ভল্ট আনলক করুন</h3>
-          <p class="text-xs text-slate-400 font-medium">Cambridge 10 থেকে 19 এর ৪০টি টেস্টের সম্পূর্ণ ব্যাখ্যা ও আনলিমিটেড অ্যাক্সেস</p>
+          <h3 class="text-xl font-black text-slate-900 mt-1">Unlock the full Cambridge vault</h3>
+          <p class="text-xs text-slate-400 font-medium">Full explanations and unlimited access to all 40 tests from Cambridge 10 to 19</p>
         </div>
         <button onclick="closeModal('pricingModal')" class="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200">
           <i class="fa-solid fa-xmark"></i>
@@ -582,47 +582,47 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         <div class="p-4 rounded-2xl border-2 border-slate-200 hover:border-forest-600 transition-all cursor-pointer bg-slate-50/50 hover:bg-forest-50/30 group">
           <div class="flex justify-between items-start">
-            <span class="font-extrabold text-sm text-slate-800">১ মাস প্ল্যান</span>
-            <span class="text-xs font-black text-forest-700">২৯০৳</span>
+            <span class="font-extrabold text-sm text-slate-800">1 Month Plan</span>
+            <span class="text-xs font-black text-forest-700">৳290</span>
           </div>
-          <p class="text-[11px] text-slate-400 mt-1">স্বল্পমেয়াদী কুইক রিভিশন</p>
-          <button onclick="handleSubscribe('১ মাস', '২৯০৳')" class="w-full mt-3 py-2 bg-slate-200 group-hover:bg-forest-600 group-hover:text-white text-slate-700 text-xs font-bold rounded-xl transition-all">
-            সিলেক্ট করুন
+          <p class="text-[11px] text-slate-400 mt-1">Short-term quick revision</p>
+          <button onclick="handleSubscribe('1 Month', '৳290')" class="w-full mt-3 py-2 bg-slate-200 group-hover:bg-forest-600 group-hover:text-white text-slate-700 text-xs font-bold rounded-xl transition-all">
+            Select
           </button>
         </div>
 
         <div class="p-4 rounded-2xl border-2 border-forest-600 bg-forest-50/40 relative shadow-sm cursor-pointer group">
-          <span class="absolute -top-2.5 right-3 bg-forest-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">সবচেয়ে জনপ্রিয়</span>
+          <span class="absolute -top-2.5 right-3 bg-forest-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">Most popular</span>
           <div class="flex justify-between items-start">
-            <span class="font-extrabold text-sm text-slate-800">৩ মাস প্ল্যান</span>
-            <span class="text-xs font-black text-forest-700">৬৯০৳</span>
+            <span class="font-extrabold text-sm text-slate-800">3 Month Plan</span>
+            <span class="text-xs font-black text-forest-700">৳690</span>
           </div>
-          <p class="text-[11px] text-slate-500 mt-1">পারফেক্ট আইইএলটিএস প্রস্তুতি</p>
-          <button onclick="handleSubscribe('৩ মাস', '৬৯০৳')" class="w-full mt-3 py-2 bg-forest-600 text-white text-xs font-bold rounded-xl shadow-md transition-all">
-            আনলক করুন
+          <p class="text-[11px] text-slate-500 mt-1">Perfect IELTS preparation</p>
+          <button onclick="handleSubscribe('3 Months', '৳690')" class="w-full mt-3 py-2 bg-forest-600 text-white text-xs font-bold rounded-xl shadow-md transition-all">
+            Unlock
           </button>
         </div>
 
         <div class="p-4 rounded-2xl border-2 border-slate-200 hover:border-forest-600 transition-all cursor-pointer bg-slate-50/50 hover:bg-forest-50/30 group">
           <div class="flex justify-between items-start">
-            <span class="font-extrabold text-sm text-slate-800">৬ মাস প্ল্যান</span>
-            <span class="text-xs font-black text-forest-700">১১৫০৳</span>
+            <span class="font-extrabold text-sm text-slate-800">6 Month Plan</span>
+            <span class="text-xs font-black text-forest-700">৳1150</span>
           </div>
-          <p class="text-[11px] text-slate-400 mt-1">টানা প্র্যাকটিস ও ব্যান্ড বুস্টিং</p>
-          <button onclick="handleSubscribe('৬ মাস', '১১৫০৳')" class="w-full mt-3 py-2 bg-slate-200 group-hover:bg-forest-600 group-hover:text-white text-slate-700 text-xs font-bold rounded-xl transition-all">
-            সিলেক্ট করুন
+          <p class="text-[11px] text-slate-400 mt-1">Continuous practice & band boosting</p>
+          <button onclick="handleSubscribe('6 Months', '৳1150')" class="w-full mt-3 py-2 bg-slate-200 group-hover:bg-forest-600 group-hover:text-white text-slate-700 text-xs font-bold rounded-xl transition-all">
+            Select
           </button>
         </div>
 
         <div class="p-4 rounded-2xl border-2 border-amber-400 bg-amber-50/40 relative shadow-sm cursor-pointer group">
-          <span class="absolute -top-2.5 right-3 bg-amber-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">বেস্ট ভ্যালু</span>
+          <span class="absolute -top-2.5 right-3 bg-amber-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">Best value</span>
           <div class="flex justify-between items-start">
-            <span class="font-extrabold text-sm text-slate-800">১ বছর (লাইফটাইম)</span>
-            <span class="text-xs font-black text-amber-700">১৯৫০৳</span>
+            <span class="font-extrabold text-sm text-slate-800">1 Year (Lifetime)</span>
+            <span class="text-xs font-black text-amber-700">৳1950</span>
           </div>
-          <p class="text-[11px] text-slate-500 mt-1">সব নতুন বইসহ ফুল অ্যাক্সেস</p>
-          <button onclick="handleSubscribe('১ বছর', '১৯৫০৳')" class="w-full mt-3 py-2 bg-amber-600 text-white text-xs font-bold rounded-xl shadow-md transition-all">
-            আনলক করুন
+          <p class="text-[11px] text-slate-500 mt-1">Full access including all new books</p>
+          <button onclick="handleSubscribe('1 Year', '৳1950')" class="w-full mt-3 py-2 bg-amber-600 text-white text-xs font-bold rounded-xl shadow-md transition-all">
+            Unlock
           </button>
         </div>
       </div>
@@ -630,7 +630,7 @@
   </div>
 
   <div id="toast" class="hidden fixed top-12 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xl z-50">
-    বিজ্ঞপ্তি
+    Notification
   </div>
 
   <!-- ================= JAVASCRIPT & SLIDER LOGIC ================= -->
@@ -712,7 +712,7 @@
         if (!value) return '';
         if (field.audio) {
           const mediaUrl = safeExternalMediaUrl(value);
-          return mediaUrl ? `<div class="mt-3"><p class="text-xs font-bold text-slate-500">${field.label}</p><audio controls preload="none" class="mt-1 w-full"><source src="${escapeHTML(mediaUrl)}">আপনার ব্রাউজার অডিও চালাতে পারছে না।</audio></div>` : '';
+          return mediaUrl ? `<div class="mt-3"><p class="text-xs font-bold text-slate-500">${field.label}</p><audio controls preload="none" class="mt-1 w-full"><source src="${escapeHTML(mediaUrl)}">Your browser cannot play this audio.</audio></div>` : '';
         }
         return `<div class="mt-3"><p class="text-xs font-bold text-slate-500">${field.label}</p><p class="mt-1 whitespace-pre-line text-sm leading-6 text-slate-700">${escapeHTML(value)}</p></div>`;
       }).join('');
@@ -749,13 +749,13 @@
           : '';
         const audioUrl = safeExternalMediaUrl(record.audioUrl);
         const audio = moduleName === 'Listening' && audioUrl
-          ? `<audio controls preload="none" class="mt-3 w-full"><source src="${escapeHTML(audioUrl)}">আপনার ব্রাউজার অডিও চালাতে পারছে না।</audio>`
+          ? `<audio controls preload="none" class="mt-3 w-full"><source src="${escapeHTML(audioUrl)}">Your browser cannot play this audio.</audio>`
           : '';
         return `<article class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
           <h3 class="font-extrabold text-slate-800">${title}</h3>
           ${moduleName === 'Writing' ? field('Task type', record.taskType) : ''}
           ${moduleName === 'Speaking' ? field('Bullet points', record.bulletPoints) : ''}
-          ${moduleName === 'Listening' ? audio + field('Transcript / নির্দেশনা', record.transcript) + field('প্রশ্ন ও উত্তর', record.questions) : ''}
+          ${moduleName === 'Listening' ? audio + field('Transcript / instructions', record.transcript) + field('Questions & answers', record.questions) : ''}
           ${moduleName === 'Writing' ? field('Task prompt', record.prompt) + field('Model answer / planning notes', record.modelAnswer) : ''}
           ${moduleName === 'Speaking' ? field('Model answer / speaking notes', record.modelAnswer) + field('Useful vocabulary', record.vocabulary) : ''}
         </article>`;
@@ -763,7 +763,7 @@
       return `<section class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-7">
         <div class="mb-4 border-b border-slate-100 pb-3">
           <p class="text-[10px] font-extrabold uppercase tracking-wider text-forest-600">${escapeHTML(currentBook)} · ${escapeHTML(currentTest)}</p>
-          <h2 class="mt-1 text-lg font-extrabold text-slate-800">আপলোড করা ${escapeHTML(moduleName)} কনটেন্ট</h2>
+          <h2 class="mt-1 text-lg font-extrabold text-slate-800">Uploaded ${escapeHTML(moduleName)} content</h2>
         </div>
         <div class="space-y-3">${cards}</div>
       </section>`;
@@ -807,13 +807,13 @@
       const lockedTestsLabel = document.getElementById('lockedTestsLabel');
       const lockedTestsCount = document.getElementById('lockedTestsCount');
       if (isAdminUser) {
-        lockedTestsLabel.textContent = 'অ্যাডমিন অ্যাক্সেস';
-        lockedTestsCount.textContent = 'সব আনলক';
+        lockedTestsLabel.textContent = 'Admin access';
+        lockedTestsCount.textContent = 'All unlocked';
       } else {
-        lockedTestsLabel.textContent = 'লকড টেস্ট';
+        lockedTestsLabel.textContent = 'Locked tests';
         const totalTests = (end - start + 1) * 4;
         const freeTests = start <= 10 && end >= 10 ? 1 : 0;
-        lockedTestsCount.textContent = `${totalTests - freeTests} টি`;
+        lockedTestsCount.textContent = `${totalTests - freeTests} tests`;
       }
       lockedTestsCount.classList.toggle('text-amber-600', !isAdminUser);
       lockedTestsCount.classList.toggle('text-emerald-600', isAdminUser);
@@ -825,23 +825,23 @@
     const defaultBanners = [
       {
         tag: "FREE & PREMIUM IELTS PREP",
-        title: "ক্যামব্রিজ ১০–১৯ ভোকাভিউ ও সলিউশন",
-        desc: "প্রতিটি বইয়ের টেস্ট ১ এর সব ভোকাবুলারি সবার জন্য সম্পূর্ণ উন্মুক্ত! পরবর্তী টেস্ট এবং ফুল টেস্ট ভল্ট আনলক করতে এগিয়ে যান।",
-        features: ["Cambridge 10–19 টেস্ট ১ ফ্রি", "প্রিমিয়াম ফুল ভল্ট", "ব্যান্ড ৮.০ টার্গেট সলিউশন"],
+        title: "Cambridge 10–19 Vocabulary & Solutions",
+        desc: "All vocabulary from Test 1 of every book is completely free for everyone! Move ahead to unlock the next tests and the full test vault.",
+        features: ["Cambridge 10–19 Test 1 free", "Premium full vault", "Band 8.0 target solutions"],
         image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80"
       },
       {
         tag: "OFFICIAL CAMBRIDGE MATERIAL",
-        title: "রিডিং ও লিসেনিং উত্তর ব্যাখ্যা",
-        desc: "প্রতিটি কঠিন প্রশ্নের লাইন-বাই-লাইন বাংলা অর্থ, ট্রিকি সিনোনিম ম্যাচিং এবং অডিও স্ক্রিপ্টের মূল কি-ওয়ার্ড এক ক্লিকেই!",
-        features: ["৪০টি অফিশিয়াল টেস্ট", "সিনোনিম ও অ্যান্টনিম", "অডিও স্ক্রিপ্ট নোট"],
+        title: "Reading & Listening answer explanations",
+        desc: "Line-by-line Bangla meaning of every tough question, tricky synonym matching and key words from the audio script, all in one click!",
+        features: ["40 official tests", "Synonyms & antonyms", "Audio script notes"],
         image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1400&q=80"
       },
       {
         tag: "PRO EXAM STRATEGY",
-        title: "রাইটিং ও স্পিকিং ব্যান্ড বুস্টার",
-        desc: "Task 1 ও Task 2 এর জন্য রেডিমেড ফরম্যাট এবং লেটেস্ট স্পিকিং কিউ-কার্ডের হাই-ব্যান্ড ভোকাবুলারি দিয়ে নিজেকে এগিয়ে রাখুন।",
-        features: ["ব্যান্ড ৯.০ স্যাম্পল", "লেটেস্ট কিউ কার্ডস", "ডেইলি রিভিশন"],
+        title: "Writing & Speaking Band Booster",
+        desc: "Stay ahead with ready-made formats for Task 1 and Task 2 and high-band vocabulary for the latest speaking cue cards.",
+        features: ["Band 9.0 samples", "Latest cue cards", "Daily revision"],
         image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80"
       }
     ];
@@ -952,7 +952,7 @@
         const initials = savedName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'TA';
         document.getElementById('userAvatarPill').innerText = initials;
 
-    // শুধুমাত্র ieltsvocabmaster@gmail.com হলেই অ্যাডমিন অপশনটি দৃশ্যমান হবে
+    // The admin option is visible only for ieltsvocabmaster@gmail.com
         const adminLink = document.getElementById('adminMenuLink');
         if (adminLink) {
           if (isAdminUser) {
@@ -999,7 +999,7 @@
     }
 
     function handleSubscribe(planName, price) {
-      alert(`আপনি ${planName} (${price}) সিলেক্ট করেছেন। বিকাশ/নগদ গেটওয়ে সংযোগের পর স্বয়ংক্রিয়ভাবে সক্রিয় হবে!`);
+      alert(`You selected ${planName} (${price}). It will be activated automatically once the bKash/Nagad payment gateway is connected!`);
       closeModal('pricingModal');
     }
 
@@ -1096,7 +1096,7 @@
         explanation: 'Reading-এ শুধু দ্রুত পড়লেই হয় না—প্রশ্নের ধরন বুঝে প্যাসেজে প্রমাণ খুঁজে উত্তর দিতে হয়। প্রতিটি উত্তরের জন্য প্যাসেজের নির্দিষ্ট লাইন মিলিয়ে নিন।',
         steps: ['প্রথমে শিরোনাম ও প্রতিটি অনুচ্ছেদের প্রথম বাক্য দেখে মূল বিষয় ধরুন।', 'প্রশ্নে থাকা নাম, সংখ্যা ও মূল শব্দ চিহ্নিত করে প্যাসেজে স্ক্যান করুন।', 'প্রশ্নের বক্তব্য প্যাসেজের তথ্যের সঙ্গে মিলিয়ে TRUE, FALSE বা NOT GIVEN নির্ধারণ করুন।'],
         practice: `
-          <h3 class="text-lg font-extrabold text-slate-800">অনুশীলন: True / False / Not Given</h3>
+          <h3 class="text-lg font-extrabold text-slate-800">Practice: True / False / Not Given</h3>
           <div class="mt-4 rounded-2xl bg-slate-50 border border-slate-200 p-4 space-y-3 text-sm leading-7 text-slate-700">
             <p><strong>Passage:</strong> Green roofs can lower building temperatures during summer. Some cities offer grants to encourage residents to install them. However, the long-term effect on local bird populations has not yet been studied.</p>
             <p><strong>Statement:</strong> Green roofs have been proven to increase the number of birds in cities.</p>
@@ -1114,14 +1114,14 @@
         explanation: 'Listening-এ অডিও শুরুর আগে প্রশ্ন দেখে কী ধরনের উত্তর দরকার তা অনুমান করুন। বানান, একবচন-বহুবচন এবং শব্দসীমা মেনে উত্তর লিখুন।',
         steps: ['অডিও শুরুর আগে ফাঁকা জায়গার আশপাশের শব্দ পড়ে উত্তরটি নাম, তারিখ, সময় নাকি স্থান হবে বুঝুন।', 'শোনার সময় মূল শব্দের পাশাপাশি সমার্থক শব্দ ও বক্তার সংশোধন খেয়াল করুন।', 'শেষে উত্তরগুলোর বানান ও “ONE WORD” বা “NO MORE THAN TWO WORDS” নির্দেশনা মিলিয়ে নিন।'],
         practice: `
-          <h3 class="text-lg font-extrabold text-slate-800">অনুশীলন: Form Completion</h3>
+          <h3 class="text-lg font-extrabold text-slate-800">Practice: Form Completion</h3>
           <p class="mt-2 text-sm text-slate-600">নিচের অডিও একবার শুনুন। মিটিংয়ের দিনটি লিখুন।</p>
           <button onclick="playListeningPractice()" class="mt-4 px-4 py-2.5 rounded-xl bg-forest-600 text-white text-sm font-bold hover:bg-forest-700">
-            <i class="fa-solid fa-volume-high mr-2"></i>অডিও শুনুন
+            <i class="fa-solid fa-volume-high mr-2"></i>Play audio
           </button>
           <div class="mt-4 flex flex-col sm:flex-row gap-2">
-            <input id="listeningAnswer" type="text" placeholder="বারের নাম লিখুন" class="flex-1 px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-forest-500">
-            <button onclick="checkListeningAnswer()" class="px-4 py-3 rounded-xl bg-forest-600 text-white text-sm font-bold hover:bg-forest-700">উত্তর মিলিয়ে দেখুন</button>
+            <input id="listeningAnswer" type="text" placeholder="Type the day" class="flex-1 px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-forest-500">
+            <button onclick="checkListeningAnswer()" class="px-4 py-3 rounded-xl bg-forest-600 text-white text-sm font-bold hover:bg-forest-700">Check answer</button>
           </div>
           <p id="listeningFeedback" aria-live="polite" class="mt-3 text-sm font-semibold text-slate-600">প্রয়োজনে অডিও আবার শুনে উত্তর দিন।</p>`
       },
@@ -1131,14 +1131,14 @@
         explanation: 'Writing-এ প্রশ্নের প্রতিটি অংশের উত্তর, অনুচ্ছেদের পরিষ্কার বিন্যাস এবং ধারণার যৌক্তিক সংযোগ গুরুত্বপূর্ণ। লেখা শুরু করার আগে ৩–৫ মিনিট পরিকল্পনা করুন।',
         steps: ['প্রশ্নের নির্দেশ—যেমন discuss, agree/disagree বা causes/solutions—চিহ্নিত করুন।', 'ভূমিকায় প্রশ্নটি নিজের ভাষায় তুলে ধরে স্পষ্ট অবস্থান জানান।', 'প্রতিটি বডি অনুচ্ছেদে একটি মূল বক্তব্য, ব্যাখ্যা ও উদাহরণ দিন; শেষে উত্তর যাচাই করুন।'],
         practice: `
-          <h3 class="text-lg font-extrabold text-slate-800">অনুশীলন: Task 2 Essay Plan</h3>
+          <h3 class="text-lg font-extrabold text-slate-800">Practice: Task 2 Essay Plan</h3>
           <p class="mt-3 rounded-2xl bg-slate-50 border border-slate-200 p-4 text-sm leading-7 text-slate-700">
             <strong>Question:</strong> Some people think public transport should be free in cities. To what extent do you agree or disagree?
           </p>
           <p class="mt-3 text-sm text-slate-600">নিজের অবস্থান এবং দুটি সমর্থনকারী কারণ নোট করুন। এটি পরিকল্পনার জায়গা; এখানে কোনো স্বয়ংক্রিয় AI মূল্যায়ন নেই।</p>
-          <textarea id="writingPlan" oninput="updateWritingWordCount()" rows="6" placeholder="ভূমিকার অবস্থান, কারণ ১, কারণ ২ এবং উপসংহার লিখুন..." class="mt-4 w-full resize-y rounded-2xl border border-slate-200 bg-white p-4 text-sm leading-6 outline-none focus:border-forest-500"></textarea>
-          <p class="mt-2 text-right text-xs font-semibold text-slate-500">পরিকল্পনার শব্দ: <span id="writingWordCount">0</span></p>
-          <button onclick="toggleWritingGuidance()" class="mt-3 px-4 py-2 rounded-xl border border-forest-200 bg-forest-50 text-sm font-bold text-forest-700">পরিকল্পনার নমুনা দেখুন</button>
+          <textarea id="writingPlan" oninput="updateWritingWordCount()" rows="6" placeholder="Write your position, reason 1, reason 2 and conclusion..." class="mt-4 w-full resize-y rounded-2xl border border-slate-200 bg-white p-4 text-sm leading-6 outline-none focus:border-forest-500"></textarea>
+          <p class="mt-2 text-right text-xs font-semibold text-slate-500">Planning words: <span id="writingWordCount">0</span></p>
+          <button onclick="toggleWritingGuidance()" class="mt-3 px-4 py-2 rounded-xl border border-forest-200 bg-forest-50 text-sm font-bold text-forest-700">Show sample plan</button>
           <p id="writingGuidance" class="hidden mt-3 rounded-xl bg-emerald-50 p-4 text-sm leading-6 text-emerald-800">অবস্থান: শর্তসাপেক্ষে একমত। কারণ ১: বিনামূল্যে যাতায়াত যানজট ও ব্যক্তিগত গাড়ির ব্যবহার কমাতে পারে। কারণ ২: এতে নিম্ন-আয়ের মানুষের কর্মস্থল ও শিক্ষায় যাতায়াত সহজ হয়। বিপরীত দিক: খরচ মেটাতে কর বা সরকারি বাজেট প্রয়োজন—এটি সমাধানের অংশ হিসেবে আলোচনা করুন।</p>`
       },
       Speaking: {
@@ -1147,7 +1147,7 @@
         explanation: 'Speaking Part 2-তে একটি cue card নিয়ে এক মিনিট প্রস্তুতির পর এক থেকে দুই মিনিট কথা বলতে হয়। প্রতিটি bullet point স্পর্শ করে একটি ছোট গল্পের মতো উত্তর সাজান।',
         steps: ['এক মিনিটে চারটি bullet point-এর পাশে একটি করে মূল শব্দ লিখুন।', 'অতীত, বর্তমান ও ভবিষ্যৎ—এই ধারায় কথা সাজালে উত্তর স্বাভাবিকভাবে এগোয়।', 'কারণ, অনুভূতি ও একটি নির্দিষ্ট উদাহরণ যোগ করুন; মুখস্থ উত্তরের মতো শোনানো এড়িয়ে চলুন।'],
         practice: `
-          <h3 class="text-lg font-extrabold text-slate-800">অনুশীলন: Speaking Part 2 Cue Card</h3>
+          <h3 class="text-lg font-extrabold text-slate-800">Practice: Speaking Part 2 Cue Card</h3>
           <div class="mt-4 rounded-2xl bg-slate-50 border border-slate-200 p-4 text-sm leading-7 text-slate-700">
             <p class="font-bold">Describe a skill you learned that was useful to you.</p>
             <ul class="mt-2 list-disc pl-5">
@@ -1159,9 +1159,9 @@
           </div>
           <div class="mt-4 flex items-center gap-4">
             <span id="speakingTimer" aria-live="polite" class="text-2xl font-black text-forest-700">01:00</span>
-            <button onclick="startSpeakingTimer()" class="px-4 py-2.5 rounded-xl bg-forest-600 text-white text-sm font-bold hover:bg-forest-700">১ মিনিট প্রস্তুতি শুরু</button>
+            <button onclick="startSpeakingTimer()" class="px-4 py-2.5 rounded-xl bg-forest-600 text-white text-sm font-bold hover:bg-forest-700">Start 1-minute preparation</button>
           </div>
-          <textarea id="speakingNotes" rows="4" placeholder="প্রস্তুতির সময় মূল শব্দগুলো লিখুন..." class="mt-4 w-full resize-y rounded-2xl border border-slate-200 bg-white p-4 text-sm leading-6 outline-none focus:border-forest-500"></textarea>
+          <textarea id="speakingNotes" rows="4" placeholder="Note key words while you prepare..." class="mt-4 w-full resize-y rounded-2xl border border-slate-200 bg-white p-4 text-sm leading-6 outline-none focus:border-forest-500"></textarea>
           <p class="mt-2 text-xs text-slate-500">সময় শেষ হলে নোট না পড়ে ১–২ মিনিট নিজের উত্তর বলার অনুশীলন করুন।</p>`
       }
     };
@@ -1173,7 +1173,7 @@
       content.innerHTML = `
         <section class="rounded-3xl bg-white border border-slate-200/80 p-5 md:p-8 shadow-sm">
           <button onclick="showView('viewHome')" class="mb-5 inline-flex items-center gap-2 text-sm font-bold text-forest-700 hover:underline">
-            <i class="fa-solid fa-arrow-left"></i> ড্যাশবোর্ডে ফিরুন
+            <i class="fa-solid fa-arrow-left"></i> Back to dashboard
           </button>
           <div class="flex items-start gap-4">
             <div class="w-12 h-12 shrink-0 rounded-2xl bg-forest-50 text-forest-700 flex items-center justify-center text-xl"><i class="fa-solid ${lesson.icon}"></i></div>
@@ -1185,7 +1185,7 @@
           </div>
         </section>
         <section class="rounded-3xl bg-white border border-slate-200/80 p-5 md:p-7 shadow-sm">
-          <h2 class="text-lg font-extrabold text-slate-800">কীভাবে অনুশীলন করবেন</h2>
+          <h2 class="text-lg font-extrabold text-slate-800">How to practise</h2>
           <p class="mt-3 text-sm leading-7 text-slate-600">${lesson.explanation}</p>
           <ol class="mt-4 space-y-3">
             ${lesson.steps.map((step, index) => `<li class="flex gap-3 text-sm leading-6 text-slate-700"><span class="w-6 h-6 shrink-0 rounded-full bg-forest-100 text-forest-700 flex items-center justify-center text-xs font-extrabold">${index + 1}</span><span>${step}</span></li>`).join('')}
@@ -1210,7 +1210,7 @@
 
     function playListeningPractice() {
       if (!('speechSynthesis' in window)) {
-        document.getElementById('listeningFeedback').innerText = 'এই ব্রাউজারে অডিও প্লেব্যাক সমর্থিত নয়।';
+        document.getElementById('listeningFeedback').innerText = 'Audio playback is not supported in this browser.';
         return;
       }
       window.speechSynthesis.cancel();
@@ -1250,7 +1250,7 @@
         if (secondsLeft <= 0) {
           clearInterval(speakingTimerInterval);
           speakingTimerInterval = null;
-          timer.innerText = 'এবার বলুন!';
+          timer.innerText = 'Now speak!';
         }
       }, 1000);
     }
@@ -1332,7 +1332,7 @@
     function renderCompletionButton() {
       const button = document.getElementById('completeTestBtn');
       const completed = getModuleCompletedTests(currentModule).includes(currentTest);
-      button.innerText = completed ? '✓ টেস্ট সম্পন্ন — আনমার্ক করুন' : 'এই টেস্ট সম্পন্ন হিসেবে চিহ্নিত করুন';
+      button.innerText = completed ? '✓ Test completed: unmark' : 'Mark this test as completed';
       button.setAttribute('aria-pressed', String(completed));
     }
 
@@ -1384,8 +1384,8 @@
         container.innerHTML = `
           <div class="col-span-full bg-white rounded-2xl md:rounded-3xl p-8 md:p-12 text-center space-y-2 border border-slate-200 my-4 shadow-sm">
             <i class="fa-solid fa-folder-open text-4xl text-slate-300"></i>
-            <p class="text-sm font-bold text-slate-700">${currentBook} (${currentTest}) এর জন্য কোনো শব্দ পাওয়া যায়নি</p>
-            <p class="text-xs text-slate-400">অ্যাডমিন প্যানেল থেকে নতুন শব্দ যোগ করুন।</p>
+            <p class="text-sm font-bold text-slate-700">${currentBook} (${currentTest}): no words found</p>
+            <p class="text-xs text-slate-400">Add new words from the admin panel.</p>
           </div>
         `;
         return;
@@ -1411,14 +1411,14 @@
             <div class="bg-forest-50/50 p-3 rounded-xl border border-forest-100">
               <h4 class="text-xs font-bold text-forest-700 uppercase tracking-wider mb-2 border-b border-forest-200 pb-1">Synonym:</h4>
               <ul class="space-y-1 list-disc list-inside text-slate-700">
-                ${synHTML || '<li class="text-[11px] text-slate-400">নেই</li>'}
+                ${synHTML || '<li class="text-[11px] text-slate-400">None</li>'}
               </ul>
               ${synExamples ? `<p class="mt-2 border-t border-forest-100 pt-2 text-[10px] font-bold text-forest-700">Examples</p><ul class="mt-1 space-y-1">${synExamples}</ul>` : ''}
             </div>
             <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-100">
               <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1">Antonym:</h4>
               <ul class="space-y-1 list-disc list-inside text-slate-700">
-                ${antHTML || '<li class="text-[11px] text-slate-400">নেই</li>'}
+                ${antHTML || '<li class="text-[11px] text-slate-400">None</li>'}
               </ul>
               ${antExamples ? `<p class="mt-2 border-t border-slate-200 pt-2 text-[10px] font-bold text-slate-600">Examples</p><ul class="mt-1 space-y-1">${antExamples}</ul>` : ''}
             </div>
@@ -1448,12 +1448,12 @@
     }
 
     async function handleLogout() {
-      if (await notify.confirm('আপনি কি নিশ্চিতভাবে লগআউট করতে চান?', { title: 'লগআউট', confirmText: 'লগআউট করুন' })) {
+      if (await notify.confirm('Are you sure you want to log out?', { title: 'Log out', confirmText: 'Log out' })) {
         try {
           await window.firebaseLogOut();
         } catch (error) {
           console.error('Logout failed.', error);
-          notify('লগআউট করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
+          notify('Could not log out. Check your internet connection and try again.');
           return;
         }
         closeModuleMenu();
@@ -1485,7 +1485,7 @@
       if (!user) return;
       saveProgress(user.uid, completedTests).catch(error => {
         console.error('Progress could not be saved to the cloud.', error);
-        notify('অগ্রগতি সেভ করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন।');
+        notify('Could not save your progress. Check your internet connection.');
       });
     };
 
@@ -1505,7 +1505,7 @@
         renderCompletionButton();
       } catch (error) {
         console.error('Progress could not be loaded from the cloud.', error);
-        notify('আপনার অগ্রগতি লোড করা যায়নি। পেজ রিফ্রেশ করে দেখুন।');
+        notify('Could not load your progress. Try refreshing the page.');
       }
     });
 
@@ -1522,7 +1522,7 @@
       renderWords();
     } catch (error) {
       console.error('Site content could not be loaded from Firestore.', error);
-      notify('নতুন কনটেন্ট লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে পেজ রিফ্রেশ করুন।');
+      notify('Could not load new content. Check your internet connection and refresh the page.');
     }
   </script>
 </body>

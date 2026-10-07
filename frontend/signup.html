@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -125,7 +125,7 @@
       <div id="loginFormContainer" class="space-y-5">
         <div>
           <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Log In</h1>
-          <p class="text-xs text-slate-400 mt-1 font-medium">ক্যামব্রিজ টেস্ট প্রস্তুতিতে ফিরে যেতে সাইন ইন করুন।</p>
+          <p class="text-xs text-slate-400 mt-1 font-medium">Sign in to continue your Cambridge test preparation.</p>
         </div>
 
         <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
@@ -192,7 +192,7 @@
       <div id="signupFormContainer" class="hidden space-y-5">
         <div>
           <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Create Account</h1>
-          <p class="text-xs text-slate-400 mt-1 font-medium">আপনার ফ্রি অ্যাকাউন্ট তৈরি করে প্রস্তুতি শুরু করুন।</p>
+          <p class="text-xs text-slate-400 mt-1 font-medium">Create your free account and start preparing.</p>
         </div>
 
         <form onsubmit="handleSignupSubmit(event)" class="space-y-4">
@@ -311,38 +311,46 @@
     import { auth, mirrorUser, saveUserProfile } from './firebase.js';
     import {
       createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider,
-      updateProfile, sendEmailVerification, sendPasswordResetEmail
+      updateProfile, sendEmailVerification, sendPasswordResetEmail, getAdditionalUserInfo
     } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
 
     const AUTH_ERRORS = {
-      'auth/email-already-in-use': 'এই ইমেইল দিয়ে আগেই অ্যাকাউন্ট খোলা হয়েছে। Log In করুন।',
-      'auth/invalid-email': 'ইমেইল ঠিকানাটি সঠিক নয়।',
-      'auth/weak-password': 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।',
-      'auth/invalid-credential': 'ইমেইল বা পাসওয়ার্ড ভুল।',
-      'auth/user-not-found': 'এই ইমেইলে কোনো অ্যাকাউন্ট নেই।',
-      'auth/wrong-password': 'ইমেইল বা পাসওয়ার্ড ভুল।',
-      'auth/too-many-requests': 'অনেকবার চেষ্টা করা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।',
-      'auth/popup-closed-by-user': 'Google লগইন উইন্ডো বন্ধ করা হয়েছে।',
-      'auth/popup-blocked': 'ব্রাউজার পপআপ ব্লক করেছে। পপআপ অনুমতি দিয়ে আবার চেষ্টা করুন।',
-      'auth/unauthorized-domain': 'এই ডোমেইন Firebase-এ অনুমোদিত নয়। Authentication → Settings → Authorized domains-এ যোগ করুন।',
-      'auth/network-request-failed': 'ইন্টারনেট সংযোগ পরীক্ষা করুন।'
+      'auth/email-already-in-use': 'An account with this email already exists. Please log in.',
+      'auth/invalid-email': 'Please enter a valid email address.',
+      'auth/weak-password': 'Password must be at least 6 characters.',
+      'auth/invalid-credential': 'Incorrect email or password.',
+      'auth/user-not-found': 'No account found with this email.',
+      'auth/wrong-password': 'Incorrect email or password.',
+      'auth/too-many-requests': 'Too many attempts. Please try again later.',
+      'auth/popup-closed-by-user': 'The Google sign-in window was closed.',
+      'auth/popup-blocked': 'Your browser blocked the popup. Allow popups and try again.',
+      'auth/unauthorized-domain': 'This domain is not authorized in Firebase. Add it under Authentication → Settings → Authorized domains.',
+      'auth/network-request-failed': 'Please check your internet connection.'
     };
 
     function showAuthError(error) {
       console.error(error);
-      notify(AUTH_ERRORS[error.code] || `লগইন করা যায়নি (${error.code || error.message})।`);
+      notify(AUTH_ERRORS[error.code] || `Could not sign in (${error.code || error.message}).`);
     }
 
-    function goHome(user) {
+    // New accounts get a congratulations message, returning users a login confirmation.
+    function goHome(user, isNewUser) {
       mirrorUser(user);
+      if (isNewUser) {
+        const name = user.displayName ? `, ${user.displayName}` : '';
+        notify.later(`🎉 Congratulations${name}! Your account has been created.${user.emailVerified ? '' : ' We sent a verification link to your email.'}`, 'success');
+      } else {
+        notify.later('Login successful. Welcome back!', 'success');
+      }
       window.location.href = 'index.html';
     }
 
     window.handleGoogleAuth = async function () {
       try {
-        const { user } = await signInWithPopup(auth, new GoogleAuthProvider());
-        await saveUserProfile(user);
-        goHome(user);
+        const result = await signInWithPopup(auth, new GoogleAuthProvider());
+        const isNewUser = !!getAdditionalUserInfo(result)?.isNewUser;
+        await saveUserProfile(result.user, isNewUser ? { createdAt: new Date().toISOString() } : {});
+        goHome(result.user, isNewUser);
       } catch (error) {
         showAuthError(error);
       }
@@ -354,7 +362,7 @@
       const password = document.getElementById('loginPassword').value;
       try {
         const { user } = await signInWithEmailAndPassword(auth, email, password);
-        goHome(user);
+        goHome(user, false);
       } catch (error) {
         showAuthError(error);
       }
@@ -370,8 +378,7 @@
         await updateProfile(user, { displayName: name });
         await saveUserProfile(user, { createdAt: new Date().toISOString() });
         await sendEmailVerification(user);
-        notify.later('অ্যাকাউন্ট তৈরি হয়েছে! আপনার ইমেইলে একটি যাচাই (verification) লিংক পাঠানো হয়েছে।', 'success');
-        goHome(user);
+        goHome(user, true);
       } catch (error) {
         showAuthError(error);
       }
@@ -380,12 +387,12 @@
     window.handlePasswordReset = async function () {
       const email = document.getElementById('loginEmail').value.trim();
       if (!email) {
-        notify('প্রথমে উপরের Email ঘরে আপনার ইমেইল লিখুন, তারপর আবার ক্লিক করুন।');
+        notify('Enter your email in the Email field above, then click again.');
         return;
       }
       try {
         await sendPasswordResetEmail(auth, email);
-        notify('পাসওয়ার্ড রিসেট লিংক আপনার ইমেইলে পাঠানো হয়েছে।', 'success');
+        notify('A password reset link has been sent to your email.', 'success');
       } catch (error) {
         showAuthError(error);
       }
