@@ -1448,7 +1448,7 @@
     }
 
     async function handleLogout() {
-      if (confirm("আপনি কি নিশ্চিতভাবে লগআউট করতে চান?")) {
+      if (await notify.confirm('আপনি কি নিশ্চিতভাবে লগআউট করতে চান?', { title: 'লগআউট', confirmText: 'লগআউট করুন' })) {
         try {
           await window.firebaseLogOut();
         } catch (error) {

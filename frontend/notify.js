@@ -61,6 +61,65 @@
     setTimeout(dismiss, duration || (type === 'error' || type === 'warning' ? 6000 : 3500));
   }
 
+  // Styled replacement for window.confirm(); resolves to true when confirmed.
+  notify.confirm = function (message, { title = 'নিশ্চিত করুন', confirmText = 'হ্যাঁ', cancelText = 'বাতিল' } = {}) {
+    return new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .15s;';
+
+      const dialog = document.createElement('div');
+      dialog.setAttribute('role', 'alertdialog');
+      dialog.setAttribute('aria-modal', 'true');
+      dialog.style.cssText = 'width:min(380px,100%);background:#fff;border-radius:20px;padding:22px;box-shadow:0 20px 50px rgba(15,23,42,.25);font-family:inherit;';
+
+      const heading = document.createElement('h2');
+      heading.textContent = title;
+      heading.style.cssText = 'margin:0 0 8px;font-size:17px;font-weight:800;color:#0f172a;';
+
+      const text = document.createElement('p');
+      text.textContent = message;
+      text.style.cssText = 'margin:0 0 20px;font-size:14px;line-height:1.6;color:#475569;';
+
+      const actions = document.createElement('div');
+      actions.style.cssText = 'display:flex;justify-content:flex-end;gap:10px;';
+
+      const cancel = document.createElement('button');
+      cancel.type = 'button';
+      cancel.textContent = cancelText;
+      cancel.style.cssText = 'padding:10px 18px;border-radius:12px;border:1px solid #e2e8f0;background:#fff;color:#334155;font-size:13px;font-weight:700;cursor:pointer;';
+
+      const ok = document.createElement('button');
+      ok.type = 'button';
+      ok.textContent = confirmText;
+      ok.style.cssText = 'padding:10px 18px;border-radius:12px;border:0;background:#dc2626;color:#fff;font-size:13px;font-weight:700;cursor:pointer;';
+
+      const finish = result => {
+        document.removeEventListener('keydown', onKey);
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.remove(), 150);
+        resolve(result);
+      };
+      const onKey = event => {
+        if (event.key === 'Escape') finish(false);
+      };
+      cancel.addEventListener('click', () => finish(false));
+      ok.addEventListener('click', () => finish(true));
+      overlay.addEventListener('click', event => {
+        if (event.target === overlay) finish(false);
+      });
+      document.addEventListener('keydown', onKey);
+
+      actions.append(cancel, ok);
+      dialog.append(heading, text, actions);
+      overlay.appendChild(dialog);
+      document.body.appendChild(overlay);
+      requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+      });
+      ok.focus();
+    });
+  };
+
   notify.later = function (message, type = 'error') {
     try {
       sessionStorage.setItem(QUEUE_KEY, JSON.stringify({ message, type }));
