@@ -48,7 +48,7 @@
       transform-origin: 50% 50%;
     }
     .slide-item {
-      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
     }
   </style>
   <script src="notify.js"></script>
@@ -60,9 +60,6 @@
     
     <div class="flex items-center gap-3">
       <a href="javascript:void(0)" onclick="showView('viewHome')" class="flex items-center gap-2.5">
-        <div class="w-10 h-10 rounded-xl bg-forest-600 text-white flex items-center justify-center font-black text-sm shadow-md shadow-forest-900/20">
-          IV
-        </div>
         <div>
           <span class="text-base md:text-lg font-black tracking-tight text-slate-900 leading-tight">IELTS <span class="text-forest-600">VocabMaster</span></span>
           <span data-cambridge-range class="hidden sm:inline-block ml-1 text-[10px] font-bold bg-forest-100 text-forest-700 px-2 py-0.5 rounded-md">Cambridge 10-19</span>
@@ -74,12 +71,10 @@
     <div class="flex items-center gap-3">
       
       <!-- Guest Controls -->
-      <div id="guestNavGroup" class="flex items-center gap-2">
-        <a href="signup.html" class="px-4 py-2 text-xs font-bold text-forest-700 hover:bg-forest-50 rounded-xl transition-all">Log in</a>
-        <a href="signup.html" class="px-4 py-2 bg-forest-600 hover:bg-forest-700 text-white text-xs font-bold rounded-xl shadow-md shadow-forest-900/20 transition-all flex items-center gap-1.5">
-          <i class="fa-solid fa-user-plus text-[10px]"></i>
-          <span>Create free account</span>
-        </a>
+      <!-- Stays invisible until Firebase confirms the visitor is a guest, so it never flashes for logged-in users. -->
+      <div id="guestNavGroup" class="invisible flex items-center gap-2">
+        <a href="signup.html" class="whitespace-nowrap rounded-lg bg-forest-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-forest-700">Log in</a>
+        <a href="signup.html#signup" class="whitespace-nowrap rounded-lg bg-forest-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-forest-700">Sign up</a>
       </div>
 
       <!-- User Profile Controls -->
@@ -208,17 +203,10 @@
 
         <!-- ================= HERO SLIDER SECTION ================= -->
         <div class="relative">
-            <section class="relative rounded-3xl overflow-hidden shadow-xl shadow-forest-900/15 md:min-h-[300px] h-[320px] md:h-[310px] select-none group">
+            <section class="relative rounded-3xl overflow-hidden shadow-xl shadow-forest-900/15 h-[240px] md:h-[270px] select-none group">
 
             <div id="sliderWrapper" class="relative w-full h-full">
             </div>
-
-            <button onclick="prevSlide()" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/30 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-80 md:opacity-0 group-hover:opacity-100 z-20">
-              <i class="fa-solid fa-chevron-left text-xs"></i>
-            </button>
-            <button onclick="nextSlide()" class="absolute right-3.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/30 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-80 md:opacity-0 group-hover:opacity-100 z-20">
-              <i class="fa-solid fa-chevron-right text-xs"></i>
-            </button>
 
             <div id="sliderDots" class="absolute bottom-3.5 inset-x-0 flex justify-center items-center gap-1.5 z-20">
             </div>
@@ -374,30 +362,31 @@
 
       <!-- ================= 3. WORDS & DETAILS VIEW ================= -->
       <div id="viewBookDetails" class="view-screen w-full hidden flex-col space-y-4 p-4 md:p-0">
-        <div class="bg-white border border-slate-200/80 p-4 md:p-5 rounded-2xl md:rounded-3xl shadow-sm flex items-center justify-between">
+        <!-- Stays fixed under the site header while the word list scrolls (--header-height is set in JS). -->
+        <div class="sticky z-30 bg-white border border-slate-200/80 p-3 md:p-5 rounded-2xl md:rounded-3xl shadow-sm flex flex-col gap-3 md:flex-row md:items-center md:justify-between" style="top: calc(var(--header-height, 64px) + 8px);">
           <div class="flex items-center gap-3">
-            <button onclick="showView('viewCambridgeList')" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors">
+            <button onclick="showView('viewCambridgeList')" aria-label="Back to book list" class="w-10 h-10 shrink-0 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors">
               <i class="fa-solid fa-chevron-left text-sm"></i>
             </button>
-            <h2 id="selectedBookHeader" class="text-base md:text-xl font-black text-slate-800">Cambridge 10</h2>
+            <h2 id="selectedBookHeader" class="whitespace-nowrap text-lg md:text-xl font-black text-slate-800">Cambridge 10</h2>
           </div>
 
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold text-slate-400 hidden md:inline mr-2">Choose a test:</span>
-            <div class="inline-flex bg-slate-100 p-1 rounded-xl">
-              <button data-test-access="T1" data-test-layout="desktop" onclick="selectTest('T1')" id="deskBtnT1" class="px-3 py-1.5 text-xs font-bold rounded-lg border border-forest-600 bg-forest-600 text-white transition-all flex items-center gap-1">
+            <div class="grid w-full grid-cols-4 gap-1 rounded-xl bg-slate-100 p-1 md:inline-flex md:w-auto">
+              <button data-test-access="T1" onclick="selectTest('T1')" id="deskBtnT1" class="px-3 py-2 md:py-1.5 text-xs font-bold rounded-lg border border-forest-600 bg-forest-600 text-white transition-all flex items-center justify-center gap-1">
                 <span>T1</span>
                 <span class="text-[9px] bg-white/20 px-1 rounded">FREE</span>
               </button>
-              <button data-test-access="T2" data-test-layout="desktop" onclick="handleLockedContentClick('T2')" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
+              <button data-test-access="T2" onclick="handleLockedContentClick('T2')" class="px-3 py-2 md:py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center justify-center gap-1">
                 <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
                 <span>T2</span>
               </button>
-              <button data-test-access="T3" data-test-layout="desktop" onclick="handleLockedContentClick('T3')" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
+              <button data-test-access="T3" onclick="handleLockedContentClick('T3')" class="px-3 py-2 md:py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center justify-center gap-1">
                 <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
                 <span>T3</span>
               </button>
-              <button data-test-access="T4" data-test-layout="desktop" onclick="handleLockedContentClick('T4')" class="px-3 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center gap-1">
+              <button data-test-access="T4" onclick="handleLockedContentClick('T4')" class="px-3 py-2 md:py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:bg-slate-200 transition-all flex items-center justify-center gap-1">
                 <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
                 <span>T4</span>
               </button>
@@ -412,27 +401,6 @@
             Mark this test as completed
           </button>
         </div>
-
-        <div class="md:hidden fixed bottom-[62px] inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 z-20 shadow-lg">
-          <div class="grid grid-cols-4 gap-2 max-w-sm mx-auto">
-            <button data-test-access="T1" data-test-layout="mobile" onclick="selectTest('T1')" class="py-2 text-xs font-bold rounded-xl border border-forest-600 bg-forest-600 text-white shadow-sm flex items-center justify-center gap-1">
-              <span>T1</span>
-              <span class="text-[9px] bg-white/20 px-1 rounded">FREE</span>
-            </button>
-            <button data-test-access="T2" data-test-layout="mobile" onclick="handleLockedContentClick('T2')" class="py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 flex items-center justify-center gap-1">
-              <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
-              <span>T2</span>
-            </button>
-            <button data-test-access="T3" data-test-layout="mobile" onclick="handleLockedContentClick('T3')" class="py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 flex items-center justify-center gap-1">
-              <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
-              <span>T3</span>
-            </button>
-            <button data-test-access="T4" data-test-layout="mobile" onclick="handleLockedContentClick('T4')" class="py-2 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 text-slate-600 flex items-center justify-center gap-1">
-              <i class="fa-solid fa-lock text-[10px] text-amber-500"></i>
-              <span>T4</span>
-            </button>
-          </div>
-        </div>
       </div>
 
     </main>
@@ -443,9 +411,6 @@
     <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
       <div class="space-y-3">
         <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-xl bg-forest-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
-            IV
-          </div>
           <span class="text-base font-black text-slate-800">IELTS <span class="text-forest-600">VocabMaster</span></span>
         </div>
         <p class="text-xs text-slate-500 leading-relaxed">
@@ -863,7 +828,7 @@
 
       bannersDB.forEach((banner, idx) => {
         const slide = document.createElement('div');
-        slide.className = `slide-item absolute inset-0 w-full h-full p-5 md:p-12 flex flex-col justify-between text-white ${idx === currentSlideIdx ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none z-0'}`;
+        slide.className = 'slide-item absolute inset-0 w-full h-full p-5 md:p-8 flex flex-col justify-between text-white';
         
         slide.innerHTML = `
           <div class="absolute inset-0 z-0 overflow-hidden">
@@ -871,19 +836,19 @@
             <div class="absolute inset-0 bg-gradient-to-r from-forest-900/95 via-forest-800/85 to-forest-950/70"></div>
           </div>
 
-          <div class="relative z-10 space-y-2 md:space-y-4 max-w-2xl">
+          <div class="relative z-10 space-y-2 md:space-y-3 max-w-2xl">
             <span class="inline-block px-3 py-0.5 md:px-3.5 md:py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] md:text-xs font-extrabold tracking-wider uppercase text-emerald-200">
               ${banner.tag}
             </span>
-            <h1 class="text-xl md:text-3xl lg:text-4xl font-black leading-tight tracking-tight drop-shadow-sm">
+            <h1 class="text-xl md:text-2xl lg:text-3xl font-black leading-tight tracking-tight drop-shadow-sm line-clamp-2">
               ${banner.title}
             </h1>
-            <p class="text-xs md:text-sm text-forest-100/90 font-medium leading-relaxed max-w-xl line-clamp-2 md:line-clamp-none">
+            <p class="text-xs md:text-sm text-forest-100/90 font-medium leading-relaxed max-w-xl line-clamp-2">
               ${banner.desc}
             </p>
           </div>
 
-          <div class="relative z-10 pt-3 md:pt-4 border-t border-white/15 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] md:text-xs text-forest-100 font-semibold">
+          <div class="relative z-10 pt-2.5 md:pt-3 border-t border-white/15 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] md:text-xs text-forest-100 font-semibold">
             ${banner.features.map((f, i) => `
               <div class="flex items-center gap-1">
                 <i class="fa-solid fa-circle-check text-emerald-300 text-[10px]"></i>
@@ -900,28 +865,39 @@
         wrapper.appendChild(slide);
 
         const dot = document.createElement('button');
-        dot.className = `w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all ${idx === currentSlideIdx ? 'bg-white w-6 md:w-7' : 'bg-white/40 hover:bg-white/70'}`;
+        dot.setAttribute('aria-label', `Slide ${idx + 1}`);
         dot.onclick = () => goToSlide(idx);
         dotsContainer.appendChild(dot);
+      });
+      positionSlides(-1, false);
+    }
+
+    // The current slide sits in view; the one just left slides out to the left,
+    // and every other slide waits off-screen on the right, so motion is always right-to-left.
+    function positionSlides(previousIdx, animate) {
+      document.querySelectorAll('#sliderWrapper .slide-item').forEach((slide, idx) => {
+        const isCurrent = idx === currentSlideIdx;
+        const isPrevious = idx === previousIdx;
+        slide.style.transition = animate && (isCurrent || isPrevious) ? 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
+        slide.style.transform = isCurrent ? 'translateX(0)' : isPrevious ? 'translateX(-100%)' : 'translateX(100%)';
+        slide.style.zIndex = isCurrent || isPrevious ? '10' : '0';
+        slide.setAttribute('aria-hidden', String(!isCurrent));
+      });
+      document.querySelectorAll('#sliderDots button').forEach((dot, idx) => {
+        dot.className = `h-2 md:h-2.5 rounded-full transition-all ${idx === currentSlideIdx ? 'bg-white w-6 md:w-7' : 'w-2 md:w-2.5 bg-white/40 hover:bg-white/70'}`;
       });
     }
 
     function goToSlide(idx) {
+      if (idx === currentSlideIdx) return;
+      const previousIdx = currentSlideIdx;
       currentSlideIdx = idx;
-      renderSlider();
+      positionSlides(previousIdx, true);
       restartSliderTimer();
     }
 
     function nextSlide() {
-      currentSlideIdx = (currentSlideIdx + 1) % bannersDB.length;
-      renderSlider();
-      restartSliderTimer();
-    }
-
-    function prevSlide() {
-      currentSlideIdx = (currentSlideIdx - 1 + bannersDB.length) % bannersDB.length;
-      renderSlider();
-      restartSliderTimer();
+      if (bannersDB.length > 1) goToSlide((currentSlideIdx + 1) % bannersDB.length);
     }
 
     function startSliderTimer() {
@@ -988,6 +964,8 @@
         }
       } else {
         document.getElementById('guestNavGroup').classList.remove('hidden');
+        // Fallback in case Firebase cannot load (e.g. offline): show the login buttons anyway.
+        setTimeout(() => document.getElementById('guestNavGroup').classList.remove('invisible'), 3000);
         // md:flex would otherwise override "hidden" on desktop and show the profile to guests.
         document.getElementById('userProfileGroup').classList.add('hidden');
         document.getElementById('userProfileGroup').classList.remove('md:flex');
@@ -1098,6 +1076,14 @@
     window.addEventListener('pageshow', event => {
       if (event.persisted) window.location.reload();
     });
+
+    // Sticky bars (e.g. the T1–T4 test bar) sit just below the site header, whose height varies by screen.
+    function updateHeaderHeight() {
+      const header = document.querySelector('header');
+      if (header) document.documentElement.style.setProperty('--header-height', `${header.offsetHeight}px`);
+    }
+    window.addEventListener('DOMContentLoaded', updateHeaderHeight);
+    window.addEventListener('resize', updateHeaderHeight);
 
     function setActiveModuleNav(activeModule) {
       document.querySelectorAll('[data-module-nav]').forEach(button => {
@@ -1357,11 +1343,8 @@
       if (!isAdminUser && !isPremiumUser) return;
       document.querySelectorAll('[data-test-access]').forEach(button => {
         const testId = button.dataset.testAccess;
-        const isDesktop = button.dataset.testLayout === 'desktop';
         const selected = testId === currentTest;
-        button.className = isDesktop
-          ? `px-3 py-1.5 text-xs font-bold rounded-lg border transition-all flex items-center gap-1 ${selected ? 'border-forest-600 bg-forest-600 text-white' : 'border-slate-200 bg-white text-slate-600 hover:bg-forest-50'}`
-          : `py-2 text-xs font-bold rounded-xl border flex items-center justify-center gap-1 ${selected ? 'border-forest-600 bg-forest-600 text-white shadow-sm' : 'border-slate-200 bg-white text-slate-600 hover:bg-forest-50'}`;
+        button.className = `px-3 py-2 md:py-1.5 text-xs font-bold rounded-lg border transition-all flex items-center justify-center gap-1 ${selected ? 'border-forest-600 bg-forest-600 text-white' : 'border-slate-200 bg-white text-slate-600 hover:bg-forest-50'}`;
         button.onclick = () => selectTest(testId);
         button.innerHTML = `<span>${testId}</span>`;
       });
@@ -1573,7 +1556,10 @@
         window.location.reload();
         return;
       }
-      if (!user) return;
+      if (!user) {
+        document.getElementById('guestNavGroup').classList.remove('invisible');
+        return;
+      }
       try {
         const { progress, premium } = await loadUserData(user.uid);
         await pageReady;

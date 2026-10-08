@@ -4,6 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="open-in-browser.js"></script>
+  <script>
+    // A logged-in visitor is sent straight home; hide the form meanwhile so it does not flash.
+    try {
+      if (localStorage.getItem('user_auth_token')) {
+        document.documentElement.style.visibility = 'hidden';
+        // Fallback in case Firebase cannot load: never leave the page hidden.
+        setTimeout(() => { document.documentElement.style.visibility = ''; }, 4000);
+      }
+    } catch {
+      // Without localStorage the page simply shows normally.
+    }
+  </script>
   <title>Login & Sign Up - IELTS VocabMaster</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
@@ -57,9 +69,6 @@
       
       <!-- Brand Logo -->
       <a href="index.html" class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-forest-600 text-white flex items-center justify-center font-extrabold text-base shadow-md shadow-forest-900/20">
-          IV
-        </div>
         <div>
           <span class="text-lg font-black tracking-tight text-slate-900">IELTS <span class="text-forest-600">VocabMaster</span></span>
           <span class="hidden sm:inline-block ml-1 text-[10px] font-bold bg-forest-100 text-forest-700 px-2 py-0.5 rounded-md">CAMBRIDGE PREP</span>
@@ -307,6 +316,8 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // "Sign up" links point to signup.html#signup.
+    if (window.location.hash === '#signup') switchToSignUp();
   </script>
   <script type="module">
     import { auth, mirrorUser, saveUserProfile, waitForUser } from './firebase.js';
@@ -316,12 +327,16 @@
     } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
 
     // Someone who is already logged in (e.g. reaching this page with the Back button) goes straight home.
+    const showPage = () => { document.documentElement.style.visibility = ''; };
     waitForUser().then(user => {
       if (user) {
         mirrorUser(user);
         window.location.replace('index.html');
+      } else {
+        mirrorUser(null);
+        showPage();
       }
-    });
+    }, showPage);
     window.addEventListener('pageshow', event => {
       if (event.persisted) window.location.reload();
     });
