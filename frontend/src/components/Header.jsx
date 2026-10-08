@@ -7,6 +7,7 @@ import { MODULE_META, MODULE_NAMES } from '../lib/data';
 import useLogout from '../lib/useLogout';
 import useClickOutside from '../lib/useClickOutside';
 import Avatar from './Avatar';
+import Drawer from './Drawer';
 
 function MembershipBadge() {
   const { isAdmin, isPremium, needsAdminVerification } = useAuth();
@@ -59,7 +60,7 @@ function ProfileMenu() {
       {open && (
         <div className="absolute right-0 top-full z-50 mt-2 max-h-[calc(100vh-5rem)] w-64 space-y-1 overflow-y-auto rounded-2xl border border-slate-200/90 bg-white p-2 shadow-2xl">
           <div className="border-b border-slate-100 px-3 py-2">
-            <p className="text-xs font-bold uppercase text-slate-400">User account</p>
+            <p className="text-xs font-bold uppercase text-slate-400">{isAdmin ? 'Admin account' : 'Student account'}</p>
             <p className="truncate text-sm font-black text-slate-800">{profile?.email}</p>
           </div>
           {isAdmin && (
@@ -92,30 +93,25 @@ function ProfileMenu() {
   );
 }
 
-// Mobile-only menu (☰) with the four modules, shown to logged-in visitors.
+// Mobile-only menu (☰) with the four modules, shown to logged-in visitors as a slide-in drawer.
 function ModuleMenu() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const ref = useRef(null);
   const close = useCallback(() => setOpen(false), []);
-  useClickOutside(ref, close, open);
 
   return (
-    <div ref={ref} className="relative md:hidden">
-      <button type="button" onClick={() => setOpen(value => !value)} aria-label="Open module menu" aria-haspopup="menu" aria-expanded={open} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-forest-500 hover:text-forest-700">
+    <div className="md:hidden">
+      <button type="button" onClick={() => setOpen(true)} aria-label="Open module menu" aria-haspopup="dialog" aria-expanded={open} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-forest-500 hover:text-forest-700">
         <i className="fa-solid fa-bars text-base" aria-hidden="true"></i>
       </button>
-      {open && (
-        <div role="menu" aria-label="Module navigation" className="absolute right-0 top-12 z-50 w-64 rounded-2xl border border-slate-200 bg-white p-2.5 shadow-xl">
-          <p className="px-3 py-2 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Navigation menu</p>
-          {MODULE_NAMES.map(name => (
-            <button key={name} type="button" role="menuitem" onClick={() => { close(); navigate(`/practice/${name}`); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-bold text-slate-700 transition-colors hover:bg-forest-50 hover:text-forest-700">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-forest-50 text-forest-600"><i className={`fa-solid ${MODULE_META[name].icon} text-base`}></i></span>
-              <span>{MODULE_META[name].navLabel}</span>
-            </button>
-          ))}
-        </div>
-      )}
+      <Drawer open={open} onClose={close} title="Navigation menu" labelledBy="moduleDrawerTitle">
+        {MODULE_NAMES.map(name => (
+          <button key={name} type="button" onClick={() => { close(); navigate(`/practice/${name}`); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-bold text-slate-700 transition-colors hover:bg-forest-50 hover:text-forest-700">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-forest-50 text-forest-600"><i className={`fa-solid ${MODULE_META[name].icon} text-base`}></i></span>
+            <span>{MODULE_META[name].navLabel}</span>
+          </button>
+        ))}
+      </Drawer>
     </div>
   );
 }

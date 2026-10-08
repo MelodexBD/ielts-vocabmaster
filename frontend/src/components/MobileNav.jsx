@@ -1,11 +1,11 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link, useMatch, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useUI } from '../context/UIContext';
 import useLogout from '../lib/useLogout';
-import useClickOutside from '../lib/useClickOutside';
 import Avatar from './Avatar';
 import { VerifyAdminButton } from './Header';
+import Drawer from './Drawer';
 
 // Bottom navigation bar and account menu for phones.
 export default function MobileNav() {
@@ -15,20 +15,18 @@ export default function MobileNav() {
   const logout = useLogout();
   const onHome = useMatch('/');
   const [menuOpen, setMenuOpen] = useState(false);
-  const ref = useRef(null);
   const close = useCallback(() => setMenuOpen(false), []);
-  useClickOutside(ref, close, menuOpen);
 
   const onProfileClick = () => {
     if (!isLoggedIn) {
       navigate('/login');
       return;
     }
-    setMenuOpen(value => !value);
+    setMenuOpen(true);
   };
 
   return (
-    <div ref={ref} className="md:hidden">
+    <div className="md:hidden">
       <nav className="fixed inset-x-0 bottom-0 z-30 select-none border-t border-slate-200 bg-white px-2 py-1.5 shadow-lg">
         <div className="mx-auto grid w-full max-w-md grid-cols-5 items-center justify-items-center">
           <button type="button" onClick={() => navigate('/')} className={`flex w-full flex-col items-center justify-center py-1 transition-all ${onHome ? 'text-forest-600' : 'text-slate-400 hover:text-slate-600'}`}>
@@ -53,7 +51,7 @@ export default function MobileNav() {
             <span className="mt-0.5 text-[10px] font-medium">Progress</span>
           </button>
 
-          <button type="button" onClick={onProfileClick} aria-label="Open profile and menu" aria-haspopup="menu" aria-expanded={menuOpen} className={`flex w-full flex-col items-center justify-center py-1 transition-all ${isLoggedIn ? 'text-forest-600' : 'text-slate-400 hover:text-slate-600'}`}>
+          <button type="button" onClick={onProfileClick} aria-label="Open profile and menu" aria-haspopup="dialog" aria-expanded={menuOpen} className={`flex w-full flex-col items-center justify-center py-1 transition-all ${isLoggedIn ? 'text-forest-600' : 'text-slate-400 hover:text-slate-600'}`}>
             {isLoggedIn
               ? <Avatar profile={profile} className="h-7 w-7 text-[10px] ring-2 ring-forest-500/30" />
               : <i className="fa-solid fa-user text-lg"></i>}
@@ -62,33 +60,36 @@ export default function MobileNav() {
         </div>
       </nav>
 
-      {menuOpen && (
-        <div role="menu" aria-label="Profile and module menu" className="fixed bottom-[70px] right-2 z-40 max-h-[75vh] w-72 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl">
-          <div className="border-b border-slate-100 px-3 py-2">
-            <p className="text-xs font-bold uppercase text-slate-400">User account</p>
-            <p className="truncate text-sm font-black text-slate-800">{profile?.email}</p>
+      <Drawer open={menuOpen} onClose={close} title={isAdmin ? 'Admin account' : 'Student account'} labelledBy="profileDrawerTitle">
+        <div className="mb-3 flex items-center gap-3 rounded-2xl bg-forest-50/70 p-3">
+          <Avatar profile={profile} className="h-12 w-12 shrink-0 text-sm ring-2 ring-forest-500/20" />
+          <div className="min-w-0">
+            <p className="truncate text-sm font-black text-slate-900">{profile?.name}</p>
+            <p className="truncate text-xs font-semibold text-slate-500">{profile?.email}</p>
           </div>
-          <div className="mt-1 border-t border-slate-100 pt-1">
-            {isAdmin && (
-              <Link to="/admin" className="flex w-full items-center gap-3 rounded-xl bg-forest-50/70 px-3 py-2.5 text-xs font-bold text-forest-700 hover:bg-forest-100">
-                <i className="fa-solid fa-screwdriver-wrench w-5 text-center text-forest-600"></i><span>Admin panel</span>
-              </Link>
-            )}
-            <VerifyAdminButton onDone={close} className="flex w-full items-center gap-3 rounded-xl bg-amber-50 px-3 py-2.5 text-left text-xs font-bold text-amber-700 hover:bg-amber-100" />
-            {!isAdmin && (
-              <button type="button" onClick={() => { close(); openPricing(); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-amber-600 hover:bg-amber-50">
-                <i className="fa-solid fa-crown w-5 text-center"></i><span>Upgrade to Premium</span>
-              </button>
-            )}
-            <button type="button" onClick={() => { close(); navigate('/'); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700">
-              <i className="fa-solid fa-gauge-high w-5 text-center text-forest-600"></i><span>Dashboard view</span>
+        </div>
+        <div className="space-y-1">
+          {isAdmin && (
+            <Link to="/admin" onClick={close} className="flex w-full items-center gap-3 rounded-xl bg-forest-50/70 px-3 py-3 text-sm font-bold text-forest-700 hover:bg-forest-100">
+              <i className="fa-solid fa-screwdriver-wrench w-5 text-center text-forest-600"></i><span>Admin panel</span>
+            </Link>
+          )}
+          <VerifyAdminButton onDone={close} className="flex w-full items-center gap-3 rounded-xl bg-amber-50 px-3 py-3 text-left text-sm font-bold text-amber-700 hover:bg-amber-100" />
+          {!isAdmin && (
+            <button type="button" onClick={() => { close(); openPricing(); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-bold text-amber-600 hover:bg-amber-50">
+              <i className="fa-solid fa-crown w-5 text-center"></i><span>Upgrade to Premium</span>
             </button>
-            <button type="button" onClick={() => { close(); logout(); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-rose-600 hover:bg-rose-50">
+          )}
+          <button type="button" onClick={() => { close(); navigate('/'); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-bold text-slate-700 hover:bg-forest-50 hover:text-forest-700">
+            <i className="fa-solid fa-gauge-high w-5 text-center text-forest-600"></i><span>Dashboard view</span>
+          </button>
+          <div className="border-t border-slate-100 pt-1">
+            <button type="button" onClick={() => { close(); logout(); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-bold text-rose-600 hover:bg-rose-50">
               <i className="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i><span>Log out</span>
             </button>
           </div>
         </div>
-      )}
+      </Drawer>
     </div>
   );
 }
