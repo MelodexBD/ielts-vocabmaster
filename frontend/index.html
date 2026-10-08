@@ -1051,7 +1051,52 @@
         setActiveModuleNav(currentModule);
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (!restoringHistory) recordViewInHistory(viewId);
     }
+
+    // ------------------------------------------------------------------
+    // BROWSER / MOBILE BACK BUTTON
+    // Every view change is added to the browser history, so the back button
+    // returns to the previous screen of the site instead of leaving the page.
+    // ------------------------------------------------------------------
+    let restoringHistory = false;
+    history.replaceState({ view: 'viewHome' }, '');
+
+    function recordViewInHistory(viewId) {
+      const state = { view: viewId, module: currentModule, book: currentBook };
+      const current = history.state || {};
+      if (current.view === state.view && current.module === state.module && current.book === state.book) return;
+      history.pushState(state, '');
+    }
+
+    window.addEventListener('popstate', event => {
+      const state = event.state || { view: 'viewHome' };
+      closeModal('pricingModal');
+      closeModal('authPromptModal');
+      closeMobileAccountMenu();
+      restoringHistory = true;
+      try {
+        if (state.view === 'viewCambridgeList') {
+          openCambridgeList(state.module);
+        } else if (state.view === 'viewModuleExercise') {
+          openExercise(state.module);
+        } else if (state.view === 'viewBookDetails') {
+          currentModule = state.module;
+          document.getElementById('moduleTitleHeader').innerText = state.module + ' Module';
+          openBookDetails(state.book);
+        } else {
+          showView('viewHome');
+        }
+      } finally {
+        restoringHistory = false;
+      }
+    });
+
+    // Mobile browsers can restore an old copy of the page from memory (for example the
+    // guest view from before login). Reload it so the login state is always current.
+    window.addEventListener('pageshow', event => {
+      if (event.persisted) window.location.reload();
+    });
 
     function setActiveModuleNav(activeModule) {
       document.querySelectorAll('[data-module-nav]').forEach(button => {

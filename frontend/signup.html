@@ -308,11 +308,22 @@
 
   </script>
   <script type="module">
-    import { auth, mirrorUser, saveUserProfile } from './firebase.js';
+    import { auth, mirrorUser, saveUserProfile, waitForUser } from './firebase.js';
     import {
       createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider,
       updateProfile, sendEmailVerification, sendPasswordResetEmail, getAdditionalUserInfo
     } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
+
+    // Someone who is already logged in (e.g. reaching this page with the Back button) goes straight home.
+    waitForUser().then(user => {
+      if (user) {
+        mirrorUser(user);
+        window.location.replace('index.html');
+      }
+    });
+    window.addEventListener('pageshow', event => {
+      if (event.persisted) window.location.reload();
+    });
 
     const AUTH_ERRORS = {
       'auth/email-already-in-use': 'An account with this email already exists. Please log in.',
@@ -342,7 +353,8 @@
       } else {
         notify.later('Login successful. Welcome back!', 'success');
       }
-      window.location.href = 'index.html';
+      // replace() keeps the login page out of the history, so Back does not return to it.
+      window.location.replace('index.html');
     }
 
     window.handleGoogleAuth = async function () {
