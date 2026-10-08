@@ -72,8 +72,10 @@ export function mirrorUser(user) {
     localStorage.setItem('user_auth_token', 'firebase');
     localStorage.setItem('user_name', user.displayName || email.split('@')[0] || 'User');
     localStorage.setItem('user_email', email);
-    // Google accounts come with a profile photo; email/password accounts have none.
-    if (user.photoURL) localStorage.setItem('user_photo', user.photoURL);
+    // Google accounts come with a profile photo; email/password accounts have none. If the account was
+    // created with a password and Google was linked later, the photo is only on the Google provider entry.
+    const photoUrl = user.photoURL || (user.providerData || []).map(provider => provider.photoURL).find(Boolean);
+    if (photoUrl) localStorage.setItem('user_photo', photoUrl);
     else localStorage.removeItem('user_photo');
   } else {
     keys.forEach(key => localStorage.removeItem(key));

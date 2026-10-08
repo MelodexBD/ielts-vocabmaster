@@ -79,17 +79,16 @@
       </div>
 
       <!-- User Profile Controls -->
-      <div id="userProfileGroup" class="hidden md:flex relative items-center gap-2">
+      <div id="userProfileGroup" class="hidden relative items-center gap-2">
           <button onclick="toggleProfileDropdown(event)" class="flex items-center gap-3 p-1 rounded-2xl hover:bg-slate-50 transition-colors focus:outline-none">
           <div class="relative">
             <div id="userAvatarPill" class="w-10 h-10 rounded-full bg-gradient-to-tr from-forest-700 to-forest-500 text-white font-extrabold flex items-center justify-center text-sm shadow-md ring-2 ring-forest-500/20">
-              TA
             </div>
             <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
           </div>
           <div class="text-left hidden sm:block">
             <div class="flex items-center gap-1.5">
-              <h2 id="headerUserName" class="text-sm font-extrabold text-slate-900 leading-tight">Tanbir Ahmed</h2>
+              <h2 id="headerUserName" class="text-sm font-extrabold text-slate-900 leading-tight"></h2>
               <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
             </div>
             <p id="userSubscriptionBadge" class="text-[11px] font-bold text-amber-600">Free Tier Member</p>
@@ -100,7 +99,7 @@
         <div id="profileDropdown" class="hidden absolute right-0 top-full mt-2 max-h-[calc(100vh-5rem)] w-64 overflow-y-auto bg-white border border-slate-200/90 rounded-2xl shadow-2xl z-50 p-2 space-y-1">
           <div class="px-3 py-2 border-b border-slate-100">
             <p class="text-xs text-slate-400 font-bold uppercase">User account</p>
-            <p id="dropdownUserEmail" class="text-sm font-black text-slate-800 truncate">tanbir.ahmed@example.com</p>
+            <p id="dropdownUserEmail" class="text-sm font-black text-slate-800 truncate"></p>
           </div>
           
           <!-- Admin link (hidden by default; shown only for the admin email) -->
@@ -479,7 +478,8 @@
       </button>
 
       <button id="mobileProfileButton" onclick="handleProfileOrLoginClick(event)" aria-label="Open profile and menu" aria-haspopup="menu" aria-controls="mobileAccountMenu" aria-expanded="false" class="nav-btn flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-600 transition-all">
-        <i class="fa-solid fa-user text-lg"></i>
+        <i id="mobileProfileIcon" class="fa-solid fa-user text-lg"></i>
+        <span id="mobileProfileAvatar" class="hidden h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-gradient-to-tr from-forest-700 to-forest-500 text-[10px] font-extrabold text-white ring-2 ring-forest-500/30"></span>
         <span class="text-[10px] font-medium mt-0.5">Profile</span>
       </button>
     </div>
@@ -923,28 +923,23 @@
         document.getElementById('guestNavGroup').classList.add('hidden');
         document.getElementById('headerModuleMenuContainer').classList.remove('hidden');
         document.getElementById('mobileProfileButton').classList.replace('text-slate-400', 'text-forest-600');
+        document.getElementById('userProfileGroup').classList.add('md:flex');
 
-        const savedName = localStorage.getItem('user_name') || 'Tanbir Ahmed (Google)';
-        const profileEmail = savedEmail || 'tanbir.google@gmail.com';
+        const savedName = localStorage.getItem('user_name') || 'User';
+        const profileEmail = savedEmail;
         
         document.getElementById('headerUserName').innerText = savedName;
         document.getElementById('dropdownUserEmail').innerText = profileEmail;
         document.getElementById('mobileDropdownUserEmail').innerText = profileEmail;
         
-        const initials = savedName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'TA';
-        const avatar = document.getElementById('userAvatarPill');
-        avatar.innerText = initials;
+        const initials = savedName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'U';
         const photoUrl = localStorage.getItem('user_photo');
-        if (photoUrl) {
-          // Show the Google account photo; fall back to initials if it fails to load.
-          const photo = document.createElement('img');
-          photo.src = photoUrl;
-          photo.alt = savedName;
-          photo.referrerPolicy = 'no-referrer';
-          photo.className = 'h-full w-full rounded-full object-cover';
-          photo.onerror = () => { avatar.innerText = initials; };
-          avatar.replaceChildren(photo);
-        }
+        fillAvatar(document.getElementById('userAvatarPill'), photoUrl, initials, savedName);
+        // Mobile bottom bar: the generic user icon becomes the round account photo (or initials).
+        document.getElementById('mobileProfileIcon').classList.add('hidden');
+        const mobileAvatar = document.getElementById('mobileProfileAvatar');
+        mobileAvatar.classList.replace('hidden', 'flex');
+        fillAvatar(mobileAvatar, photoUrl, initials, savedName);
         renderMembershipBadge();
 
     // The admin option is visible only for ieltsvocabmaster@gmail.com
@@ -984,6 +979,19 @@
       renderProgress();
       setActiveModuleNav('home');
     });
+
+    // Shows the Google account photo inside a round avatar; falls back to initials if there is none or it fails to load.
+    function fillAvatar(element, photoUrl, initials, name) {
+      element.innerText = initials;
+      if (!photoUrl) return;
+      const photo = document.createElement('img');
+      photo.src = photoUrl;
+      photo.alt = name;
+      photo.referrerPolicy = 'no-referrer';
+      photo.className = 'h-full w-full rounded-full object-cover';
+      photo.onerror = () => { element.innerText = initials; };
+      element.replaceChildren(photo);
+    }
 
     function renderMembershipBadge() {
       const badge = document.getElementById('userSubscriptionBadge');
