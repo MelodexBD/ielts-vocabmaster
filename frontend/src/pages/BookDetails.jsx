@@ -56,26 +56,19 @@ function WordCard({ word }) {
   );
 }
 
-function TestButton({ test, selected, unlocked, isFreeTest, onClick }) {
-  const base = 'flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-xs font-bold transition-all md:py-1.5';
-  if (unlocked && !isFreeTest) {
+// Open tests can be selected; locked ones show the PRO crown and open the unlock prompt.
+function TestButton({ test, selected, unlocked, onClick }) {
+  const base = 'flex items-center justify-center gap-1 rounded-lg px-1.5 py-1.5 text-xs font-bold transition-all md:px-3';
+  if (unlocked) {
     return (
-      <button type="button" onClick={onClick} className={`${base} border ${selected ? 'border-forest-600 bg-forest-600 text-white' : 'border-slate-200 bg-white text-slate-600 hover:bg-forest-50'}`}>
+      <button type="button" onClick={onClick} aria-pressed={selected} className={`${base} border ${selected ? 'border-forest-600 bg-forest-600 text-white' : 'border-slate-200 bg-white text-slate-600 hover:bg-forest-50'}`}>
         <span>{test}</span>
-      </button>
-    );
-  }
-  if (isFreeTest) {
-    return (
-      <button type="button" onClick={onClick} className={`${base} border border-forest-600 bg-forest-600 text-white`}>
-        <span>{test}</span>
-        <span className="rounded bg-white/20 px-1 text-[9px]">FREE</span>
       </button>
     );
   }
   return (
-    <button type="button" onClick={onClick} className={`${base} text-slate-500 hover:bg-slate-200`}>
-      <i className="fa-solid fa-lock text-[10px] text-amber-500"></i>
+    <button type="button" onClick={onClick} aria-label={`${test} (PRO)`} className={`${base} border border-transparent text-slate-500 hover:bg-amber-50`}>
+      <i className="fa-solid fa-crown text-[10px] text-amber-500"></i>
       <span>{test}</span>
     </button>
   );
@@ -88,9 +81,11 @@ export default function BookDetails() {
   const { status, isLoggedIn, isAdmin, completedTests, toggleTestCompletion } = useAuth();
   const { vocabulary, bookRange } = useSiteData();
   const { selection, setSelection } = useUI();
-  const { canOpenBook, canOpenTest, showLockedPrompt, hasFullAccess } = useBookAccess();
+  const { canOpenBook, canOpenTest, showLockedPrompt } = useBookAccess();
   const book = `Cambridge ${number}`;
-  const test = selection.book === book ? selection.test : 'T1';
+  const chosenTest = selection.book === book ? selection.test : 'T1';
+  // A test that is no longer open (e.g. after logging out) falls back to the free Test 1.
+  const test = canOpenTest(number, chosenTest) ? chosenTest : 'T1';
 
   useEffect(() => {
     if (selection.book !== book) setSelection({ book, test: 'T1' });
@@ -115,15 +110,16 @@ export default function BookDetails() {
 
   return (
     <div className="flex w-full flex-col space-y-4 p-4 md:p-0">
-      {/* Stays fixed under the site header while the word list scrolls. */}
-      <div className="sticky z-30 flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-white p-3 shadow-sm md:flex-row md:items-center md:justify-between md:rounded-3xl md:p-5" style={{ top: 'calc(var(--header-height, 64px) + 8px)' }}>
-        <div className="flex items-center gap-3">
-          <button type="button" onClick={() => navigate(`/books/${module}`)} aria-label="Back to book list" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700 transition-colors hover:bg-slate-200">
+      {/* Stays fixed right under the site header while the word list scrolls. On phones it is a slim,
+          full-width bar (back button, book and the four tests on one line) so more words fit on screen. */}
+      <div className="sticky top-[var(--header-height,64px)] z-30 -mx-4 -mt-4 flex items-center gap-2 border-b border-slate-200/80 bg-white px-3 py-2 shadow-sm md:top-[calc(var(--header-height,64px)_+_8px)] md:mx-0 md:mt-0 md:justify-between md:gap-3 md:rounded-3xl md:border md:p-5">
+        <div className="flex shrink-0 items-center gap-2 md:gap-3">
+          <button type="button" onClick={() => navigate(`/books/${module}`)} aria-label="Back to book list" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700 transition-colors hover:bg-slate-200 md:h-10 md:w-10">
             <i className="fa-solid fa-chevron-left text-sm"></i>
           </button>
-          <h2 className="whitespace-nowrap text-lg font-black text-slate-800 md:text-xl">{book}</h2>
+          <h2 className="whitespace-nowrap text-base font-black text-slate-800 md:text-xl">{book}</h2>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2 md:flex-none">
           <span className="mr-2 hidden text-xs font-bold text-slate-400 md:inline">Choose a test:</span>
           <div className="grid w-full grid-cols-4 gap-1 rounded-xl bg-slate-100 p-1 md:inline-flex md:w-auto">
             {TESTS.map(item => (
@@ -131,8 +127,7 @@ export default function BookDetails() {
                 key={item}
                 test={item}
                 selected={item === test}
-                unlocked={hasFullAccess}
-                isFreeTest={!hasFullAccess && item === 'T1'}
+                unlocked={canOpenTest(number, item)}
                 onClick={() => selectTest(item)}
               />
             ))}

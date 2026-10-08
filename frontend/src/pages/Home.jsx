@@ -48,7 +48,8 @@ function LearningDashboard() {
   const { bookRange } = useSiteData();
   const overall = overallProgress(completedTests);
   const totalTests = (bookRange.end - bookRange.start + 1) * 4;
-  const freeTests = bookRange.start <= 10 && bookRange.end >= 10 ? 1 : 0;
+  // Cambridge 10 is free: Test 1 for guests, all four tests with a free account.
+  const freeTests = bookRange.start <= 10 && bookRange.end >= 10 ? (isLoggedIn ? 4 : 1) : 0;
 
   return (
     <section className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm md:flex-row md:p-6">

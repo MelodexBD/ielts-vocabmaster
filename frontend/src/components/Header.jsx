@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useMatch, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useSiteData } from '../context/SiteDataContext';
 import { useUI } from '../context/UIContext';
@@ -100,6 +100,10 @@ function ModuleMenu() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
+  // The module of the current page (practice or its books) is shown as active, like the desktop sidebar.
+  const books = useMatch('/books/:module/*');
+  const practice = useMatch('/practice/:module');
+  const activeModule = books?.params.module || practice?.params.module;
 
   return (
     <div className="md:hidden">
@@ -107,12 +111,16 @@ function ModuleMenu() {
         <i className="fa-solid fa-bars text-base" aria-hidden="true"></i>
       </button>
       <Drawer open={open} onClose={close} title="Navigation menu" labelledBy="moduleDrawerTitle">
-        {MODULE_NAMES.map(name => (
-          <button key={name} type="button" onClick={() => { close(); navigate(`/practice/${name}`); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-bold text-slate-700 transition-colors hover:bg-forest-50 hover:text-forest-700">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-forest-50 text-forest-600"><i className={`fa-solid ${MODULE_META[name].icon} text-base`}></i></span>
-            <span>{MODULE_META[name].navLabel}</span>
-          </button>
-        ))}
+        {MODULE_NAMES.map(name => {
+          const active = name === activeModule;
+          return (
+            <button key={name} type="button" aria-current={active ? 'page' : undefined} onClick={() => { close(); navigate(`/practice/${name}`); }} className={`mb-1 flex w-full items-center gap-3 rounded-xl border px-3 py-3 text-left text-sm font-bold transition-colors ${active ? 'border-forest-200 bg-forest-50 text-forest-700' : 'border-transparent text-slate-700 hover:bg-forest-50 hover:text-forest-700'}`}>
+              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${active ? 'bg-forest-600 text-white shadow-sm' : 'bg-forest-50 text-forest-600'}`}><i className={`fa-solid ${MODULE_META[name].icon} text-base`}></i></span>
+              <span>{MODULE_META[name].navLabel}</span>
+              {active && <i className="fa-solid fa-circle ml-auto text-[7px] text-forest-600" aria-hidden="true"></i>}
+            </button>
+          );
+        })}
       </Drawer>
     </div>
   );

@@ -95,7 +95,7 @@ function AuthPromptModal({ onClose }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm" onClick={event => event.target === event.currentTarget && onClose()}>
       <div className="w-full max-w-md space-y-5 rounded-3xl bg-white p-6 text-center shadow-2xl sm:p-8">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl border border-forest-100 bg-forest-50 text-2xl text-forest-600 shadow-inner">
-          <i className="fa-solid fa-lock"></i>
+          <i className="fa-solid fa-crown text-amber-500"></i>
         </div>
         <div>
           <span className="rounded-full bg-amber-100 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-amber-800">This content is locked</span>

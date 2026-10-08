@@ -10,7 +10,7 @@ function BookBadge({ number }) {
   if (isAdmin) return null;
   if (isPremium) return <span className="absolute right-2.5 top-2.5 rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600">UNLOCKED</span>;
   if (number === 10) return <span className="absolute right-2.5 top-2.5 rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600">FREE</span>;
-  return <span className="absolute right-2.5 top-2.5 flex items-center gap-1 rounded-md bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-500"><i className="fa-solid fa-lock text-[9px]"></i>PRO</span>;
+  return <span className="absolute right-2.5 top-2.5 flex items-center gap-1 rounded-md bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-500"><i className="fa-solid fa-crown text-[9px]"></i>PRO</span>;
 }
 
 export default function BookList() {

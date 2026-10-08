@@ -126,39 +126,15 @@ function skippedPasswordPrompt(uid) {
 }
 
 function TopBar() {
-  const [open, setOpen] = useState(false);
-  const links = [['fa-house', 'Home'], ['fa-circle-info', 'About'], ['fa-tags', 'Pricing'], ['fa-square-check', 'Mock Test'], ['fa-newspaper', 'Blog'], ['fa-book-bookmark', 'Resources'], ['fa-envelope', 'Contact']];
   return (
-    <header className="relative sticky top-0 z-50 border-b border-slate-200 bg-white px-5 py-3.5 shadow-sm md:px-10">
-      <div className="mx-auto flex max-w-7xl items-center justify-between">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white px-5 py-3.5 shadow-sm md:px-10">
+      <div className="mx-auto flex max-w-7xl items-center">
         <Link to="/" className="flex items-center gap-2.5">
           <div>
             <span className="text-lg font-black tracking-tight text-slate-900">IELTS <span className="text-forest-600">VocabMaster</span></span>
             <span className="ml-1 hidden rounded-md bg-forest-100 px-2 py-0.5 text-[10px] font-bold text-forest-700 sm:inline-block">CAMBRIDGE PREP</span>
           </div>
         </Link>
-        <button type="button" onClick={() => setOpen(value => !value)} aria-label="Open menu" className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 transition-all hover:bg-forest-50 hover:text-forest-600 focus:outline-none">
-          <i className={open ? 'fa-solid fa-xmark rotate-90 text-lg text-rose-500 transition-transform' : 'fa-solid fa-bars text-lg transition-transform'}></i>
-        </button>
-      </div>
-      <div className={`absolute left-0 right-0 top-full z-50 overflow-hidden border-t border-slate-100 bg-white/95 shadow-2xl backdrop-blur-md transition-all duration-300 ${open ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="mx-auto max-w-md space-y-4 px-6 py-5">
-          <nav className="space-y-1">
-            {links.map(([icon, label]) => (
-              <Link key={label} to="/" className="flex items-center gap-3.5 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-700 transition-colors hover:bg-forest-50 hover:text-forest-600">
-                <i className={`fa-solid ${icon} w-5 text-base text-slate-400`}></i>
-                <span>{label}</span>
-              </Link>
-            ))}
-          </nav>
-          <div className="border-t border-slate-100 pt-3">
-            <p className="text-xs font-medium text-slate-500">Looking for help? Feel free to drop a message.</p>
-            <a href="tel:+8801757674052" className="mt-1.5 inline-flex items-center gap-2 text-sm font-black text-forest-600 transition-colors hover:text-forest-700">
-              <i className="fa-solid fa-phone text-xs"></i>
-              <span>+88017-57674052</span>
-            </a>
-          </div>
-        </div>
       </div>
     </header>
   );
