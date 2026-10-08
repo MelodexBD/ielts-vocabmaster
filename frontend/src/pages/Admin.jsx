@@ -6,6 +6,7 @@ import { ADMIN_EMAIL, TESTS, autoDict } from '../lib/data';
 import {
   addBanner, addContent, addNotification, deleteBanner, deleteNotification, saveBookRange, saveModuleSections
 } from '../lib/firebase';
+import { lookupWord } from '../lib/wordLookup';
 
 const DEFAULT_BANNER_IMAGE = 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80';
 const SMALL_INPUT = 'mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-forest-500';
@@ -190,14 +191,25 @@ function BannersTab() {
 
 // ---------------------------------------------------------------- Module content
 
+// Label and colour of each word in the preview while and after it is looked up.
+const STATUS_BADGES = {
+  loading: ['Looking up...', 'bg-slate-100 text-slate-500'],
+  auto: ['Auto-filled · review', 'bg-emerald-50 text-emerald-700'],
+  check: ['Check meaning', 'bg-amber-50 text-amber-700'],
+  missing: ['Add meaning', 'bg-amber-50 text-amber-700'],
+  edited: ['Edited', 'bg-forest-100 text-forest-700']
+};
+
 function BulkVocabulary({ book, test }) {
   const { updateData } = useSiteData();
   const [input, setInput] = useState('');
   const [records, setRecords] = useState([]);
   const [saving, setSaving] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const generation = useRef(0);
   const words = input.split(/[,\n]+/).map(word => word.trim()).filter(Boolean);
 
-  const generate = () => {
+  const generate = async () => {
     if (!words.length) {
       window.notify('Enter one or more English words.');
       return;
@@ -206,25 +218,54 @@ function BulkVocabulary({ book, test }) {
       window.notify('You can preview at most 200 words at a time.');
       return;
     }
-    setRecords(words.map(word => {
-      const data = autoDict[word.toLowerCase()];
-      return {
-        module: 'Reading',
-        word,
-        meaning: data ? data.meaning : '',
-        synonyms: data ? [...data.synonyms] : [],
-        antonyms: data ? [...data.antonyms] : [],
-        synonymExamples: ['', '', '', ''],
-        antonymExamples: ['', '', '', ''],
-        partOfSpeech: '',
-        example: '',
-        needsReview: !data,
-        edited: false
-      };
+    const runId = ++generation.current;
+    setRecords(words.map(word => ({
+      module: 'Reading',
+      word,
+      meaning: '',
+      synonyms: [],
+      antonyms: [],
+      synonymExamples: ['', '', '', ''],
+      antonymExamples: ['', '', '', ''],
+      partOfSpeech: '',
+      example: '',
+      status: 'loading'
+    })));
+    setGenerating(true);
+
+    // Each word is looked up online (a few at a time); the built-in list covers words that are not found.
+    const fill = async index => {
+      const word = words[index];
+      let result = null;
+      try {
+        result = await lookupWord(word);
+      } catch (error) {
+        console.warn(`Could not look up "${word}".`, error);
+      }
+      const builtIn = autoDict[word.toLowerCase()];
+      const changes = result
+        ? { ...result, meaning: builtIn ? builtIn.meaning : result.meaning, status: result.meaningIsGuess && !builtIn ? 'check' : 'auto' }
+        : builtIn
+          ? { meaning: builtIn.meaning, synonyms: [...builtIn.synonyms], antonyms: [...builtIn.antonyms], status: 'auto' }
+          : { status: 'missing' };
+      delete changes.meaningIsGuess;
+      if (generation.current !== runId) return;
+      // Fields the admin already typed into while the lookup was running are kept.
+      setRecords(current => current.map((record, i) => (i === index && record.status === 'loading' ? { ...record, ...changes } : record)));
+    };
+    let next = 0;
+    await Promise.all(Array.from({ length: Math.min(3, words.length) }, async () => {
+      while (next < words.length && generation.current === runId) await fill(next++);
     }));
+    if (generation.current !== runId) return;
+    setGenerating(false);
+    window.notify('Vocabulary filled in from online dictionaries. Please review each word before publishing.', 'success');
   };
 
-  const update = (index, changes) => setRecords(current => current.map((record, i) => (i === index ? { ...record, ...changes } : record)));
+  // Typing into a word that is still being looked up keeps the admin's text (the lookup skips it).
+  const update = (index, changes) => setRecords(current => current.map((record, i) => (i === index
+    ? { ...record, ...(record.status === 'loading' ? { status: 'edited' } : {}), ...changes }
+    : record)));
   const updateExample = (index, field, exampleIndex, value) => setRecords(current => current.map((record, i) => {
     if (i !== index) return record;
     const examples = [...record[field]];
@@ -233,6 +274,10 @@ function BulkVocabulary({ book, test }) {
   }));
 
   const publish = async () => {
+    if (generating) {
+      window.notify('Please wait until every word has been looked up.', 'info');
+      return;
+    }
     const incomplete = records.find(record => !record.meaning.trim());
     if (incomplete) {
       window.notify(`“${incomplete.word}” needs a Bangla meaning. Add it, then publish all.`);
@@ -242,7 +287,7 @@ function BulkVocabulary({ book, test }) {
       window.notify('Choose a book and a T1–T4 test before publishing.');
       return;
     }
-    const toSave = records.map(({ needsReview, edited, ...record }) => ({ ...record, book, test }));
+    const toSave = records.map(({ status, ...record }) => ({ ...record, book, test }));
     setSaving(true);
     try {
       const saved = await addContent(toSave);
@@ -264,7 +309,7 @@ function BulkVocabulary({ book, test }) {
     <section className="space-y-5 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 md:p-5">
       <div>
         <h3 className="font-extrabold text-slate-800">Reading · Bulk vocabulary</h3>
-        <p className="mt-1 text-xs leading-5 text-slate-500">Enter up to 200 words, separated by commas or new lines. In the preview, edit the Bangla meaning, synonyms, antonyms and four examples for each, then publish. This is not an AI generator.</p>
+        <p className="mt-1 text-xs leading-5 text-slate-500">Enter up to 200 words, separated by commas or new lines. In the preview, edit the Bangla meaning, synonyms, antonyms and four examples for each, then publish. Generate fills these in automatically from online dictionaries; check them before publishing.</p>
       </div>
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <div className="space-y-3">
@@ -273,7 +318,7 @@ function BulkVocabulary({ book, test }) {
             <p className="text-xs font-bold text-slate-500">{words.length} words{words.length > 200 ? ' · max 200' : ''}</p>
             <div className="flex gap-2">
               <button type="button" onClick={() => setInput('Diligent, Benevolent, Candid, Resilient, Tenacious')} className="rounded-xl border border-forest-200 bg-forest-50 px-3 py-2 text-xs font-bold text-forest-700">Demo words</button>
-              <button type="button" onClick={generate} className="rounded-xl bg-forest-600 px-4 py-2 text-xs font-extrabold text-white hover:bg-forest-700"><i className="fa-solid fa-wand-magic-sparkles mr-1"></i>Generate Vocabulary</button>
+              <button type="button" onClick={generate} disabled={generating} className="rounded-xl bg-forest-600 px-4 py-2 text-xs font-extrabold text-white hover:bg-forest-700 disabled:cursor-wait disabled:opacity-70"><i className={`fa-solid ${generating ? 'fa-spinner fa-spin' : 'fa-wand-magic-sparkles'} mr-1`}></i>{generating ? `Looking up ${records.filter(record => record.status !== 'loading').length}/${records.length}...` : 'Generate Vocabulary'}</button>
             </div>
           </div>
         </div>
@@ -292,12 +337,12 @@ function BulkVocabulary({ book, test }) {
                   <div className="space-y-2 rounded-xl bg-forest-50/70 p-3">
                     <div className="flex items-center justify-between gap-2">
                       <strong className="text-sm text-forest-700">{record.word}</strong>
-                      <span className={`rounded-full px-2 py-1 text-[10px] font-bold ${record.needsReview ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700'}`}>
-                        {record.needsReview ? 'Add meaning' : record.edited && !autoDict[record.word.toLowerCase()] ? 'Edited' : 'From dictionary'}
+                      <span className={`rounded-full px-2 py-1 text-[10px] font-bold ${STATUS_BADGES[record.status][1]}`}>
+                        {STATUS_BADGES[record.status][0]}
                       </span>
                     </div>
                     <label className="block text-[10px] font-bold text-slate-500">Bangla meaning
-                      <input value={record.meaning} onChange={event => update(index, { meaning: event.target.value, needsReview: !event.target.value.trim(), edited: true })} className={small} placeholder="Bangla meaning of the word" />
+                      <input value={record.meaning} onChange={event => update(index, { meaning: event.target.value, status: event.target.value.trim() ? 'edited' : 'missing' })} className={small} placeholder="Bangla meaning of the word" />
                     </label>
                     <label className="block text-[10px] font-bold text-slate-500">Part of speech
                       <input value={record.partOfSpeech} onChange={event => update(index, { partOfSpeech: event.target.value })} className={small} placeholder="Optional" />
