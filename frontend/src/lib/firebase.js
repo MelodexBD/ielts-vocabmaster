@@ -90,13 +90,21 @@ async function fetchNotifications() {
 
 // ---------- Per-user data ----------
 
-// Progress, study plan days done and premium status (premium can only be set by the admin, see firestore.rules).
+// premiumUntil may be a Firestore timestamp (set in the Firebase console) or an ISO date string.
+function toDate(value) {
+  if (!value) return null;
+  const date = typeof value.toDate === 'function' ? value.toDate() : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+// Progress, study plan days done and premium status. Premium (and its end date, premiumUntil) can only
+// be set by the admin, see firestore.rules; without an end date premium does not expire.
 export async function loadUserData(uid) {
   const snap = await getDoc(doc(db, 'users', uid));
   const data = snap.exists() ? snap.data() : {};
   const progress = data.progress && typeof data.progress === 'object' ? data.progress : {};
   const planDone = Array.isArray(data.planDone) ? data.planDone.filter(Number.isInteger) : [];
-  return { progress, planDone, premium: data.premium === true };
+  return { progress, planDone, premium: data.premium === true, premiumUntil: toDate(data.premiumUntil) };
 }
 
 export function saveProgress(uid, progress) {

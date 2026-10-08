@@ -35,14 +35,14 @@ service cloud.firestore {
     }
 
     // Each user can read and write only their own profile and progress,
-    // but never the "premium" field: only the admin can grant premium.
+    // but never the "premium" and "premiumUntil" fields: only the admin can grant premium and its end date.
     match /users/{uid} {
       function isOwner() {
         return request.auth != null && request.auth.uid == uid;
       }
       allow read: if isOwner() || isAdmin();
-      allow create: if (isOwner() && !('premium' in request.resource.data)) || isAdmin();
-      allow update: if (isOwner() && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['premium'])) || isAdmin();
+      allow create: if (isOwner() && !('premium' in request.resource.data) && !('premiumUntil' in request.resource.data)) || isAdmin();
+      allow update: if (isOwner() && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['premium', 'premiumUntil'])) || isAdmin();
       allow delete: if isAdmin();
     }
   }

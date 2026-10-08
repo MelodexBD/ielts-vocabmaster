@@ -27,7 +27,9 @@ export function AuthProvider({ children }) {
   const [status, setStatus] = useState('loading');
   const [profile, setProfile] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isPremium, setIsPremium] = useState(false);
+  // Premium from the account (premium: true, optional end date). It switches off by itself at the end date.
+  const [premiumGrant, setPremiumGrant] = useState({ active: false, until: null });
+  const [clock, setClock] = useState(() => Date.now());
   const [progress, setProgress] = useState({});
   const [planDone, setPlanDone] = useState([]);
   const [userDataReady, setUserDataReady] = useState(false);
@@ -62,7 +64,7 @@ export function AuthProvider({ children }) {
     setIsAdmin(isAdminUser(user));
     if (!user) {
       setStatus('guest');
-      setIsPremium(false);
+      setPremiumGrant({ active: false, until: null });
       setProgress({});
       setPlanDone([]);
       setUserDataReady(true);
@@ -74,7 +76,8 @@ export function AuthProvider({ children }) {
       const data = await loadUserData(user.uid);
       setProgress(data.progress);
       setPlanDone(data.planDone);
-      setIsPremium(data.premium && !isAdminUser(user));
+      setClock(Date.now());
+      setPremiumGrant({ active: data.premium && !isAdminUser(user), until: data.premiumUntil });
     } catch (error) {
       console.error('Progress could not be loaded from the cloud.', error);
       window.notify('Could not load your progress. Try refreshing the page.');
@@ -82,6 +85,15 @@ export function AuthProvider({ children }) {
       setUserDataReady(true);
     }
   }), []);
+
+  const premiumEnd = premiumGrant.active && premiumGrant.until ? premiumGrant.until.getTime() : null;
+  const isPremium = premiumGrant.active && (premiumEnd === null || premiumEnd > clock);
+  useEffect(() => {
+    if (premiumEnd === null || premiumEnd <= clock) return undefined;
+    // Timers cannot wait longer than about 24 days; a longer wait simply checks again then.
+    const timer = setTimeout(() => setClock(Date.now()), Math.min(premiumEnd - clock + 1000, 2 ** 31 - 1));
+    return () => clearTimeout(timer);
+  }, [premiumEnd, clock]);
 
   // Picks up profile changes (e.g. the name set right after sign-up), which Firebase does not announce.
   const syncProfile = useCallback(() => {
@@ -145,6 +157,7 @@ export function AuthProvider({ children }) {
     needsAdminVerification,
     sendAdminVerification,
     isPremium,
+    premiumUntil: isPremium ? premiumGrant.until : null,
     hasFullAccess: isAdmin || isPremium,
     userDataReady,
     completedTests,
@@ -152,7 +165,7 @@ export function AuthProvider({ children }) {
     planDone,
     togglePlanDay,
     syncProfile
-  }), [status, profile, isAdmin, needsAdminVerification, sendAdminVerification, isPremium, userDataReady, completedTests, toggleTestCompletion, planDone, togglePlanDay, syncProfile]);
+  }), [status, profile, isAdmin, needsAdminVerification, sendAdminVerification, isPremium, premiumGrant.until, userDataReady, completedTests, toggleTestCompletion, planDone, togglePlanDay, syncProfile]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

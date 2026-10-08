@@ -6,6 +6,7 @@ import BookList from './pages/BookList';
 import BookDetails from './pages/BookDetails';
 import Practice from './pages/Practice';
 import Plan from './pages/Plan';
+import Dashboard from './pages/Dashboard';
 import Notifications from './pages/Notifications';
 import Login from './pages/Login';
 
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="/books/:module/:bookNumber" element={<BookDetails />} />
           <Route path="/practice/:module" element={<Practice />} />
           <Route path="/plan" element={<Plan />} />
+          <Route path="/progress" element={<Dashboard />} />
           <Route path="/notifications" element={<Notifications />} />
         </Route>
         <Route path="/login" element={<Login mode="login" />} />
