@@ -29,7 +29,7 @@ export default function MobileNav() {
   return (
     <div className="md:hidden">
       <nav className="fixed inset-x-0 bottom-0 z-30 select-none border-t border-slate-200 bg-white px-2 py-1.5 shadow-lg">
-        <div className="mx-auto grid w-full max-w-md grid-cols-5 items-center justify-items-center">
+        <div className={`mx-auto grid w-full max-w-md items-center justify-items-center ${isAdmin ? 'grid-cols-4' : 'grid-cols-5'}`}>
           <button type="button" onClick={() => navigate('/')} className={`flex w-full flex-col items-center justify-center py-1 transition-all ${onHome ? 'text-forest-600' : 'text-slate-400 hover:text-slate-600'}`}>
             <i className="fa-solid fa-house text-lg"></i>
             <span className="mt-0.5 text-[10px] font-bold">Home</span>
@@ -40,12 +40,15 @@ export default function MobileNav() {
             <span className="mt-0.5 text-[10px] font-medium">Search</span>
           </button>
 
-          <button type="button" onClick={openPricing} className="group flex w-full flex-col items-center justify-center focus:outline-none">
-            <div className="-mt-6 flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-gradient-to-tr from-amber-500 to-amber-400 text-xl text-white shadow-lg shadow-amber-900/30 transition-transform active:scale-95 group-hover:scale-105">
-              <i className="fa-solid fa-crown text-base"></i>
-            </div>
-            <span className="mt-0.5 text-[10px] font-bold text-amber-600">PRO</span>
-          </button>
+          {/* The admin already has full access, so the PRO button is for everyone else. */}
+          {!isAdmin && (
+            <button type="button" onClick={openPricing} className="group flex w-full flex-col items-center justify-center focus:outline-none">
+              <div className="-mt-6 flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-gradient-to-tr from-amber-500 to-amber-400 text-xl text-white shadow-lg shadow-amber-900/30 transition-transform active:scale-95 group-hover:scale-105">
+                <i className="fa-solid fa-crown text-base"></i>
+              </div>
+              <span className="mt-0.5 text-[10px] font-bold text-amber-600">PRO</span>
+            </button>
+          )}
 
           <button type="button" onClick={() => window.notify('Loading progress tracker...', 'info')} className="flex w-full flex-col items-center justify-center py-1 text-slate-400 transition-all hover:text-slate-600">
             <i className="fa-solid fa-chart-column text-lg"></i>
@@ -62,12 +65,11 @@ export default function MobileNav() {
       </nav>
 
       <Drawer open={menuOpen} onClose={close} title={<AccountBadge isAdmin={isAdmin} />} labelledBy="profileDrawerTitle">
-        <div className="mb-3 flex items-center gap-3 rounded-2xl bg-forest-50/70 p-3">
-          <Avatar profile={profile} className="h-12 w-12 shrink-0 text-sm ring-2 ring-forest-500/20" />
-          <div className="min-w-0">
-            <p className="truncate text-sm font-black text-slate-900">{profile?.name}</p>
-            <p className="truncate text-xs font-semibold text-slate-500">{profile?.email}</p>
-          </div>
+        {/* Photo on top so the name and the full email get the whole width; long emails wrap instead of being cut. */}
+        <div className="mb-3 flex flex-col items-center rounded-2xl bg-forest-50/70 px-3 py-4 text-center">
+          <Avatar profile={profile} className="h-14 w-14 shrink-0 text-base ring-2 ring-forest-500/20" />
+          <p className="mt-2 w-full break-words text-sm font-black text-slate-900">{profile?.name}</p>
+          <p className="mt-0.5 w-full break-all text-xs font-semibold text-slate-600">{profile?.email}</p>
         </div>
         <div className="space-y-1">
           {isAdmin && (

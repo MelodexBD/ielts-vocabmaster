@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { useUI } from '../context/UIContext';
 
 const WHATSAPP_URL = 'https://wa.me/8801577773239?text=Hello%20IELTS%20VocabMaster%21';
@@ -9,6 +10,7 @@ function IconBox({ icon, className = 'bg-forest-50 text-forest-600' }) {
 
 export default function Footer() {
   const { openPricing } = useUI();
+  const { isAdmin } = useAuth();
   return (
     <footer className="mt-12 border-t border-slate-200 bg-white px-5 pb-24 pt-12 text-slate-600 md:px-12 md:pb-8">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 md:grid-cols-12 md:gap-8">
@@ -25,12 +27,15 @@ export default function Footer() {
             <li>
               <Link to="/" className="flex items-center gap-3 hover:text-forest-600"><IconBox icon="fa-solid fa-house" /><span>Home</span></Link>
             </li>
-            <li>
-              <button type="button" onClick={openPricing} className="flex items-center gap-3 hover:text-forest-600">
-                <IconBox icon="fa-solid fa-crown text-xs" className="bg-gradient-to-tr from-amber-500 to-amber-400 text-white" />
-                <span>Premium plans</span>
-              </button>
-            </li>
+            {/* The admin already has full access, so premium plans are only offered to everyone else. */}
+            {!isAdmin && (
+              <li>
+                <button type="button" onClick={openPricing} className="flex items-center gap-3 hover:text-forest-600">
+                  <IconBox icon="fa-solid fa-crown text-xs" className="bg-gradient-to-tr from-amber-500 to-amber-400 text-white" />
+                  <span>Premium plans</span>
+                </button>
+              </li>
+            )}
             <li>
               <Link to="/signup" className="flex items-center gap-3 hover:text-forest-600"><IconBox icon="fa-solid fa-user-plus" /><span>Create a free account</span></Link>
             </li>
