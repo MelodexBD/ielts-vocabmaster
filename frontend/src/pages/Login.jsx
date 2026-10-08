@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider,
   updateProfile, sendEmailVerification, sendPasswordResetEmail, getAdditionalUserInfo,
@@ -7,6 +7,7 @@ import {
 } from 'firebase/auth';
 import { auth, saveUserProfile } from '../lib/firebase';
 import { useAuth } from '../context/AuthContext';
+import { safeNextPath } from '../lib/authRedirect';
 
 const AUTH_ERRORS = {
   'auth/email-already-in-use': 'An account with this email already exists. Please log in.',
@@ -166,6 +167,10 @@ function TopBar() {
 export default function Login({ mode }) {
   const navigate = useNavigate();
   const { status, syncProfile } = useAuth();
+  const [searchParams] = useSearchParams();
+  const next = safeNextPath(searchParams.get('next'));
+  // Switching between Log in and Sign up keeps the page to return to.
+  const withNext = path => (next === '/' ? path : `${path}?next=${encodeURIComponent(next)}`);
   // True while this page is signing someone in, so the "already logged in" redirect does not cut the flow short.
   const working = useRef(false);
   const [loading, setLoading] = useState(null);
@@ -178,7 +183,7 @@ export default function Login({ mode }) {
   const [signupPassword, setSignupPassword] = useState('');
 
   if (status === 'loading') return null;
-  if (status === 'user' && !working.current) return <Navigate to="/" replace />;
+  if (status === 'user' && !working.current) return <Navigate to={next} replace />;
 
   const start = (key, label) => {
     working.current = true;
@@ -202,8 +207,9 @@ export default function Login({ mode }) {
     } else {
       window.notify(`Login successful. Welcome back!${passwordNote}`, 'success');
     }
-    window.pageLoader.show('Loading your dashboard...');
-    navigate('/', { replace: true });
+    // Back to the page the visitor came from (e.g. the locked book list), or home by default.
+    window.pageLoader.show(next === '/' ? 'Loading your dashboard...' : 'Taking you back...');
+    navigate(next, { replace: true });
   };
 
   const handleLogin = async event => {
@@ -224,7 +230,7 @@ export default function Login({ mode }) {
     );
     if (!goToLogin) return;
     setLoginEmail(email);
-    navigate('/login');
+    navigate(withNext('/login'));
   };
 
   const handleSignup = async event => {
@@ -342,7 +348,7 @@ export default function Login({ mode }) {
               <GoogleButton loading={loading === 'google' || loading === 'password'} onClick={handleGoogle} />
               <div className="space-y-2.5 border-t border-slate-100 pt-3 text-center">
                 <p className="text-xs font-bold text-slate-600">Don't have an account?</p>
-                <Link to="/signup" className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-forest-600/25 bg-forest-50 py-3.5 text-xs font-extrabold text-forest-800 shadow-sm transition-all hover:border-forest-600 hover:bg-forest-100 hover:text-forest-900 active:scale-[0.99] sm:text-sm">
+                <Link to={withNext('/signup')} className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-forest-600/25 bg-forest-50 py-3.5 text-xs font-extrabold text-forest-800 shadow-sm transition-all hover:border-forest-600 hover:bg-forest-100 hover:text-forest-900 active:scale-[0.99] sm:text-sm">
                   <i className="fa-solid fa-user-plus text-xs text-forest-600"></i>
                   <span>Create Account</span>
                 </Link>
@@ -383,7 +389,7 @@ export default function Login({ mode }) {
               <GoogleButton loading={loading === 'google' || loading === 'password'} onClick={handleGoogle} />
               <div className="space-y-2.5 border-t border-slate-100 pt-3 text-center">
                 <p className="text-xs font-bold text-slate-600">Already have an account?</p>
-                <Link to="/login" className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-forest-600/25 bg-forest-50 py-3.5 text-xs font-extrabold text-forest-800 shadow-sm transition-all hover:border-forest-600 hover:bg-forest-100 hover:text-forest-900 active:scale-[0.99] sm:text-sm">
+                <Link to={withNext('/login')} className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-forest-600/25 bg-forest-50 py-3.5 text-xs font-extrabold text-forest-800 shadow-sm transition-all hover:border-forest-600 hover:bg-forest-100 hover:text-forest-900 active:scale-[0.99] sm:text-sm">
                   <i className="fa-solid fa-arrow-right-to-bracket text-xs text-forest-600"></i>
                   <span>Log In</span>
                 </Link>

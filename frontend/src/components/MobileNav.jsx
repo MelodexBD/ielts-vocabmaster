@@ -6,6 +6,7 @@ import useLogout from '../lib/useLogout';
 import Avatar from './Avatar';
 import { VerifyAdminButton } from './Header';
 import Drawer from './Drawer';
+import { useAuthLink } from '../lib/authRedirect';
 import AccountBadge from './AccountBadge';
 
 // Bottom navigation bar and account menu for phones.
@@ -14,13 +15,14 @@ export default function MobileNav() {
   const { openPricing } = useUI();
   const navigate = useNavigate();
   const logout = useLogout();
+  const authLink = useAuthLink();
   const onHome = useMatch('/');
   const [menuOpen, setMenuOpen] = useState(false);
   const close = useCallback(() => setMenuOpen(false), []);
 
   const onProfileClick = () => {
     if (!isLoggedIn) {
-      navigate('/login');
+      navigate(authLink('login'));
       return;
     }
     setMenuOpen(true);

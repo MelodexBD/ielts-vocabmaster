@@ -7,12 +7,13 @@ import Sidebar from './Sidebar';
 import MobileNav from './MobileNav';
 import Footer from './Footer';
 import Modals from './Modals';
+import { takePricingIntent } from '../lib/authRedirect';
 
 // Page frame for the public site: header, sidebar, page content, footer and mobile navigation.
 export default function Layout() {
   const headerRef = useRef(null);
-  const { status, userDataReady } = useAuth();
-  const { closeModal } = useUI();
+  const { status, userDataReady, isAdmin, isPremium } = useAuth();
+  const { closeModal, openPricing } = useUI();
   const { pathname } = useLocation();
 
   // Sticky bars (e.g. the T1–T4 test bar) sit just below the header, whose height varies by screen.
@@ -34,6 +35,11 @@ export default function Layout() {
   useEffect(() => {
     closeModal();
   }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // A guest who picked a premium plan was sent to log in; once back on this page, show the plans again.
+  useEffect(() => {
+    if (status === 'user' && userDataReady && !isAdmin && !isPremium && takePricingIntent()) openPricing();
+  }, [status, userDataReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex min-h-screen flex-col">

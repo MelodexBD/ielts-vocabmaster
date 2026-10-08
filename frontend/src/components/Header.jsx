@@ -8,6 +8,7 @@ import useLogout from '../lib/useLogout';
 import useClickOutside from '../lib/useClickOutside';
 import Avatar from './Avatar';
 import Drawer from './Drawer';
+import { useAuthLink } from '../lib/authRedirect';
 import AccountBadge from './AccountBadge';
 
 function MembershipBadge() {
@@ -120,6 +121,7 @@ function ModuleMenu() {
 const Header = forwardRef(function Header(_, ref) {
   const { status } = useAuth();
   const { bookRange } = useSiteData();
+  const authLink = useAuthLink();
 
   return (
     <header ref={ref} className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200/80 bg-white px-4 py-3 shadow-sm md:px-8">
@@ -134,8 +136,8 @@ const Header = forwardRef(function Header(_, ref) {
         {/* Nothing is shown until Firebase knows the login state, so neither side ever flashes. */}
         {status === 'guest' && (
           <div className="flex items-center gap-2">
-            <Link to="/login" className="whitespace-nowrap rounded-lg bg-forest-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-forest-700">Log in</Link>
-            <Link to="/signup" className="whitespace-nowrap rounded-lg bg-forest-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-forest-700">Sign up</Link>
+            <Link to={authLink('login')} className="whitespace-nowrap rounded-lg bg-forest-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-forest-700">Log in</Link>
+            <Link to={authLink('signup')} className="whitespace-nowrap rounded-lg bg-forest-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-forest-700">Sign up</Link>
           </div>
         )}
         {status === 'user' && (

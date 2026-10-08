@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { useUI } from '../context/UIContext';
+import { rememberPricingIntent, useAuthLink } from '../lib/authRedirect';
 
 const PLANS = [
   { name: '1 Month Plan', label: '1 Month', price: '৳290', note: 'Short-term quick revision', button: 'Select', style: 'standard' },
@@ -32,7 +34,21 @@ const PLAN_STYLES = {
 };
 
 function PricingModal({ onClose }) {
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+  const authLink = useAuthLink();
+
   const subscribe = plan => {
+    // A plan belongs to an account: guests sign up first, then come back here with the plans open again.
+    if (!isLoggedIn) {
+      rememberPricingIntent();
+      onClose();
+      window.notify(`Create a free account or log in to get the ${plan.label} plan. You will come right back here.`, 'info');
+      navigate(authLink('signup'));
+      return;
+    }
+    // When the bKash/Nagad gateway is added, its success/cancel return URL should be the current page
+    // (window.location.href), so the student lands back where they started.
     window.alert(`You selected ${plan.label} (${plan.price}). It will be activated automatically once the bKash/Nagad payment gateway is connected!`);
     onClose();
   };
@@ -74,6 +90,7 @@ function PricingModal({ onClose }) {
 }
 
 function AuthPromptModal({ onClose }) {
+  const authLink = useAuthLink();
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm" onClick={event => event.target === event.currentTarget && onClose()}>
       <div className="w-full max-w-md space-y-5 rounded-3xl bg-white p-6 text-center shadow-2xl sm:p-8">
@@ -88,7 +105,7 @@ function AuthPromptModal({ onClose }) {
           </p>
         </div>
         <div className="space-y-2 pt-2">
-          <Link to="/signup" onClick={onClose} className="block w-full rounded-xl bg-forest-600 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-forest-900/20 transition-all hover:bg-forest-700 active:scale-95">
+          <Link to={authLink('signup')} onClick={onClose} className="block w-full rounded-xl bg-forest-600 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-forest-900/20 transition-all hover:bg-forest-700 active:scale-95">
             Create free account / Log in
           </Link>
           <button type="button" onClick={onClose} className="w-full py-2.5 text-xs font-bold text-slate-400 hover:text-slate-600">
