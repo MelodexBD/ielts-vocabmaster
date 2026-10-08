@@ -58,18 +58,19 @@ function WordCard({ word }) {
 
 // Open tests can be selected; locked ones show the PRO crown and open the unlock prompt.
 function TestButton({ test, selected, unlocked, onClick }) {
-  const base = 'flex items-center justify-center gap-1 rounded-lg px-1.5 py-1.5 text-xs font-bold transition-all md:px-3';
+  const label = `Test ${test.slice(1)}`;
+  const base = 'flex h-9 items-center justify-center gap-1 whitespace-nowrap rounded-lg px-1 text-xs font-bold transition-all sm:text-sm md:h-11 md:px-4';
   if (unlocked) {
     return (
-      <button type="button" onClick={onClick} aria-pressed={selected} className={`${base} border ${selected ? 'border-forest-600 bg-forest-600 text-white' : 'border-slate-200 bg-white text-slate-600 hover:bg-forest-50'}`}>
-        <span>{test}</span>
+      <button type="button" onClick={onClick} aria-pressed={selected} className={`${base} border ${selected ? 'border-forest-600 bg-forest-600 text-white shadow-sm' : 'border-slate-200 bg-white text-slate-600 hover:bg-forest-50'}`}>
+        <span>{label}</span>
       </button>
     );
   }
   return (
-    <button type="button" onClick={onClick} aria-label={`${test} (PRO)`} className={`${base} border border-transparent text-slate-500 hover:bg-amber-50`}>
-      <i className="fa-solid fa-crown text-[10px] text-amber-500"></i>
-      <span>{test}</span>
+    <button type="button" onClick={onClick} aria-label={`${label} (PRO)`} className={`${base} border border-transparent text-slate-500 hover:bg-amber-50`}>
+      <i className="fa-solid fa-crown text-[9px] text-amber-500 md:text-[11px]"></i>
+      <span>{label}</span>
     </button>
   );
 }
@@ -82,7 +83,9 @@ export default function BookDetails() {
   const { vocabulary, bookRange } = useSiteData();
   const { selection, setSelection } = useUI();
   const { canOpenBook, canOpenTest, showLockedPrompt } = useBookAccess();
+  // Words are stored under "Cambridge N"; the site shows the book as "Book N".
   const book = `Cambridge ${number}`;
+  const title = `Book ${number}`;
   const chosenTest = selection.book === book ? selection.test : 'T1';
   // A test that is no longer open (e.g. after logging out) falls back to the free Test 1.
   const test = canOpenTest(number, chosenTest) ? chosenTest : 'T1';
@@ -117,11 +120,11 @@ export default function BookDetails() {
           <button type="button" onClick={() => navigate(`/books/${module}`)} aria-label="Back to book list" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700 transition-colors hover:bg-slate-200 md:h-10 md:w-10">
             <i className="fa-solid fa-chevron-left text-sm"></i>
           </button>
-          <h2 className="whitespace-nowrap text-base font-black text-slate-800 md:text-xl">{book}</h2>
+          <h2 className="whitespace-nowrap text-base font-black text-slate-800 md:text-xl">{title}</h2>
         </div>
-        <div className="flex min-w-0 flex-1 items-center gap-2 md:flex-none">
-          <span className="mr-2 hidden text-xs font-bold text-slate-400 md:inline">Choose a test:</span>
-          <div className="grid w-full grid-cols-4 gap-1 rounded-xl bg-slate-100 p-1 md:inline-flex md:w-auto">
+        <div className="flex min-w-0 flex-1 items-center gap-2 md:justify-end md:gap-3">
+          <span className="hidden shrink-0 text-xs font-bold text-slate-400 lg:inline">Choose a test:</span>
+          <div className="grid w-full grid-cols-4 gap-1 rounded-xl bg-slate-100 p-1 md:max-w-xl md:gap-1.5">
             {TESTS.map(item => (
               <TestButton
                 key={item}
@@ -141,7 +144,7 @@ export default function BookDetails() {
           : (
             <div className="col-span-full my-4 space-y-2 rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm md:rounded-3xl md:p-12">
               <i className="fa-solid fa-folder-open text-4xl text-slate-300"></i>
-              <p className="text-sm font-bold text-slate-700">{book} ({test}): no words found</p>
+              <p className="text-sm font-bold text-slate-700">{title} (Test {test.slice(1)}): no words found</p>
               <p className="text-xs text-slate-400">Add new words from the admin panel.</p>
             </div>
           )}

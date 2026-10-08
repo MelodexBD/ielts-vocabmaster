@@ -132,7 +132,7 @@ function TopBar() {
         <Link to="/" className="flex items-center gap-2.5">
           <div>
             <span className="text-lg font-black tracking-tight text-slate-900">IELTS <span className="text-forest-600">VocabMaster</span></span>
-            <span className="ml-1 hidden rounded-md bg-forest-100 px-2 py-0.5 text-[10px] font-bold text-forest-700 sm:inline-block">CAMBRIDGE PREP</span>
+            <span className="ml-1 hidden rounded-md bg-forest-100 px-2 py-0.5 text-[10px] font-bold text-forest-700 sm:inline-block">BOOK PREP</span>
           </div>
         </Link>
       </div>
@@ -300,7 +300,7 @@ export default function Login({ mode }) {
             <div className="space-y-5">
               <div>
                 <h1 className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Log In</h1>
-                <p className="mt-1 text-xs font-medium text-slate-400">Sign in to continue your Cambridge test preparation.</p>
+                <p className="mt-1 text-xs font-medium text-slate-400">Sign in to continue your IELTS test preparation.</p>
               </div>
               <form onSubmit={handleLogin} className="space-y-4">
                 <div>

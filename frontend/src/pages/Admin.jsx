@@ -86,7 +86,7 @@ function BannersTab() {
         image,
         title: form.title.trim(),
         desc: form.desc.trim(),
-        features: features ? features.split(',').map(item => item.trim()).filter(Boolean) : ['Cambridge tests', 'Full solutions']
+        features: features ? features.split(',').map(item => item.trim()).filter(Boolean) : ['Book tests', 'Full solutions']
       });
       updateData(current => ({ banners: [saved, ...(current.banners || [])] }));
       setForm({ tag: '', title: '', desc: '', features: '' });
@@ -151,7 +151,7 @@ function BannersTab() {
               <input type="text" required placeholder="e.g. BAND 8.0 STRATEGY" className={SMALL_INPUT} {...field('tag')} />
             </label>
             <label className="block text-xs font-bold text-slate-700">Banner title
-              <input type="text" required placeholder="Latest tricks for Cambridge books" className={SMALL_INPUT} {...field('title')} />
+              <input type="text" required placeholder="Latest tricks for IELTS books" className={SMALL_INPUT} {...field('title')} />
             </label>
           </div>
           <label className="block text-xs font-bold text-slate-700">Short description
@@ -239,7 +239,7 @@ function BulkVocabulary({ book, test }) {
       return;
     }
     if (!book || !TESTS.includes(test)) {
-      window.notify('Choose a Cambridge book and a T1–T4 test before publishing.');
+      window.notify('Choose a book and a T1–T4 test before publishing.');
       return;
     }
     const toSave = records.map(({ needsReview, edited, ...record }) => ({ ...record, book, test }));
@@ -247,7 +247,7 @@ function BulkVocabulary({ book, test }) {
     try {
       const saved = await addContent(toSave);
       updateData(current => ({ content: [...saved, ...(current.content || [])] }));
-      window.notify(`${toSave.length} Reading words published to Cambridge ${book.replace('Cambridge ', '')} · ${test}.`, 'success');
+      window.notify(`${toSave.length} Reading words published to Book ${book.replace('Cambridge ', '')} · ${test}.`, 'success');
       setRecords([]);
       setInput('');
     } catch (error) {
@@ -421,7 +421,7 @@ function ModuleContentForm({ module, book, test }) {
   const submit = async event => {
     event.preventDefault();
     if (!book || !TESTS.includes(test)) {
-      window.notify('Choose a Cambridge book and a T1–T4 test.');
+      window.notify('Choose a book and a T1–T4 test.');
       return;
     }
     setSaving(true);
@@ -429,7 +429,7 @@ function ModuleContentForm({ module, book, test }) {
       const saved = await addContent([{ module, book, test, ...values, createdAt: new Date().toISOString() }]);
       updateData(current => ({ content: [...saved, ...(current.content || [])] }));
       setValues(emptyValues(module));
-      window.notify(`${module} content saved to Cambridge ${book.replace('Cambridge ', '')} · ${test}.`, 'success');
+      window.notify(`${module} content saved to Book ${book.replace('Cambridge ', '')} · ${test}.`, 'success');
     } catch (error) {
       console.error(`${module} content could not be saved.`, error);
       window.notify(cloudErrorMessage('Could not save the content.', error));
@@ -477,14 +477,14 @@ function ModulesTab() {
         <div className="space-y-5 border-b border-slate-100 pb-5">
           <div>
             <h2 className="flex items-center gap-2 text-base font-black text-slate-800"><i className="fa-solid fa-list-check text-forest-600"></i> Upload content by module</h2>
-            <p className="mt-1 text-xs text-slate-500">A separate form for each module. Content is saved to the selected Cambridge book and test.</p>
+            <p className="mt-1 text-xs text-slate-500">A separate form for each module. Content is saved to the selected book and test.</p>
           </div>
           <div className="rounded-2xl border border-forest-100 bg-forest-50/60 p-4">
             <p className="mb-3 text-[10px] font-extrabold uppercase tracking-wider text-forest-700">Step 1 · Content destination</p>
             <div className="grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-2">
-              <label className="block text-xs font-bold text-slate-700">Cambridge book
+              <label className="block text-xs font-bold text-slate-700">Book
                 <select value={book} onChange={event => setBook(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs outline-none focus:border-forest-500">
-                  {books.map(item => <option key={item}>{item}</option>)}
+                  {books.map(item => <option key={item} value={item}>{item.replace('Cambridge', 'Book')}</option>)}
                 </select>
               </label>
               <label className="block text-xs font-bold text-slate-700">Test (always 4)
@@ -600,7 +600,7 @@ function SectionsTab() {
       <div className="space-y-5 rounded-3xl border border-slate-200/90 bg-white p-5 shadow-sm md:p-6">
         <div className="border-b border-slate-100 pb-4">
           <h2 className="flex items-center gap-2 text-base font-black text-slate-800"><i className="fa-solid fa-table-cells-large text-forest-600"></i> The four module sections on the home page</h2>
-          <p className="mt-1 text-xs leading-5 text-slate-500">These are introductory sections outside the Cambridge tests. Each section has its own uploader; saved content appears on the home card and the related module page.</p>
+          <p className="mt-1 text-xs leading-5 text-slate-500">These are introductory sections outside the book tests. Each section has its own uploader; saved content appears on the home card and the related module page.</p>
         </div>
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
           {SECTION_FORMS.map(config => <SectionForm key={config.module} config={config} />)}
@@ -632,9 +632,9 @@ function BookRangeSettings() {
     try {
       await saveBookRange(range);
       updateData({ bookRange: range });
-      setFeedback({ ok: true, text: `Cambridge ${range.start}–${range.end} saved. Refresh the live site to see the new book list.` });
+      setFeedback({ ok: true, text: `Book ${range.start}–${range.end} saved. Refresh the live site to see the new book list.` });
     } catch (error) {
-      console.error('Cambridge book range could not be saved.', error);
+      console.error('book range could not be saved.', error);
       setFeedback({ ok: false, text: cloudErrorMessage('Could not save the book range.', error) });
     }
   };
@@ -644,13 +644,13 @@ function BookRangeSettings() {
       <div className="mb-5">
         <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-forest-600">Admin workspace</p>
         <h2 className="mt-1 text-lg font-black text-slate-900">Content & site management</h2>
-        <p className="mt-1 text-xs text-slate-500">Set the Cambridge book range first, then manage banners or module content.</p>
+        <p className="mt-1 text-xs text-slate-500">Set the book range first, then manage banners or module content.</p>
       </div>
       <div className="rounded-2xl border border-forest-100 bg-forest-50/70 p-4 md:p-5">
         <div className="mb-4 flex items-start gap-3">
           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-forest-600 text-xs font-black text-white">1</span>
           <div>
-            <h3 className="text-sm font-extrabold text-slate-800">Cambridge book range</h3>
+            <h3 className="text-sm font-extrabold text-slate-800">book range</h3>
             <p className="mt-0.5 text-xs leading-5 text-slate-600">Changes here also update the book list on the live site. Every book has Tests 1–4.</p>
           </div>
         </div>
@@ -683,7 +683,7 @@ export default function Admin() {
 
   useEffect(() => {
     document.title = 'Admin Dashboard - IELTS VocabMaster';
-    return () => { document.title = 'IELTS Cambridge Prep & Vocabulary Master'; };
+    return () => { document.title = 'IELTS Book Prep & Vocabulary Master'; };
   }, []);
 
   useEffect(() => {

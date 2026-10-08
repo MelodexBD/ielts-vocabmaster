@@ -19,7 +19,7 @@ export default function Footer() {
         <div className="space-y-4 md:col-span-5">
           <span className="text-lg font-black text-slate-900">IELTS <span className="text-forest-600">VocabMaster</span></span>
           <p className="max-w-sm text-sm leading-relaxed text-slate-500">
-            Your complete partner for Cambridge IELTS 10–19 preparation: a smart vocabulary vault, clear answer explanations and timed practice for Reading, Listening, Writing and Speaking.
+            Your complete partner for IELTS Book 10–19 preparation: a smart vocabulary vault, clear answer explanations and timed practice for Reading, Listening, Writing and Speaking.
           </p>
         </div>
 

@@ -60,8 +60,8 @@ function PricingModal({ onClose }) {
             <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-0.5 text-[11px] font-black text-amber-800">
               <i className="fa-solid fa-crown text-[10px]"></i> PRO ACCESS
             </div>
-            <h3 className="mt-1 text-xl font-black text-slate-900">Unlock the full Cambridge vault</h3>
-            <p className="text-xs font-medium text-slate-400">Full explanations and unlimited access to all 40 tests from Cambridge 10 to 19</p>
+            <h3 className="mt-1 text-xl font-black text-slate-900">Unlock the full book vault</h3>
+            <p className="text-xs font-medium text-slate-400">Full explanations and unlimited access to all 40 tests from Book 10 to 19</p>
           </div>
           <button type="button" onClick={onClose} aria-label="Close" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200">
             <i className="fa-solid fa-xmark"></i>
@@ -101,7 +101,7 @@ function AuthPromptModal({ onClose }) {
           <span className="rounded-full bg-amber-100 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-amber-800">This content is locked</span>
           <h3 className="mt-2 text-xl font-black text-slate-900">Create a free account to unlock</h3>
           <p className="mt-1 text-xs leading-relaxed text-slate-500">
-            Create a completely free account now to access all Cambridge test solutions and vocabulary. No credit card required!
+            Create a completely free account now to access all book test solutions and vocabulary. No credit card required!
           </p>
         </div>
         <div className="space-y-2 pt-2">

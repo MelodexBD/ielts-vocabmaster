@@ -136,7 +136,7 @@ const Header = forwardRef(function Header(_, ref) {
       <Link to="/" className="flex items-center gap-2.5">
         <div>
           <span className="text-base font-black leading-tight tracking-tight text-slate-900 md:text-lg">IELTS <span className="text-forest-600">VocabMaster</span></span>
-          <span className="ml-1 hidden rounded-md bg-forest-100 px-2 py-0.5 text-[10px] font-bold text-forest-700 sm:inline-block">Cambridge {bookRange.start}-{bookRange.end}</span>
+          <span className="ml-1 hidden rounded-md bg-forest-100 px-2 py-0.5 text-[10px] font-bold text-forest-700 sm:inline-block">Book {bookRange.start}-{bookRange.end}</span>
         </div>
       </Link>
 

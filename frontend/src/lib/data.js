@@ -8,8 +8,8 @@ export const TESTS = ['T1', 'T2', 'T3', 'T4'];
 export const MODULE_NAMES = ['Reading', 'Listening', 'Writing', 'Speaking'];
 
 export const MODULE_META = {
-  Reading: { icon: 'fa-book-open-reader', navLabel: 'Reading Vault', cardSubtitle: 'Cambridge 10-19' },
-  Listening: { icon: 'fa-headphones', navLabel: 'Listening Audio', cardSubtitle: 'Cambridge 10-19' },
+  Reading: { icon: 'fa-book-open-reader', navLabel: 'Reading Vault', cardSubtitle: 'Book 10-19' },
+  Listening: { icon: 'fa-headphones', navLabel: 'Listening Audio', cardSubtitle: 'Book 10-19' },
   Writing: { icon: 'fa-pen-to-square', navLabel: 'Writing Tasks', cardSubtitle: 'Task 1 & Task 2' },
   Speaking: { icon: 'fa-microphone-lines', navLabel: 'Speaking Cue Cards', cardSubtitle: 'Cue Cards & Q/A' }
 };
@@ -17,13 +17,13 @@ export const MODULE_META = {
 export const defaultBanners = [
   {
     tag: "FREE & PREMIUM IELTS PREP",
-    title: "Cambridge 10–19 Vocabulary & Solutions",
+    title: "Book 10–19 Vocabulary & Solutions",
     desc: "All vocabulary from Test 1 of every book is completely free for everyone! Move ahead to unlock the next tests and the full test vault.",
-    features: ["Cambridge 10–19 Test 1 free", "Premium full vault", "Band 8.0 target solutions"],
+    features: ["Book 10–19 Test 1 free", "Premium full vault", "Band 8.0 target solutions"],
     image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80"
   },
   {
-    tag: "OFFICIAL CAMBRIDGE MATERIAL",
+    tag: "OFFICIAL IELTS BOOK MATERIAL",
     title: "Reading & Listening answer explanations",
     desc: "Line-by-line Bangla meaning of every tough question, tricky synonym matching and key words from the audio script, all in one click!",
     features: ["40 official tests", "Synonyms & antonyms", "Audio script notes"],

@@ -41,7 +41,7 @@ export default function BookList() {
           </button>
           <div>
             <h2 className="text-base font-extrabold text-slate-800 md:text-xl">{module} Module</h2>
-            <p className="text-xs font-medium text-slate-400">Cambridge Books {bookRange.start} to {bookRange.end}</p>
+            <p className="text-xs font-medium text-slate-400">Books {bookRange.start} to {bookRange.end}</p>
           </div>
         </div>
         <button type="button" onClick={() => navigate('/')} className="hidden text-xs font-bold text-forest-600 hover:underline md:inline-block">← Back to dashboard</button>
@@ -53,7 +53,7 @@ export default function BookList() {
           {books.map(number => (
             <button key={number} type="button" onClick={() => openBook(number)} className="group relative flex h-28 flex-col items-center justify-center rounded-2xl border border-slate-200/90 bg-white p-5 text-center shadow-sm transition-all hover:border-forest-500 hover:bg-forest-50/60 hover:shadow-lg active:scale-95 md:h-36 md:rounded-3xl">
               <BookBadge number={number} />
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 group-hover:text-forest-600 md:text-xs">Cambridge</span>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 group-hover:text-forest-600 md:text-xs">Book</span>
               <span className="mt-1 text-2xl font-black text-slate-800 group-hover:text-forest-600 md:text-3xl">{number}</span>
             </button>
           ))}

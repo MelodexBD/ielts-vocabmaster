@@ -48,8 +48,8 @@ function LearningDashboard() {
   const { bookRange } = useSiteData();
   const overall = overallProgress(completedTests);
   const totalTests = (bookRange.end - bookRange.start + 1) * 4;
-  // Cambridge 10 is free: Test 1 for guests, all four tests with a free account.
-  const freeTests = bookRange.start <= 10 && bookRange.end >= 10 ? (isLoggedIn ? 4 : 1) : 0;
+  // Book 10 is free for everyone: all four of its tests.
+  const freeTests = bookRange.start <= 10 && bookRange.end >= 10 ? 4 : 0;
 
   return (
     <section className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm md:flex-row md:p-6">
@@ -70,8 +70,8 @@ function LearningDashboard() {
           <div className="inline-flex items-center gap-1.5 rounded-md bg-forest-100 px-2.5 py-0.5 text-[11px] font-bold text-forest-700">
             <i className="fa-solid fa-chart-line"></i> Learning dashboard
           </div>
-          <h3 className="text-base font-black text-slate-800 md:text-lg">Cambridge test preparation progress</h3>
-          <p className="text-xs font-medium text-slate-400">Progress is calculated from the Cambridge 10 tests completed in each module.</p>
+          <h3 className="text-base font-black text-slate-800 md:text-lg">Test preparation progress</h3>
+          <p className="text-xs font-medium text-slate-400">Progress is calculated from the Book 10 tests completed in each module.</p>
         </div>
       </div>
 
