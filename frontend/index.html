@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="open-in-browser.js"></script>
+  <script src="page-loader.js"></script>
   <title>IELTS Cambridge Prep & Vocabulary Master</title>
 
   <!-- Tailwind CSS CDN -->
@@ -1550,14 +1551,17 @@
       });
     };
 
+    // The loading screen from the login page (if any) is removed once the login state and the user's data are ready.
     onAuthStateChanged(auth, async user => {
       // The header and access checks are built from these keys on load, so reload when the login state changes.
       if (mirrorUser(user)) {
+        if (document.getElementById('pageLoader')) pageLoader.carryOver('Loading your dashboard...');
         window.location.reload();
         return;
       }
       if (!user) {
         document.getElementById('guestNavGroup').classList.remove('invisible');
+        pageReady.then(() => pageLoader.hide());
         return;
       }
       try {
@@ -1576,6 +1580,8 @@
       } catch (error) {
         console.error('Progress could not be loaded from the cloud.', error);
         notify('Could not load your progress. Try refreshing the page.');
+      } finally {
+        pageReady.then(() => pageLoader.hide());
       }
     });
 

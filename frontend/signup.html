@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="open-in-browser.js"></script>
+  <script src="page-loader.js"></script>
   <script>
     // A logged-in visitor is sent straight home; hide the form meanwhile so it does not flash.
     try {
@@ -331,6 +332,7 @@
     waitForUser().then(user => {
       if (user) {
         mirrorUser(user);
+        pageLoader.carryOver('Loading your dashboard...');
         window.location.replace('index.html');
       } else {
         mirrorUser(null);
@@ -369,12 +371,13 @@
       } else {
         notify.later('Login successful. Welcome back!', 'success');
       }
-      // replace() keeps the login page out of the history, so Back does not return to it.
+      // The loading screen continues on the home page; replace() keeps the login page out of the history.
+      pageLoader.carryOver('Loading your dashboard...');
       window.location.replace('index.html');
     }
 
-    // Shows a spinner on the clicked button and blocks double clicks while Firebase works.
-    // On success the spinner stays until the home page opens; on error the button is restored.
+    // Shows the full-screen loading screen plus a spinner on the clicked button, and blocks double clicks.
+    // On success the loading screen stays up until the home page is ready; on error everything is restored.
     function setLoading(button, loading, label) {
       if (!button) return;
       if (loading) {
@@ -382,10 +385,12 @@
         button.disabled = true;
         button.classList.add('opacity-80', 'cursor-wait');
         button.innerHTML = `<span class="inline-flex items-center justify-center gap-2"><i class="fa-solid fa-circle-notch fa-spin"></i><span>${label}</span></span>`;
+        pageLoader.show(label);
       } else {
         button.disabled = false;
         button.classList.remove('opacity-80', 'cursor-wait');
         if (button.dataset.originalHtml) button.innerHTML = button.dataset.originalHtml;
+        pageLoader.hide();
       }
     }
 
