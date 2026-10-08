@@ -179,7 +179,7 @@
           <div class="flex-grow border-t border-slate-200"></div>
         </div>
 
-        <button type="button" onclick="handleGoogleAuth()" class="w-full py-3 px-4 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm rounded-xl border border-slate-200 shadow-sm flex items-center justify-center gap-3 transition-all active:scale-[0.99]">
+        <button type="button" onclick="handleGoogleAuth(this)" class="w-full py-3 px-4 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm rounded-xl border border-slate-200 shadow-sm flex items-center justify-center gap-3 transition-all active:scale-[0.99]">
           <svg class="w-4 h-4" viewBox="0 0 48 48">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
             <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -254,7 +254,7 @@
           <div class="flex-grow border-t border-slate-200"></div>
         </div>
 
-        <button type="button" onclick="handleGoogleAuth()" class="w-full py-3 px-4 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm rounded-xl border border-slate-200 shadow-sm flex items-center justify-center gap-3 transition-all active:scale-[0.99]">
+        <button type="button" onclick="handleGoogleAuth(this)" class="w-full py-3 px-4 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm rounded-xl border border-slate-200 shadow-sm flex items-center justify-center gap-3 transition-all active:scale-[0.99]">
           <svg class="w-4 h-4" viewBox="0 0 48 48">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
             <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
@@ -373,41 +373,70 @@
       window.location.replace('index.html');
     }
 
-    window.handleGoogleAuth = async function () {
+    // Shows a spinner on the clicked button and blocks double clicks while Firebase works.
+    // On success the spinner stays until the home page opens; on error the button is restored.
+    function setLoading(button, loading, label) {
+      if (!button) return;
+      if (loading) {
+        button.dataset.originalHtml = button.innerHTML;
+        button.disabled = true;
+        button.classList.add('opacity-80', 'cursor-wait');
+        button.innerHTML = `<span class="inline-flex items-center justify-center gap-2"><i class="fa-solid fa-circle-notch fa-spin"></i><span>${label}</span></span>`;
+      } else {
+        button.disabled = false;
+        button.classList.remove('opacity-80', 'cursor-wait');
+        if (button.dataset.originalHtml) button.innerHTML = button.dataset.originalHtml;
+      }
+    }
+
+    window.handleGoogleAuth = async function (button) {
+      setLoading(button, true, 'Connecting to Google...');
       try {
         const result = await signInWithPopup(auth, new GoogleAuthProvider());
         const isNewUser = !!getAdditionalUserInfo(result)?.isNewUser;
-        await saveUserProfile(result.user, isNewUser ? { createdAt: new Date().toISOString() } : {});
+        // Returning users already have a profile, so they go home without waiting for a save.
+        if (isNewUser) await saveUserProfile(result.user, { createdAt: new Date().toISOString() });
         goHome(result.user, isNewUser);
       } catch (error) {
+        setLoading(button, false);
         showAuthError(error);
       }
     };
 
     window.handleLoginSubmit = async function (e) {
       e.preventDefault();
+      const button = e.currentTarget.querySelector('button[type="submit"]');
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
+      setLoading(button, true, 'Logging in...');
       try {
         const { user } = await signInWithEmailAndPassword(auth, email, password);
         goHome(user, false);
       } catch (error) {
+        setLoading(button, false);
         showAuthError(error);
       }
     };
 
     window.handleSignupSubmit = async function (e) {
       e.preventDefault();
+      const button = e.currentTarget.querySelector('button[type="submit"]');
       const name = document.getElementById('signupName').value.trim();
       const email = document.getElementById('signupEmail').value.trim();
       const password = document.getElementById('signupPassword').value;
+      setLoading(button, true, 'Creating your account...');
       try {
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(user, { displayName: name });
-        await saveUserProfile(user, { createdAt: new Date().toISOString() });
-        await sendEmailVerification(user);
+        // Run the follow-up steps in parallel instead of one after another, so the home page opens sooner.
+        // A failed verification email must not block the sign-up.
+        await Promise.all([
+          updateProfile(user, { displayName: name }),
+          saveUserProfile(user, { name, createdAt: new Date().toISOString() }),
+          sendEmailVerification(user).catch(error => console.error('Verification email could not be sent.', error))
+        ]);
         goHome(user, true);
       } catch (error) {
+        setLoading(button, false);
         showAuthError(error);
       }
     };
