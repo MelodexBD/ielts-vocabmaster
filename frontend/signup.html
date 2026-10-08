@@ -531,9 +531,25 @@
         goHome(user, true);
       } catch (error) {
         setLoading(button, false);
+        if (error.code === 'auth/email-already-in-use') {
+          await showAccountExists(email);
+          return;
+        }
         showAuthError(error);
       }
     };
+
+    // The email is already registered (with a password or with Google): offer to go to the login form.
+    async function showAccountExists(email) {
+      const goToLogin = await notify.confirm(
+        `An account with ${email} already exists. Please log in instead. If you signed up with Google, use "Continue with Google".`,
+        { title: 'Account already exists', confirmText: 'Log in', cancelText: 'Cancel', tone: 'primary' }
+      );
+      if (!goToLogin) return;
+      switchToLogIn();
+      document.getElementById('loginEmail').value = email;
+      document.getElementById('loginPassword').focus();
+    }
 
     window.handlePasswordReset = async function () {
       const email = document.getElementById('loginEmail').value.trim();

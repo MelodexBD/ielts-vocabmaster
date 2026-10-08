@@ -62,7 +62,7 @@
   }
 
   // Styled replacement for window.confirm(); resolves to true when confirmed.
-  notify.confirm = function (message, { title = 'Please confirm', confirmText = 'Yes', cancelText = 'Cancel' } = {}) {
+  notify.confirm = function (message, { title = 'Please confirm', confirmText = 'Yes', cancelText = 'Cancel', tone = 'danger' } = {}) {
     return new Promise(resolve => {
       const overlay = document.createElement('div');
       overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .15s;';
@@ -91,7 +91,7 @@
       const ok = document.createElement('button');
       ok.type = 'button';
       ok.textContent = confirmText;
-      ok.style.cssText = 'padding:10px 18px;border-radius:12px;border:0;background:#dc2626;color:#fff;font-size:13px;font-weight:700;cursor:pointer;';
+      ok.style.cssText = `padding:10px 18px;border-radius:12px;border:0;background:${tone === 'primary' ? '#2d5a43' : '#dc2626'};color:#fff;font-size:13px;font-weight:700;cursor:pointer;`;
 
       const finish = result => {
         document.removeEventListener('keydown', onKey);
