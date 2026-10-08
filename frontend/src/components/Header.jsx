@@ -9,11 +9,25 @@ import useClickOutside from '../lib/useClickOutside';
 import Avatar from './Avatar';
 
 function MembershipBadge() {
-  const { isAdmin, isPremium } = useAuth();
+  const { isAdmin, isPremium, needsAdminVerification } = useAuth();
   const [text, color] = isAdmin
     ? ['Admin', 'text-forest-600']
-    : isPremium ? ['Premium Member', 'text-emerald-600'] : ['Free Tier Member', 'text-amber-600'];
+    : needsAdminVerification
+      ? ['Admin · email not verified', 'text-rose-600']
+      : isPremium ? ['Premium Member', 'text-emerald-600'] : ['Free Tier Member', 'text-amber-600'];
   return <p className={`text-[11px] font-bold ${color}`}>{text}</p>;
+}
+
+// Shown to the admin account while its email is not verified yet: sends the verification link again.
+export function VerifyAdminButton({ onDone, className }) {
+  const { needsAdminVerification, sendAdminVerification } = useAuth();
+  if (!needsAdminVerification) return null;
+  return (
+    <button type="button" onClick={() => { onDone?.(); sendAdminVerification(); }} className={className}>
+      <i className="fa-solid fa-envelope-circle-check text-sm text-amber-600"></i>
+      <span>Verify email to open Admin panel</span>
+    </button>
+  );
 }
 
 function ProfileMenu() {
@@ -54,6 +68,7 @@ function ProfileMenu() {
               <span>Admin panel (control)</span>
             </Link>
           )}
+          <VerifyAdminButton onDone={close} className="flex w-full items-center gap-3 rounded-xl bg-amber-50 px-3 py-2 text-left text-xs font-bold text-amber-700 transition-all hover:bg-amber-100" />
           {/* The admin already has full access, so the upgrade option is hidden. */}
           {!isAdmin && (
             <button type="button" onClick={() => { close(); openPricing(); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-xs font-bold text-amber-600 transition-all hover:bg-amber-50">

@@ -1,9 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, sendEmailVerification } from 'firebase/auth';
 import { auth, getPhotoUrl, isAdminUser, loadUserData, saveProgress } from '../lib/firebase';
-import { TESTS } from '../lib/data';
+import { ADMIN_EMAIL, TESTS } from '../lib/data';
 
 const AuthContext = createContext(null);
+
+function isAdminEmail(email) {
+  return (email || '').trim().toLowerCase() === ADMIN_EMAIL;
+}
 
 function toProfile(user) {
   if (!user) return null;
@@ -40,7 +44,19 @@ export function AuthProvider({ children }) {
     return () => clearTimeout(fallback);
   }, []);
 
-  useEffect(() => onAuthStateChanged(auth, async user => {
+  useEffect(() => onAuthStateChanged(auth, async signedInUser => {
+    let user = signedInUser;
+    // The admin email may have been verified (link clicked) since the last login. Firebase only
+    // notices after a reload, and Firestore rules only after a fresh token.
+    if (user && isAdminEmail(user.email) && !user.emailVerified) {
+      try {
+        await user.reload();
+        user = auth.currentUser || user;
+        if (user.emailVerified) await user.getIdToken(true);
+      } catch (error) {
+        console.warn('Could not refresh the admin verification status.', error);
+      }
+    }
     setProfile(toProfile(user));
     setIsAdmin(isAdminUser(user));
     if (!user) {
@@ -90,18 +106,36 @@ export function AuthProvider({ children }) {
     }
   }, [progress, completedTests]);
 
+  // Logged in with the admin email but not verified yet: the admin panel stays locked until the
+  // verification link is clicked (or the admin signs in with Google, which counts as verified).
+  const needsAdminVerification = !!profile && isAdminEmail(profile.email) && !profile.emailVerified;
+
+  const sendAdminVerification = useCallback(async () => {
+    try {
+      await sendEmailVerification(auth.currentUser);
+      window.notify(`Verification email sent to ${auth.currentUser.email}. Click the link in it, then refresh this page to open the Admin panel.`, 'success');
+    } catch (error) {
+      console.error('Verification email could not be sent.', error);
+      window.notify(error.code === 'auth/too-many-requests'
+        ? 'A verification email was sent recently. Please check your inbox (and Spam) or try again later.'
+        : 'Could not send the verification email. Check your internet connection and try again.');
+    }
+  }, []);
+
   const value = useMemo(() => ({
     status,
     isLoggedIn: status === 'user',
     profile,
     isAdmin,
+    needsAdminVerification,
+    sendAdminVerification,
     isPremium,
     hasFullAccess: isAdmin || isPremium,
     userDataReady,
     completedTests,
     toggleTestCompletion,
     syncProfile
-  }), [status, profile, isAdmin, isPremium, userDataReady, completedTests, toggleTestCompletion, syncProfile]);
+  }), [status, profile, isAdmin, needsAdminVerification, sendAdminVerification, isPremium, userDataReady, completedTests, toggleTestCompletion, syncProfile]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

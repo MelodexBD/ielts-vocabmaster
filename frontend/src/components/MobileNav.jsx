@@ -5,6 +5,7 @@ import { useUI } from '../context/UIContext';
 import useLogout from '../lib/useLogout';
 import useClickOutside from '../lib/useClickOutside';
 import Avatar from './Avatar';
+import { VerifyAdminButton } from './Header';
 
 // Bottom navigation bar and account menu for phones.
 export default function MobileNav() {
@@ -73,6 +74,7 @@ export default function MobileNav() {
                 <i className="fa-solid fa-screwdriver-wrench w-5 text-center text-forest-600"></i><span>Admin panel</span>
               </Link>
             )}
+            <VerifyAdminButton onDone={close} className="flex w-full items-center gap-3 rounded-xl bg-amber-50 px-3 py-2.5 text-left text-xs font-bold text-amber-700 hover:bg-amber-100" />
             {!isAdmin && (
               <button type="button" onClick={() => { close(); openPricing(); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-amber-600 hover:bg-amber-50">
                 <i className="fa-solid fa-crown w-5 text-center"></i><span>Upgrade to Premium</span>
