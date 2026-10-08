@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useSiteData } from '../context/SiteDataContext';
 import { ADMIN_EMAIL, TESTS, autoDict } from '../lib/data';
 import {
-  addBanner, addContent, deleteBanner, saveBookRange, saveModuleSections
+  addBanner, addContent, addNotification, deleteBanner, deleteNotification, saveBookRange, saveModuleSections
 } from '../lib/firebase';
 
 const DEFAULT_BANNER_IMAGE = 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80';
@@ -610,6 +610,78 @@ function SectionsTab() {
   );
 }
 
+// ---------------------------------------------------------------- Notifications
+
+function NotificationsTab() {
+  const { raw, updateData } = useSiteData();
+  const [form, setForm] = useState({ title: '', message: '' });
+  const [saving, setSaving] = useState(false);
+  const notifications = raw.notifications || [];
+
+  const submit = async event => {
+    event.preventDefault();
+    setSaving(true);
+    try {
+      const saved = await addNotification({ title: form.title.trim(), message: form.message.trim() });
+      updateData(current => ({ notifications: [saved, ...(current.notifications || [])] }));
+      setForm({ title: '', message: '' });
+      window.notify('Notification sent. Students will see a red dot until they open it.', 'success');
+    } catch (error) {
+      console.error('Notification could not be saved.', error);
+      window.notify(cloudErrorMessage('Could not send the notification.', error));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const remove = async item => {
+    if (!await window.notify.confirm('Delete this notification for everyone?', { tone: 'danger', confirmText: 'Delete' })) return;
+    try {
+      await deleteNotification(item.id);
+      updateData(current => ({ notifications: (current.notifications || []).filter(entry => entry.id !== item.id) }));
+    } catch (error) {
+      console.error('Notification could not be deleted.', error);
+      window.notify(cloudErrorMessage('Could not delete the notification.', error));
+    }
+  };
+
+  const field = name => ({ value: form[name], onChange: event => setForm(current => ({ ...current, [name]: event.target.value })) });
+
+  return (
+    <section className="space-y-6">
+      <form onSubmit={submit} className="space-y-4 rounded-3xl border border-slate-200/90 bg-white p-5 shadow-sm md:p-6">
+        <div className="border-b border-slate-100 pb-3">
+          <h2 className="flex items-center gap-2 text-base font-black text-slate-800"><i className="fa-solid fa-bell text-forest-600"></i> Send a notification</h2>
+          <p className="mt-1 text-xs text-slate-500">Shown to every visitor under the bell icon. Unread notifications show a red dot until they are opened.</p>
+        </div>
+        <label className="block text-xs font-bold text-slate-700">Title
+          <input type="text" required maxLength={100} placeholder="e.g. New Book 11 vocabulary added" className={SMALL_INPUT} {...field('title')} />
+        </label>
+        <label className="block text-xs font-bold text-slate-700">Message
+          <textarea rows={4} maxLength={1000} placeholder="Write the details here (optional)" className={SMALL_INPUT} {...field('message')} />
+        </label>
+        <button type="submit" disabled={saving} className={SAVE_BUTTON}>{saving ? 'Sending...' : 'Send notification'}</button>
+      </form>
+
+      <div className="space-y-3 rounded-3xl border border-slate-200/90 bg-white p-5 shadow-sm md:p-6">
+        <h3 className="text-sm font-extrabold text-slate-800">Sent notifications ({notifications.length})</h3>
+        {notifications.length ? notifications.map(item => (
+          <div key={item.id} className="flex items-start justify-between gap-3 rounded-2xl border border-slate-100 bg-slate-50/70 p-3">
+            <div className="min-w-0">
+              <p className="break-words text-sm font-bold text-slate-800">{item.title}</p>
+              {item.message && <p className="mt-0.5 whitespace-pre-line break-words text-xs text-slate-500">{item.message}</p>}
+              <p className="mt-1 text-[11px] text-slate-400">{new Date(item.createdAt).toLocaleString('en-GB')}</p>
+            </div>
+            <button type="button" onClick={() => remove(item)} aria-label="Delete notification" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-rose-500 hover:bg-rose-50">
+              <i className="fa-solid fa-trash-can text-xs"></i>
+            </button>
+          </div>
+        )) : <p className="text-xs text-slate-400">No notifications sent yet.</p>}
+      </div>
+    </section>
+  );
+}
+
 // ---------------------------------------------------------------- Book range
 
 function BookRangeSettings() {
@@ -674,7 +746,8 @@ function BookRangeSettings() {
 const TABS = [
   { id: 'banners', label: 'Slider Banners', icon: 'fa-images', Component: BannersTab },
   { id: 'modules', label: 'Module Content', icon: 'fa-layer-group', Component: ModulesTab },
-  { id: 'sections', label: 'Home Section Upload', icon: 'fa-table-cells-large', Component: SectionsTab }
+  { id: 'sections', label: 'Home Section Upload', icon: 'fa-table-cells-large', Component: SectionsTab },
+  { id: 'notifications', label: 'Notifications', icon: 'fa-bell', Component: NotificationsTab }
 ];
 
 export default function Admin() {

@@ -22,6 +22,12 @@ service cloud.firestore {
       allow create, delete: if isAdmin();
     }
 
+    // Daily notifications: everyone reads, only the admin posts or deletes.
+    match /notifications/{notificationId} {
+      allow read: if true;
+      allow create, delete: if isAdmin();
+    }
+
     // Vocabulary and module content uploaded from the admin panel.
     match /content/{contentId} {
       allow read: if true;

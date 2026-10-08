@@ -4,7 +4,7 @@ import { DEFAULT_BOOK_RANGE, defaultBanners, initialVocabulary } from '../lib/da
 
 const SiteDataContext = createContext(null);
 
-const EMPTY = { bookRange: null, moduleSections: {}, banners: [], content: [] };
+const EMPTY = { bookRange: null, moduleSections: {}, banners: [], content: [], notifications: [] };
 
 function validRange(range) {
   return range && Number.isInteger(range.start) && Number.isInteger(range.end) &&
@@ -14,7 +14,7 @@ function validRange(range) {
 }
 
 // Public site content managed from the admin panel (book range, banners, home sections,
-// vocabulary and module content). Shows the cached copy first, then the latest from Firestore.
+// vocabulary, module content and notifications). Shows the cached copy first, then the latest from Firestore.
 export function SiteDataProvider({ children }) {
   const [data, setData] = useState(() => readSiteCache() || EMPTY);
   const [loaded, setLoaded] = useState(false);
@@ -53,6 +53,7 @@ export function SiteDataProvider({ children }) {
     banners: data.banners?.length ? data.banners : defaultBanners,
     vocabulary: data.content?.length ? data.content : initialVocabulary,
     content: data.content || [],
+    notifications: Array.isArray(data.notifications) ? data.notifications : [],
     updateData
   }), [data, loaded, updateData]);
 

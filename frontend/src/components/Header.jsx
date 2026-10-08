@@ -10,6 +10,7 @@ import Avatar from './Avatar';
 import Drawer from './Drawer';
 import { useAuthLink } from '../lib/authRedirect';
 import AccountBadge from './AccountBadge';
+import { useNotifications } from '../lib/notifications';
 
 function MembershipBadge() {
   const { isAdmin, isPremium, needsAdminVerification } = useAuth();
@@ -36,7 +37,6 @@ export function VerifyAdminButton({ onDone, className }) {
 function ProfileMenu() {
   const { profile, isAdmin } = useAuth();
   const { openPricing } = useUI();
-  const navigate = useNavigate();
   const logout = useLogout();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -79,10 +79,6 @@ function ProfileMenu() {
               <span>Upgrade to Premium</span>
             </button>
           )}
-          <button type="button" onClick={() => { close(); navigate('/'); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-xs font-bold text-slate-700 transition-all hover:bg-forest-50 hover:text-forest-700">
-            <i className="fa-solid fa-gauge-high text-sm text-forest-600"></i>
-            <span>Dashboard view</span>
-          </button>
           <div className="border-t border-slate-100 pt-1">
             <button type="button" onClick={() => { close(); logout(); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-xs font-bold text-rose-600 transition-all hover:bg-rose-50">
               <i className="fa-solid fa-arrow-right-from-bracket text-sm"></i>
@@ -95,22 +91,47 @@ function ProfileMenu() {
   );
 }
 
-// Mobile-only menu (☰) with the four modules, shown to logged-in visitors as a slide-in drawer.
+
+// Mobile-only menu (☰) for logged-in visitors, as a slide-in drawer: the profile and account
+// actions on top, then the four modules (the current page's module is shown as active).
 function ModuleMenu() {
+  const { profile, isAdmin } = useAuth();
+  const { openPricing } = useUI();
   const navigate = useNavigate();
+  const logout = useLogout();
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
-  // The module of the current page (practice or its books) is shown as active, like the desktop sidebar.
   const books = useMatch('/books/:module/*');
   const practice = useMatch('/practice/:module');
   const activeModule = books?.params.module || practice?.params.module;
 
   return (
     <div className="md:hidden">
-      <button type="button" onClick={() => setOpen(true)} aria-label="Open module menu" aria-haspopup="dialog" aria-expanded={open} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-forest-500 hover:text-forest-700">
+      <button type="button" onClick={() => setOpen(true)} aria-label="Open menu and profile" aria-haspopup="dialog" aria-expanded={open} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-forest-500 hover:text-forest-700">
         <i className="fa-solid fa-bars text-base" aria-hidden="true"></i>
       </button>
-      <Drawer open={open} onClose={close} title="Navigation menu" labelledBy="moduleDrawerTitle">
+      <Drawer open={open} onClose={close} title={<AccountBadge isAdmin={isAdmin} />} labelledBy="moduleDrawerTitle">
+        {/* Photo on top so the name and the full email get the whole width; long emails wrap instead of being cut. */}
+        <div className="mb-2 flex flex-col items-center rounded-2xl bg-forest-50/70 px-3 py-4 text-center">
+          <Avatar profile={profile} className="h-14 w-14 shrink-0 text-base ring-2 ring-forest-500/20" />
+          <p className="mt-2 w-full break-words text-sm font-black text-slate-900">{profile?.name}</p>
+          <p className="mt-0.5 w-full break-all text-xs font-semibold text-slate-600">{profile?.email}</p>
+        </div>
+        <div className="space-y-1">
+          {isAdmin && (
+            <Link to="/admin" onClick={close} className="flex w-full items-center gap-3 rounded-xl bg-forest-50/70 px-3 py-3 text-sm font-bold text-forest-700 hover:bg-forest-100">
+              <i className="fa-solid fa-screwdriver-wrench w-5 text-center text-forest-600"></i><span>Admin panel</span>
+            </Link>
+          )}
+          <VerifyAdminButton onDone={close} className="flex w-full items-center gap-3 rounded-xl bg-amber-50 px-3 py-3 text-left text-sm font-bold text-amber-700 hover:bg-amber-100" />
+          {!isAdmin && (
+            <button type="button" onClick={() => { close(); openPricing(); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-bold text-amber-600 hover:bg-amber-50">
+              <i className="fa-solid fa-crown w-5 text-center"></i><span>Upgrade to Premium</span>
+            </button>
+          )}
+        </div>
+
+        <p className="mb-2 mt-4 border-t border-slate-100 px-1 pt-4 text-[11px] font-bold uppercase tracking-wider text-slate-400">Modules</p>
         {MODULE_NAMES.map(name => {
           const active = name === activeModule;
           return (
@@ -121,11 +142,31 @@ function ModuleMenu() {
             </button>
           );
         })}
+
+        <div className="mt-3 border-t border-slate-100 pt-2">
+          <button type="button" onClick={() => { close(); logout(); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-bold text-rose-600 hover:bg-rose-50">
+            <i className="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i><span>Log out</span>
+          </button>
+        </div>
       </Drawer>
     </div>
   );
 }
 
+// Desktop bell next to the profile; phones have it in the bottom navigation.
+function NotificationBell() {
+  const { unreadCount } = useNotifications();
+  return (
+    <Link to="/notifications" aria-label={unreadCount ? `Notifications, ${unreadCount} new` : 'Notifications'} className="relative hidden h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-colors hover:border-forest-500 hover:text-forest-700 md:flex">
+      <i className="fa-solid fa-bell text-base"></i>
+      {unreadCount > 0 && (
+        <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-rose-500 px-1 text-[10px] font-black leading-none text-white">
+          {unreadCount > 9 ? '9+' : unreadCount}
+        </span>
+      )}
+    </Link>
+  );
+}
 const Header = forwardRef(function Header(_, ref) {
   const { status } = useAuth();
   const { bookRange } = useSiteData();
@@ -141,6 +182,7 @@ const Header = forwardRef(function Header(_, ref) {
       </Link>
 
       <div className="flex items-center gap-3">
+        {status !== 'loading' && <NotificationBell />}
         {/* Nothing is shown until Firebase knows the login state, so neither side ever flashes. */}
         {status === 'guest' && (
           <div className="flex items-center gap-2">

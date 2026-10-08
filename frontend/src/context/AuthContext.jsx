@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { onAuthStateChanged, sendEmailVerification } from 'firebase/auth';
-import { auth, getPhotoUrl, isAdminUser, loadUserData, saveProgress } from '../lib/firebase';
+import { auth, getPhotoUrl, isAdminUser, loadUserData, savePlanDone, saveProgress } from '../lib/firebase';
 import { ADMIN_EMAIL, TESTS } from '../lib/data';
 
 const AuthContext = createContext(null);
@@ -29,6 +29,7 @@ export function AuthProvider({ children }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
   const [progress, setProgress] = useState({});
+  const [planDone, setPlanDone] = useState([]);
   const [userDataReady, setUserDataReady] = useState(false);
 
   // If Firebase cannot answer (offline, blocked), show the guest view after a few seconds
@@ -63,6 +64,7 @@ export function AuthProvider({ children }) {
       setStatus('guest');
       setIsPremium(false);
       setProgress({});
+      setPlanDone([]);
       setUserDataReady(true);
       return;
     }
@@ -71,6 +73,7 @@ export function AuthProvider({ children }) {
     try {
       const data = await loadUserData(user.uid);
       setProgress(data.progress);
+      setPlanDone(data.planDone);
       setIsPremium(data.premium && !isAdminUser(user));
     } catch (error) {
       console.error('Progress could not be loaded from the cloud.', error);
@@ -106,6 +109,18 @@ export function AuthProvider({ children }) {
     }
   }, [progress, completedTests]);
 
+  // Days of the study plan the student has marked as done (saved to their account).
+  const togglePlanDay = useCallback(day => {
+    const next = planDone.includes(day) ? planDone.filter(item => item !== day) : [...planDone, day].sort((a, b) => a - b);
+    setPlanDone(next);
+    if (auth.currentUser) {
+      savePlanDone(auth.currentUser.uid, next).catch(error => {
+        console.error('Study plan could not be saved to the cloud.', error);
+        window.notify('Could not save your study plan. Check your internet connection.');
+      });
+    }
+  }, [planDone]);
+
   // Logged in with the admin email but not verified yet: the admin panel stays locked until the
   // verification link is clicked (or the admin signs in with Google, which counts as verified).
   const needsAdminVerification = !!profile && isAdminEmail(profile.email) && !profile.emailVerified;
@@ -134,8 +149,10 @@ export function AuthProvider({ children }) {
     userDataReady,
     completedTests,
     toggleTestCompletion,
+    planDone,
+    togglePlanDay,
     syncProfile
-  }), [status, profile, isAdmin, needsAdminVerification, sendAdminVerification, isPremium, userDataReady, completedTests, toggleTestCompletion, syncProfile]);
+  }), [status, profile, isAdmin, needsAdminVerification, sendAdminVerification, isPremium, userDataReady, completedTests, toggleTestCompletion, planDone, togglePlanDay, syncProfile]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

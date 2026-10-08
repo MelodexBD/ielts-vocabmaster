@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import BookList from './pages/BookList';
 import BookDetails from './pages/BookDetails';
 import Practice from './pages/Practice';
+import Plan from './pages/Plan';
+import Notifications from './pages/Notifications';
 import Login from './pages/Login';
 
 // Only the admin uses this page, so visitors never download its code.
@@ -35,6 +37,8 @@ export default function App() {
           <Route path="/books/:module" element={<BookList />} />
           <Route path="/books/:module/:bookNumber" element={<BookDetails />} />
           <Route path="/practice/:module" element={<Practice />} />
+          <Route path="/plan" element={<Plan />} />
+          <Route path="/notifications" element={<Notifications />} />
         </Route>
         <Route path="/login" element={<Login mode="login" />} />
         <Route path="/signup" element={<Login mode="signup" />} />

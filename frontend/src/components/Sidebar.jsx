@@ -20,6 +20,7 @@ function NavItem({ to, icon, label, active }) {
 export default function Sidebar() {
   const { isLoggedIn, isAdmin, completedTests } = useAuth();
   const home = useMatch('/');
+  const plan = useMatch('/plan');
   const books = useMatch('/books/:module/*');
   const practice = useMatch('/practice/:module');
   const activeModule = books?.params.module || practice?.params.module;
@@ -28,6 +29,7 @@ export default function Sidebar() {
     <aside className="sticky top-24 hidden h-fit w-64 shrink-0 flex-col space-y-2 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm md:flex">
       <span className="mb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Navigation menu</span>
       <NavItem to="/" icon="fa-house" label="Home" active={!!home} />
+      <NavItem to="/plan" icon="fa-calendar-check" label="Daily study plan" active={!!plan} />
       {MODULE_NAMES.map(name => (
         <NavItem key={name} to={`/practice/${name}`} icon={MODULE_META[name].icon} label={MODULE_META[name].navLabel} active={activeModule === name} />
       ))}

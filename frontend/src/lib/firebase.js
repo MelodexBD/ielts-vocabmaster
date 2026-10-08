@@ -3,7 +3,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signOut } from 'firebase/auth';
 import {
-  getFirestore, doc, getDoc, setDoc, getDocs, addDoc, deleteDoc, collection, query, orderBy, writeBatch
+  getFirestore, doc, getDoc, setDoc, getDocs, addDoc, deleteDoc, collection, query, orderBy, limit, writeBatch
 } from 'firebase/firestore';
 import { ADMIN_EMAIL } from './data';
 
@@ -60,32 +60,51 @@ export function writeSiteCache(data) {
 }
 
 export async function fetchSiteData() {
-  const [rangeSnap, sectionsSnap, bannersSnap, contentSnap] = await Promise.all([
+  const [rangeSnap, sectionsSnap, bannersSnap, contentSnap, notificationDocs] = await Promise.all([
     getDoc(doc(db, 'site', 'bookRange')),
     getDoc(doc(db, 'site', 'moduleSections')),
     getDocs(query(collection(db, 'banners'), orderBy('createdAt', 'desc'))),
-    getDocs(query(collection(db, 'content'), orderBy('createdAt', 'desc')))
+    getDocs(query(collection(db, 'content'), orderBy('createdAt', 'desc'))),
+    fetchNotifications()
   ]);
   return {
     bookRange: rangeSnap.exists() ? rangeSnap.data() : null,
     moduleSections: sectionsSnap.exists() ? sectionsSnap.data() : {},
     banners: bannersSnap.docs.map(snap => ({ ...snap.data(), id: snap.id })),
-    content: contentSnap.docs.map(snap => ({ ...snap.data(), id: snap.id }))
+    content: contentSnap.docs.map(snap => ({ ...snap.data(), id: snap.id })),
+    notifications: notificationDocs
   };
+}
+
+// Daily notices from the admin, newest first. A failure here (e.g. rules not published yet)
+// must not stop the rest of the site content from loading.
+async function fetchNotifications() {
+  try {
+    const snap = await getDocs(query(collection(db, 'notifications'), orderBy('createdAt', 'desc'), limit(30)));
+    return snap.docs.map(item => ({ ...item.data(), id: item.id }));
+  } catch (error) {
+    console.warn('Notifications could not be loaded.', error);
+    return [];
+  }
 }
 
 // ---------- Per-user data ----------
 
-// Progress and premium status (premium can only be set by the admin, see firestore.rules).
+// Progress, study plan days done and premium status (premium can only be set by the admin, see firestore.rules).
 export async function loadUserData(uid) {
   const snap = await getDoc(doc(db, 'users', uid));
   const data = snap.exists() ? snap.data() : {};
   const progress = data.progress && typeof data.progress === 'object' ? data.progress : {};
-  return { progress, premium: data.premium === true };
+  const planDone = Array.isArray(data.planDone) ? data.planDone.filter(Number.isInteger) : [];
+  return { progress, planDone, premium: data.premium === true };
 }
 
 export function saveProgress(uid, progress) {
   return setDoc(doc(db, 'users', uid), { progress }, { merge: true });
+}
+
+export function savePlanDone(uid, planDone) {
+  return setDoc(doc(db, 'users', uid), { planDone }, { merge: true });
 }
 
 export function saveUserProfile(user, extra = {}) {
@@ -131,4 +150,14 @@ export async function addContent(records) {
     await batch.commit();
   }
   return saved;
+}
+
+export async function addNotification(notification) {
+  const record = { ...notification, createdAt: new Date().toISOString() };
+  const ref = await addDoc(collection(db, 'notifications'), record);
+  return { ...record, id: ref.id };
+}
+
+export function deleteNotification(id) {
+  return deleteDoc(doc(db, 'notifications', id));
 }
