@@ -7,6 +7,7 @@ import {
   addBanner, addContent, addNotification, deleteBanner, deleteNotification, saveBookRange, saveModuleSections
 } from '../lib/firebase';
 import { lookupWord } from '../lib/wordLookup';
+import { AI_BATCH_SIZE, AI_WORKER_URL, generateWithAI } from '../lib/aiVocabulary';
 
 const DEFAULT_BANNER_IMAGE = 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80';
 const SMALL_INPUT = 'mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-forest-500';
@@ -197,6 +198,7 @@ const STATUS_BADGES = {
   auto: ['Auto-filled · review', 'bg-emerald-50 text-emerald-700'],
   check: ['Check meaning', 'bg-amber-50 text-amber-700'],
   missing: ['Add meaning', 'bg-amber-50 text-amber-700'],
+  ai: ['AI · review', 'bg-emerald-50 text-emerald-700'],
   edited: ['Edited', 'bg-forest-100 text-forest-700']
 };
 
@@ -233,7 +235,42 @@ function BulkVocabulary({ book, test }) {
     })));
     setGenerating(true);
 
-    // Each word is looked up online (a few at a time); the built-in list covers words that are not found.
+    const apply = (index, changes) => {
+      if (generation.current !== runId) return;
+      // Fields the admin already typed into while the lookup was running are kept.
+      setRecords(current => current.map((record, i) => (i === index && record.status === 'loading' ? { ...record, ...changes } : record)));
+    };
+
+    // 1. Gemini AI (through the admin-only worker), 20 words per request.
+    let aiError = '';
+    const leftover = [];
+    if (AI_WORKER_URL) {
+      for (let start = 0; start < words.length; start += AI_BATCH_SIZE) {
+        const indices = words.slice(start, start + AI_BATCH_SIZE).map((_, offset) => start + offset);
+        if (aiError) {
+          leftover.push(...indices);
+          continue;
+        }
+        try {
+          const found = await generateWithAI(indices.map(index => words[index]));
+          if (generation.current !== runId) return;
+          indices.forEach(index => {
+            const result = found.get(words[index].toLowerCase());
+            if (result) apply(index, { ...result, status: 'ai' });
+            else leftover.push(index);
+          });
+        } catch (error) {
+          console.warn('AI vocabulary request failed.', error);
+          aiError = error.message;
+          leftover.push(...indices);
+        }
+      }
+    } else {
+      leftover.push(...words.map((_, index) => index));
+    }
+
+    // 2. Free online dictionaries (a few words at a time) for anything the AI did not cover;
+    //    the built-in list covers words that are not found there either.
     const fill = async index => {
       const word = words[index];
       let result = null;
@@ -249,17 +286,16 @@ function BulkVocabulary({ book, test }) {
           ? { meaning: builtIn.meaning, synonyms: [...builtIn.synonyms], antonyms: [...builtIn.antonyms], status: 'auto' }
           : { status: 'missing' };
       delete changes.meaningIsGuess;
-      if (generation.current !== runId) return;
-      // Fields the admin already typed into while the lookup was running are kept.
-      setRecords(current => current.map((record, i) => (i === index && record.status === 'loading' ? { ...record, ...changes } : record)));
+      apply(index, changes);
     };
     let next = 0;
-    await Promise.all(Array.from({ length: Math.min(3, words.length) }, async () => {
-      while (next < words.length && generation.current === runId) await fill(next++);
+    await Promise.all(Array.from({ length: Math.min(3, leftover.length) }, async () => {
+      while (next < leftover.length && generation.current === runId) await fill(leftover[next++]);
     }));
     if (generation.current !== runId) return;
     setGenerating(false);
-    window.notify('Vocabulary filled in from online dictionaries. Please review each word before publishing.', 'success');
+    if (aiError) window.notify(`AI could not be used (${aiError}) The other words were filled in from online dictionaries. Please review them.`, 'info');
+    else window.notify(`Vocabulary filled in${AI_WORKER_URL ? ' by AI' : ' from online dictionaries'}. Please review each word before publishing.`, 'success');
   };
 
   // Typing into a word that is still being looked up keeps the admin's text (the lookup skips it).
@@ -309,7 +345,7 @@ function BulkVocabulary({ book, test }) {
     <section className="space-y-5 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 md:p-5">
       <div>
         <h3 className="font-extrabold text-slate-800">Reading · Bulk vocabulary</h3>
-        <p className="mt-1 text-xs leading-5 text-slate-500">Enter up to 200 words, separated by commas or new lines. In the preview, edit the Bangla meaning, synonyms, antonyms and four examples for each, then publish. Generate fills these in automatically from online dictionaries; check them before publishing.</p>
+        <p className="mt-1 text-xs leading-5 text-slate-500">Enter up to 200 words, separated by commas or new lines. In the preview, edit the Bangla meaning, synonyms, antonyms and four examples for each, then publish. Generate fills these in automatically (Gemini AI when it is set up, otherwise online dictionaries); check them before publishing.</p>
       </div>
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <div className="space-y-3">
