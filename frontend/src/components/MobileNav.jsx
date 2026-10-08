@@ -6,6 +6,7 @@ import useLogout from '../lib/useLogout';
 import Avatar from './Avatar';
 import { VerifyAdminButton } from './Header';
 import Drawer from './Drawer';
+import AccountBadge from './AccountBadge';
 
 // Bottom navigation bar and account menu for phones.
 export default function MobileNav() {
@@ -60,7 +61,7 @@ export default function MobileNav() {
         </div>
       </nav>
 
-      <Drawer open={menuOpen} onClose={close} title={isAdmin ? 'Admin account' : 'Student account'} labelledBy="profileDrawerTitle">
+      <Drawer open={menuOpen} onClose={close} title={<AccountBadge isAdmin={isAdmin} />} labelledBy="profileDrawerTitle">
         <div className="mb-3 flex items-center gap-3 rounded-2xl bg-forest-50/70 p-3">
           <Avatar profile={profile} className="h-12 w-12 shrink-0 text-sm ring-2 ring-forest-500/20" />
           <div className="min-w-0">

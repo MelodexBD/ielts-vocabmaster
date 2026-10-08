@@ -27,7 +27,9 @@ export default function Drawer({ open, onClose, title, children, labelledBy }) {
         className={`absolute right-0 top-0 flex h-full w-80 max-w-[85vw] flex-col bg-white shadow-2xl transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-          <p id={labelledBy} className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">{title}</p>
+          {typeof title === 'string'
+            ? <p id={labelledBy} className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">{title}</p>
+            : <div id={labelledBy}>{title}</div>}
           <button type="button" onClick={onClose} aria-label="Close menu" className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200">
             <i className="fa-solid fa-xmark"></i>
           </button>

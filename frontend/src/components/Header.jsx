@@ -8,6 +8,7 @@ import useLogout from '../lib/useLogout';
 import useClickOutside from '../lib/useClickOutside';
 import Avatar from './Avatar';
 import Drawer from './Drawer';
+import AccountBadge from './AccountBadge';
 
 function MembershipBadge() {
   const { isAdmin, isPremium, needsAdminVerification } = useAuth();
@@ -60,8 +61,8 @@ function ProfileMenu() {
       {open && (
         <div className="absolute right-0 top-full z-50 mt-2 max-h-[calc(100vh-5rem)] w-64 space-y-1 overflow-y-auto rounded-2xl border border-slate-200/90 bg-white p-2 shadow-2xl">
           <div className="border-b border-slate-100 px-3 py-2">
-            <p className="text-xs font-bold uppercase text-slate-400">{isAdmin ? 'Admin account' : 'Student account'}</p>
-            <p className="truncate text-sm font-black text-slate-800">{profile?.email}</p>
+            <AccountBadge isAdmin={isAdmin} />
+            <p className="mt-1.5 truncate text-sm font-black text-slate-800">{profile?.email}</p>
           </div>
           {isAdmin && (
             <Link to="/admin" className="flex w-full items-center gap-3 rounded-xl bg-forest-50/70 px-3 py-2 text-left text-xs font-bold text-forest-700 transition-all hover:bg-forest-100">
