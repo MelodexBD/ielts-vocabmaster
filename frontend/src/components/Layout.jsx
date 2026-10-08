@@ -15,6 +15,8 @@ export default function Layout() {
   const { status, userDataReady, isAdmin, isPremium } = useAuth();
   const { closeModal, openPricing } = useUI();
   const { pathname } = useLocation();
+  // The footer belongs to the home page only; other pages end with their content.
+  const showFooter = pathname === '/';
 
   // Sticky bars (e.g. the T1–T4 test bar) sit just below the header, whose height varies by screen.
   useEffect(() => {
@@ -46,11 +48,12 @@ export default function Layout() {
       <Header ref={headerRef} />
       <div className="mx-auto flex w-full max-w-7xl flex-1 gap-6 md:px-6 md:py-6">
         <Sidebar />
-        <main className="flex w-full min-w-0 flex-1 flex-col">
+        {/* Without the footer, phones need room so the bottom navigation does not cover the last content. */}
+        <main className={`flex w-full min-w-0 flex-1 flex-col ${showFooter ? '' : 'pb-24 md:pb-0'}`}>
           <Outlet />
         </main>
       </div>
-      <Footer />
+      {showFooter && <Footer />}
       <MobileNav />
       <Modals />
     </div>

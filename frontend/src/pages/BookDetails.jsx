@@ -5,6 +5,7 @@ import { useSiteData } from '../context/SiteDataContext';
 import { useUI } from '../context/UIContext';
 import { MODULE_NAMES, TESTS } from '../lib/data';
 import useBookAccess from '../lib/useBookAccess';
+import useHideOnScroll from '../lib/useHideOnScroll';
 
 function WordList({ items }) {
   return (
@@ -89,6 +90,7 @@ export default function BookDetails() {
   const chosenTest = selection.book === book ? selection.test : 'T1';
   // A test that is no longer open (e.g. after logging out) falls back to the free Test 1.
   const test = canOpenTest(number, chosenTest) ? chosenTest : 'T1';
+  const barHidden = useHideOnScroll();
 
   useEffect(() => {
     if (selection.book !== book) setSelection({ book, test: 'T1' });
@@ -114,8 +116,9 @@ export default function BookDetails() {
   return (
     <div className="flex w-full flex-col space-y-4 p-4 md:p-0">
       {/* Stays fixed right under the site header while the word list scrolls. On phones it is a slim,
-          full-width bar (back button, book and the four tests on one line) so more words fit on screen. */}
-      <div className="sticky top-[var(--header-height,64px)] z-30 -mx-4 -mt-4 flex items-center gap-2 border-b border-slate-200/80 bg-white px-3 py-2 shadow-sm md:top-[calc(var(--header-height,64px)_+_8px)] md:mx-0 md:mt-0 md:justify-between md:gap-3 md:rounded-3xl md:border md:p-5">
+          full-width bar (back button, book and the four tests on one line) so more words fit on screen.
+          It slides away under the header while scrolling down and comes back on scrolling up. */}
+      <div aria-hidden={barHidden || undefined} className={`sticky top-[var(--header-height,64px)] z-30 -mx-4 -mt-4 flex items-center gap-2 border-b border-slate-200/80 bg-white px-3 py-2 shadow-sm transition-[transform,opacity] duration-300 ease-out md:top-[calc(var(--header-height,64px)_+_8px)] md:mx-0 md:mt-0 md:justify-between md:gap-3 md:rounded-3xl md:border md:p-5 ${barHidden ? 'pointer-events-none -translate-y-[calc(100%+12px)] opacity-0' : 'translate-y-0 opacity-100'}`}>
         <div className="flex shrink-0 items-center gap-2 md:gap-3">
           <button type="button" onClick={() => navigate(`/books/${module}`)} aria-label="Back to book list" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700 transition-colors hover:bg-slate-200 md:h-10 md:w-10">
             <i className="fa-solid fa-chevron-left text-sm"></i>

@@ -11,7 +11,7 @@ function IconBox({ icon, className = 'bg-forest-50 text-forest-600' }) {
 
 export default function Footer() {
   const { openPricing } = useUI();
-  const { isAdmin } = useAuth();
+  const { status, hasFullAccess } = useAuth();
   const authLink = useAuthLink();
   return (
     <footer className="mt-12 border-t border-slate-200 bg-white px-5 pb-24 pt-12 text-slate-600 md:px-12 md:pb-8">
@@ -23,14 +23,15 @@ export default function Footer() {
           </p>
         </div>
 
-        <div className="space-y-4 md:col-span-3">
+        {/* Quick links are for computers only; phones already have the bottom navigation. */}
+        <div className="hidden space-y-4 md:col-span-3 md:block">
           <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">Quick links</h4>
           <ul className="space-y-3 text-sm font-medium">
             <li>
               <Link to="/" className="flex items-center gap-3 hover:text-forest-600"><IconBox icon="fa-solid fa-house" /><span>Home</span></Link>
             </li>
-            {/* The admin already has full access, so premium plans are only offered to everyone else. */}
-            {!isAdmin && (
+            {/* Premium plans are hidden once the account has full access (premium members and the admin). */}
+            {!hasFullAccess && (
               <li>
                 <button type="button" onClick={openPricing} className="flex items-center gap-3 hover:text-forest-600">
                   <IconBox icon="fa-solid fa-crown text-xs" className="bg-gradient-to-tr from-amber-500 to-amber-400 text-white" />
@@ -38,9 +39,12 @@ export default function Footer() {
                 </button>
               </li>
             )}
-            <li>
-              <Link to={authLink('signup')} className="flex items-center gap-3 hover:text-forest-600"><IconBox icon="fa-solid fa-user-plus" /><span>Create a free account</span></Link>
-            </li>
+            {/* Only visitors without an account are invited to create one. */}
+            {status === 'guest' && (
+              <li>
+                <Link to={authLink('signup')} className="flex items-center gap-3 hover:text-forest-600"><IconBox icon="fa-solid fa-user-plus" /><span>Create a free account</span></Link>
+              </li>
+            )}
           </ul>
         </div>
 
