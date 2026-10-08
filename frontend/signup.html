@@ -277,6 +277,28 @@
     </div>
   </main>
 
+  <!-- Shown after Google sign-in when the account has no password yet. -->
+  <div id="setPasswordModal" class="hidden fixed inset-0 z-[1000] items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm">
+    <form id="setPasswordForm" class="w-full max-w-[400px] space-y-4 rounded-3xl bg-white p-6 shadow-2xl sm:p-7">
+      <div>
+        <h2 class="text-xl font-black tracking-tight text-slate-900">Set a password</h2>
+        <p class="mt-1 text-xs font-medium leading-5 text-slate-500">Add a password to log in with <span id="setPasswordEmail" class="font-bold text-slate-700"></span> and a password too, not only with Google.</p>
+      </div>
+      <div>
+        <label for="newPassword" class="mb-1.5 block text-xs font-bold text-slate-700">Password<span class="text-rose-500">*</span></label>
+        <input type="password" id="newPassword" required minlength="6" autocomplete="new-password" placeholder="At least 6 characters" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all focus:border-forest-600 focus:bg-white focus:ring-2 focus:ring-forest-500/20">
+      </div>
+      <div>
+        <label for="confirmPassword" class="mb-1.5 block text-xs font-bold text-slate-700">Confirm password<span class="text-rose-500">*</span></label>
+        <input type="password" id="confirmPassword" required minlength="6" autocomplete="new-password" placeholder="Type the password again" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all focus:border-forest-600 focus:bg-white focus:ring-2 focus:ring-forest-500/20">
+      </div>
+      <div class="flex gap-2 pt-1">
+        <button type="button" id="skipPasswordBtn" class="flex-1 rounded-xl border border-slate-200 bg-white py-3 text-sm font-bold text-slate-600 transition-all hover:bg-slate-50">Skip</button>
+        <button type="submit" id="savePasswordBtn" class="flex-1 rounded-xl bg-forest-600 py-3 text-sm font-extrabold text-white shadow-lg shadow-forest-900/20 transition-all hover:bg-forest-700">Save password</button>
+      </div>
+    </form>
+  </div>
+
   <footer class="py-4 text-center text-xs text-slate-400 border-t border-slate-200 bg-white">
     © 2026 IELTS VocabMaster. All rights reserved.
   </footer>
@@ -324,7 +346,8 @@
     import { auth, mirrorUser, saveUserProfile, waitForUser } from './firebase.js';
     import {
       createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider,
-      updateProfile, sendEmailVerification, sendPasswordResetEmail, getAdditionalUserInfo
+      updateProfile, sendEmailVerification, sendPasswordResetEmail, getAdditionalUserInfo,
+      linkWithCredential, EmailAuthProvider
     } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
 
     // Someone who is already logged in (e.g. reaching this page with the Back button) goes straight home.
@@ -354,7 +377,10 @@
       'auth/popup-closed-by-user': 'The Google sign-in window was closed.',
       'auth/popup-blocked': 'Your browser blocked the popup. Allow popups and try again.',
       'auth/unauthorized-domain': 'This domain is not authorized in Firebase. Add it under Authentication → Settings → Authorized domains.',
-      'auth/network-request-failed': 'Please check your internet connection.'
+      'auth/network-request-failed': 'Please check your internet connection.',
+      'auth/provider-already-linked': 'This account already has a password.',
+      'auth/credential-already-in-use': 'This email and password are already used by another account.',
+      'auth/requires-recent-login': 'For security, please sign in with Google again and then set the password.'
     };
 
     function showAuthError(error) {
@@ -363,13 +389,14 @@
     }
 
     // New accounts get a congratulations message, returning users a login confirmation.
-    function goHome(user, isNewUser) {
+    function goHome(user, isNewUser, passwordSaved = false) {
       mirrorUser(user);
+      const passwordNote = passwordSaved ? ' Your password is saved, so you can also log in with email and password.' : '';
       if (isNewUser) {
         const name = user.displayName ? `, ${user.displayName}` : '';
-        notify.later(`🎉 Congratulations${name}! Your account has been created.${user.emailVerified ? '' : ' We sent a verification link to your email.'}`, 'success');
+        notify.later(`🎉 Congratulations${name}! Your account has been created.${user.emailVerified ? '' : ' We sent a verification link to your email.'}${passwordNote}`, 'success');
       } else {
-        notify.later('Login successful. Welcome back!', 'success');
+        notify.later(`Login successful. Welcome back!${passwordNote}`, 'success');
       }
       // The loading screen continues on the home page; replace() keeps the login page out of the history.
       pageLoader.carryOver('Loading your dashboard...');
@@ -394,6 +421,67 @@
       }
     }
 
+    // Google accounts have no password. Offer to link one (stored securely by Firebase Authentication,
+    // never in our database) so the same account can also log in with email + password.
+    // Resolves once the password is saved or the user skips.
+    function offerPassword(user) {
+      return new Promise(resolve => {
+        const modal = document.getElementById('setPasswordModal');
+        const form = document.getElementById('setPasswordForm');
+        const saveButton = document.getElementById('savePasswordBtn');
+        const skipButton = document.getElementById('skipPasswordBtn');
+        document.getElementById('setPasswordEmail').textContent = user.email;
+        pageLoader.hide();
+        modal.classList.replace('hidden', 'flex');
+        document.getElementById('newPassword').focus();
+
+        const finish = saved => {
+          form.removeEventListener('submit', onSave);
+          skipButton.removeEventListener('click', onSkip);
+          modal.classList.replace('flex', 'hidden');
+          pageLoader.show('Loading your dashboard...');
+          resolve(saved);
+        };
+        const onSkip = () => {
+          try {
+            localStorage.setItem(`password_prompt_skipped_${user.uid}`, '1');
+          } catch {
+            // Without localStorage the prompt simply shows again next time.
+          }
+          finish(false);
+        };
+        const onSave = async event => {
+          event.preventDefault();
+          const password = document.getElementById('newPassword').value;
+          if (password !== document.getElementById('confirmPassword').value) {
+            notify('The two passwords do not match.');
+            return;
+          }
+          setLoading(saveButton, true, 'Saving...');
+          pageLoader.hide();
+          try {
+            await linkWithCredential(user, EmailAuthProvider.credential(user.email, password));
+            finish(true);
+          } catch (error) {
+            setLoading(saveButton, false);
+            showAuthError(error);
+          }
+        };
+        form.addEventListener('submit', onSave);
+        skipButton.addEventListener('click', onSkip);
+      });
+    }
+
+    function needsPassword(user) {
+      let skipped = false;
+      try {
+        skipped = localStorage.getItem(`password_prompt_skipped_${user.uid}`) === '1';
+      } catch {
+        // Treat unreadable storage as not skipped.
+      }
+      return !skipped && !!user.email && !user.providerData.some(provider => provider.providerId === 'password');
+    }
+
     window.handleGoogleAuth = async function (button) {
       setLoading(button, true, 'Connecting to Google...');
       try {
@@ -401,7 +489,8 @@
         const isNewUser = !!getAdditionalUserInfo(result)?.isNewUser;
         // Returning users already have a profile, so they go home without waiting for a save.
         if (isNewUser) await saveUserProfile(result.user, { createdAt: new Date().toISOString() });
-        goHome(result.user, isNewUser);
+        const passwordSaved = needsPassword(result.user) ? await offerPassword(result.user) : false;
+        goHome(result.user, isNewUser, passwordSaved);
       } catch (error) {
         setLoading(button, false);
         showAuthError(error);
