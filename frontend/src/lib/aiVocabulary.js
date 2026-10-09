@@ -2,7 +2,8 @@ import { auth } from './firebase';
 
 // Address of the Cloudflare Worker that asks Gemini (backend/ai-worker). It is not a secret: the
 // worker only answers the logged-in admin. Without it the generator uses the free online dictionaries.
-export const AI_WORKER_URL = (import.meta.env.VITE_AI_WORKER_URL || '').trim();
+// On Cloudflare the site and the worker share one address, so /api/vocabulary is used by default.
+export const AI_WORKER_URL = (import.meta.env.VITE_AI_WORKER_URL || (import.meta.env.BASE_URL === '/' ? '/api/vocabulary' : '')).trim();
 export const AI_BATCH_SIZE = 20;
 
 const capitalize = text => text.charAt(0).toUpperCase() + text.slice(1);

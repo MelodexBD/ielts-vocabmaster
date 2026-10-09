@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // The site is served from https://melodexbd.github.io/ielts-vocabmaster/, so every asset
-// and route lives under /ielts-vocabmaster/. Set BASE_PATH=/ when hosting on a root domain.
+// and route lives under /ielts-vocabmaster/. The Cloudflare build (npm run build:cloudflare) uses BASE_PATH=/.
 export default defineConfig({
   base: process.env.BASE_PATH || '/ielts-vocabmaster/',
   plugins: [react()],

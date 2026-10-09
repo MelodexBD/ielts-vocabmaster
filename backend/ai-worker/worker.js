@@ -1,7 +1,8 @@
-// IELTS VocabMaster · AI vocabulary worker (Cloudflare Workers, free plan).
+// IELTS VocabMaster · Cloudflare Worker (free plan).
 //
-// The admin panel sends a list of English words; this worker asks Google Gemini for the Bangla
-// meaning, synonyms, antonyms and example sentences, and sends the result back.
+// Hosts the website (the built frontend/dist files, see frontend/wrangler.jsonc) and answers
+// /api/vocabulary: the admin panel sends a list of English words, and this worker asks Google Gemini
+// for the Bangla meaning, synonyms, antonyms and example sentences.
 // The Gemini API key stays here as a secret (GEMINI_API_KEY), never in the website's code.
 // Only the verified admin account can use it: every request must carry the admin's Firebase login token.
 //
@@ -16,6 +17,9 @@ const MAX_WORDS = 25;
 
 export default {
   async fetch(request, env) {
+    // Everything except /api/ is the website itself (React handles its own routes).
+    if (!new URL(request.url).pathname.startsWith('/api/') && env.ASSETS) return env.ASSETS.fetch(request);
+
     const origin = request.headers.get('Origin') || '';
     const cors = {
       'Access-Control-Allow-Origin': ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0],

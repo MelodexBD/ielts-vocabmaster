@@ -1,34 +1,48 @@
-# AI vocabulary worker (Gemini + Cloudflare, ফ্রি)
+# Cloudflare: ওয়েবসাইট হোস্টিং + AI vocabulary (ফ্রি)
 
-অ্যাডমিন প্যানেলের **Generate Vocabulary** বাটন এই Worker-এর মাধ্যমে Google Gemini থেকে প্রতিটা শব্দের বাংলা অর্থ, সিনোনিম, এন্টোনিম আর উদাহরণ আনে।
+একটাই Cloudflare Worker (`ielts-vocabmaster`) দুটো কাজ করে:
 
-- Gemini API key শুধু Cloudflare-এ গোপন (Secret) হিসেবে থাকে, ওয়েবসাইটের কোডে বা GitHub-এ কখনও যায় না।
-- শুধু ভেরিফাইড অ্যাডমিন অ্যাকাউন্ট (ieltsvocabmaster@gmail.com) এটা ব্যবহার করতে পারে। প্রতিটা অনুরোধে Firebase লগইন টোকেন যাচাই করা হয়।
-- Worker সেট না থাকলে বা কাজ না করলে জেনারেটর আগের মতো ফ্রি অনলাইন ডিকশনারি ব্যবহার করে।
+1. **ওয়েবসাইট হোস্ট করে:** `frontend/dist`-এর ফাইলগুলো পরিবেশন করে। GitHub-এর `main`-এ পুশ করলে Cloudflare নিজে বিল্ড করে লাইভ করে।
+2. **`/api/vocabulary`:** অ্যাডমিন প্যানেলের **Generate Vocabulary** এখান থেকে Google Gemini-র মাধ্যমে বাংলা অর্থ, সিনোনিম, এন্টোনিম আর উদাহরণ আনে।
 
-## সেটআপ (কোনো সফটওয়্যার লাগবে না, শুধু ব্রাউজার)
+নিরাপত্তা:
+- Gemini API key শুধু Cloudflare-এ Secret হিসেবে থাকে, কোডে বা GitHub-এ যায় না।
+- শুধু ভেরিফাইড অ্যাডমিন অ্যাকাউন্ট (ieltsvocabmaster@gmail.com) AI ব্যবহার করতে পারে। প্রতিটা অনুরোধে Firebase লগইন টোকেন যাচাই হয়।
+- AI কাজ না করলে জেনারেটর ফ্রি অনলাইন ডিকশনারি ব্যবহার করে।
 
-### ১. Gemini API key
-1. https://aistudio.google.com/apikey খুলে Google অ্যাকাউন্ট দিয়ে লগইন করুন।
-2. **Create API key** চাপুন, তারপর key কপি করুন।
-3. key কাউকে দেবেন না, চ্যাটে বা কোডেও লিখবেন না।
+ফাইল:
+- [`worker.js`](worker.js): Worker-এর কোড
+- [`frontend/wrangler.jsonc`](../../frontend/wrangler.jsonc): Cloudflare-এর সেটিং
 
-### ২. Cloudflare Worker
-1. https://dash.cloudflare.com এ ফ্রি অ্যাকাউন্ট খুলুন।
-2. **Workers & Pages** → **Create** → **Create Worker** খুলুন। নাম দিন `ielts-vocab-ai`, তারপর **Deploy** চাপুন।
-3. **Edit code** চাপুন। আগের সব কোড মুছে এই ফোল্ডারের [`worker.js`](worker.js) ফাইলের পুরো লেখা পেস্ট করুন, তারপর **Deploy** চাপুন।
-4. Worker-এর **Settings** → **Variables and Secrets** → **Add** খুলুন।
+## সেটআপ (শুধু ব্রাউজার, কোনো সফটওয়্যার লাগবে না)
+
+### ১. GitHub রিপো যুক্ত করা
+1. https://dash.cloudflare.com → **Workers & Pages** → **Create** → **Connect GitHub** খুলুন। GitHub-এ অনুমতি দিন, তারপর `MelodexBD/ielts-vocabmaster` রিপো বেছে নিন।
+2. সেটিং দিন:
+   | ঘর | মান |
+   |---|---|
+   | Project name | `ielts-vocabmaster` |
+   | Build command | `npm run build:cloudflare` |
+   | Deploy command | `npx wrangler deploy` |
+   | Root directory (Advanced settings / Path) | `frontend` |
+3. **Deploy** চাপুন। কয়েক মিনিটে সাইট চালু হবে, ঠিকানা হবে `https://ielts-vocabmaster.<আপনার-নাম>.workers.dev`।
+
+### ২. Gemini API key (ফ্রি)
+1. https://aistudio.google.com/apikey খুলে **Create API key** চাপুন, তারপর key কপি করুন।
+2. Cloudflare-এ Worker `ielts-vocabmaster` খুলে **Settings** → **Variables and Secrets** → **Add**:
    - Type: **Secret**
    - Name: `GEMINI_API_KEY`
-   - Value: ধাপ ১-এর key
+   - Value: key
 
    তারপর **Deploy** চাপুন।
-5. Worker-এর ঠিকানা কপি করুন (যেমন `https://ielts-vocab-ai.<আপনার-নাম>.workers.dev`)।
+3. key কাউকে দেবেন না, চ্যাটে বা কোডেও লিখবেন না।
 
-### ৩. ওয়েবসাইটে ঠিকানা বসানো
-[`frontend/.env.production`](../../frontend/.env.production) ফাইলে `VITE_AI_WORKER_URL=` এর পরে Worker-এর ঠিকানা বসিয়ে GitHub-এ পুশ করুন। এই ঠিকানা গোপন নয়, Worker নিজেই অ্যাডমিন যাচাই করে।
+### ৩. Firebase-এ নতুন ঠিকানার অনুমতি
+Firebase Console → **Authentication** → **Settings** → **Authorized domains** → **Add domain**-এ `ielts-vocabmaster.<আপনার-নাম>.workers.dev` যোগ করুন। এটা না করলে নতুন ঠিকানায় "Continue with Google" কাজ করবে না।
 
 ## ঐচ্ছিক
-- **মডেল বদলানো:** Worker-এর Variables-এ `GEMINI_MODEL` (Type: Text) যোগ করুন, যেমন `gemini-2.5-flash`। না দিলে প্রথমে `gemini-flash-latest`, তারপর `gemini-2.5-flash` চেষ্টা করা হয়।
-- **ফ্রি সীমা:** Gemini-র ফ্রি টায়ারে প্রতি মিনিট আর প্রতিদিন কিছু সীমা আছে। জেনারেটর একবারে ২০টা শব্দ পাঠায়, তাই ২০০ শব্দে ১০টা অনুরোধ লাগে। সীমা ছাড়ালে বাকি শব্দ ডিকশনারি থেকে আসে।
-- **গোপনীয়তা:** ফ্রি টায়ারে Google পাঠানো লেখা তাদের সেবা উন্নত করতে ব্যবহার করতে পারে। এখানে শুধু ইংরেজি শব্দ পাঠানো হয়, কোনো ব্যক্তিগত তথ্য নয়।
+- **নিজের ডোমেইন:** Worker-এর **Settings** → **Domains & Routes** থেকে যোগ করা যায়। সেই ডোমেইনও Firebase-এর Authorized domains-এ দিতে হবে।
+- **মডেল বদলানো:** Variables-এ `GEMINI_MODEL` (Type: Text) দিন, যেমন `gemini-2.5-flash`। না দিলে প্রথমে `gemini-flash-latest`, তারপর `gemini-2.5-flash` চেষ্টা করা হয়।
+- **ফ্রি সীমা:** Gemini-র ফ্রি টায়ারে প্রতি মিনিট আর প্রতিদিন সীমা আছে। জেনারেটর একবারে ২০টা শব্দ পাঠায়। সীমা ছাড়ালে বাকি শব্দ ডিকশনারি থেকে আসে।
+- **গোপনীয়তা:** ফ্রি টায়ারে Google পাঠানো লেখা সেবা উন্নত করতে ব্যবহার করতে পারে। এখানে শুধু ইংরেজি শব্দ পাঠানো হয়।
+- **GitHub Pages:** পুরনো ঠিকানা (melodexbd.github.io/ielts-vocabmaster) আপাতত আগের মতো চলবে। সেখানে AI জেনারেটর নেই, শুধু ডিকশনারি পদ্ধতি চলে।

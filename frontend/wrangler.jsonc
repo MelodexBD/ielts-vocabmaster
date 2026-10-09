@@ -1,0 +1,17 @@
+// Cloudflare hosting: one Worker serves the built website (dist) and the admin-only AI API
+// (/api/*, code in backend/ai-worker/worker.js). Deployed by Cloudflare's GitHub integration on
+// every push to main: build command `npm run build:cloudflare`, deploy command `npx wrangler deploy`.
+{
+  "name": "ielts-vocabmaster",
+  "main": "../backend/ai-worker/worker.js",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    // Paths that are not files (e.g. /books/Reading/10) load index.html, and React shows the page.
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  // Variables added in the Cloudflare dashboard (e.g. GEMINI_MODEL) are kept on each deploy.
+  "keep_vars": true
+}
