@@ -3,6 +3,8 @@
 // Wiktionary (antonyms, extra synonyms) and Datamuse (antonyms Wiktionary does not list).
 // Everything comes back as a draft that the admin reviews and edits before publishing.
 
+import { EXAMPLES_PER_ITEM, examplePair } from './vocabItems';
+
 const GOOGLE_URL = 'https://translate.googleapis.com/translate_a/single';
 const WIKTIONARY_URL = 'https://en.wiktionary.org/api/rest_v1/page/html/';
 const DATAMUSE_URL = 'https://api.datamuse.com/words';
@@ -44,9 +46,9 @@ function googleLookup(word, parts) {
 const translationOf = data => (data?.[0] || []).map(segment => segment?.[0] || '').join('').trim();
 const dictionaryGroups = data => (Array.isArray(data?.[1]) ? data[1] : []);
 
-function firstExample(data) {
-  const html = data?.[13]?.[0]?.[0]?.[0];
-  return typeof html === 'string' ? sentence(html) : '';
+function examplesOf(data) {
+  const list = Array.isArray(data?.[13]?.[0]) ? data[13][0] : [];
+  return list.map(entry => entry?.[0]).filter(html => typeof html === 'string').map(sentence).slice(0, EXAMPLES_PER_ITEM);
 }
 
 // Bangla meanings for the given part of speech (or the first one listed).
@@ -102,21 +104,19 @@ async function datamuseFallback(word, synonyms) {
   return [...direct, ...prefixed, ...repeated];
 }
 
-// Bangla meaning and one example sentence for a synonym or antonym.
+// Bangla meaning and two example sentences for a synonym or antonym.
 async function describe(item, partOfSpeech) {
   try {
     const data = await googleLookup(item, ['t', 'bd', 'ex']);
     const bangla = banglaTerms(data, partOfSpeech)[0] || translationOf(data);
     return {
-      label: bangla && bangla.toLowerCase() !== item.toLowerCase() ? `${capitalize(item)} + ${bangla}` : capitalize(item),
-      example: firstExample(data)
+      text: bangla && bangla.toLowerCase() !== item.toLowerCase() ? `${capitalize(item)} + ${bangla}` : capitalize(item),
+      examples: examplePair(examplesOf(data))
     };
   } catch {
-    return { label: capitalize(item), example: '' };
+    return { text: capitalize(item), examples: examplePair([]) };
   }
 }
-
-const padExamples = examples => [...examples.filter(Boolean), '', '', '', ''].slice(0, MAX_ITEMS);
 
 // Looks up one word. Returns null when no Bangla meaning could be found.
 export async function lookupWord(word) {
@@ -146,10 +146,8 @@ export async function lookupWord(word) {
     // Without dictionary meanings the translation may only be a transliteration, so it needs a check.
     meaningIsGuess: !terms.length,
     partOfSpeech,
-    synonyms: synonymInfo.map(info => info.label),
-    antonyms: antonymInfo.map(info => info.label),
-    synonymExamples: padExamples(synonymInfo.map(info => info.example)),
-    antonymExamples: padExamples(antonymInfo.map(info => info.example)),
-    example: firstExample(exampleData)
+    examples: examplePair(examplesOf(exampleData)),
+    synonyms: synonymInfo,
+    antonyms: antonymInfo
   };
 }

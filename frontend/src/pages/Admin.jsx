@@ -8,6 +8,7 @@ import {
 } from '../lib/firebase';
 import { lookupWord } from '../lib/wordLookup';
 import { AI_BATCH_SIZE, AI_WORKER_URL, generateWithAI } from '../lib/aiVocabulary';
+import { cleanExamples, examplePair } from '../lib/vocabItems';
 
 const DEFAULT_BANNER_IMAGE = 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80';
 const SMALL_INPUT = 'mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-forest-500';
@@ -202,6 +203,9 @@ const STATUS_BADGES = {
   edited: ['Edited', 'bg-forest-100 text-forest-700']
 };
 
+const MAX_RELATED = 4;
+const toItem = text => ({ text, examples: examplePair([]) });
+
 function BulkVocabulary({ book, test }) {
   const { updateData } = useSiteData();
   const [input, setInput] = useState('');
@@ -227,10 +231,8 @@ function BulkVocabulary({ book, test }) {
       meaning: '',
       synonyms: [],
       antonyms: [],
-      synonymExamples: ['', '', '', ''],
-      antonymExamples: ['', '', '', ''],
+      examples: examplePair([]),
       partOfSpeech: '',
-      example: '',
       status: 'loading'
     })));
     setGenerating(true);
@@ -283,7 +285,7 @@ function BulkVocabulary({ book, test }) {
       const changes = result
         ? { ...result, meaning: builtIn ? builtIn.meaning : result.meaning, status: result.meaningIsGuess && !builtIn ? 'check' : 'auto' }
         : builtIn
-          ? { meaning: builtIn.meaning, synonyms: [...builtIn.synonyms], antonyms: [...builtIn.antonyms], status: 'auto' }
+          ? { meaning: builtIn.meaning, synonyms: builtIn.synonyms.map(toItem), antonyms: builtIn.antonyms.map(toItem), status: 'auto' }
           : { status: 'missing' };
       delete changes.meaningIsGuess;
       apply(index, changes);
@@ -302,12 +304,11 @@ function BulkVocabulary({ book, test }) {
   const update = (index, changes) => setRecords(current => current.map((record, i) => (i === index
     ? { ...record, ...(record.status === 'loading' ? { status: 'edited' } : {}), ...changes }
     : record)));
-  const updateExample = (index, field, exampleIndex, value) => setRecords(current => current.map((record, i) => {
-    if (i !== index) return record;
-    const examples = [...record[field]];
-    examples[exampleIndex] = value;
-    return { ...record, [field]: examples };
-  }));
+  const updateItem = (index, field, itemIndex, changes) => update(index, {
+    [field]: records[index][field].map((item, i) => (i === itemIndex ? { ...item, ...changes } : item))
+  });
+  const addItem = (index, field) => update(index, { [field]: [...records[index][field], { text: '', examples: examplePair([]) }] });
+  const removeItem = (index, field, itemIndex) => update(index, { [field]: records[index][field].filter((_, i) => i !== itemIndex) });
 
   const publish = async () => {
     if (generating) {
@@ -323,7 +324,19 @@ function BulkVocabulary({ book, test }) {
       window.notify('Choose a book and a T1–T4 test before publishing.');
       return;
     }
-    const toSave = records.map(({ status, ...record }) => ({ ...record, book, test }));
+    // Empty rows and example slots are left out of what is saved.
+    const clean = list => list
+      .filter(item => item.text.trim())
+      .map(item => ({ text: item.text.trim(), examples: cleanExamples(item.examples) }));
+    const toSave = records.map(({ status, ...record }) => ({
+      ...record,
+      meaning: record.meaning.trim(),
+      synonyms: clean(record.synonyms),
+      antonyms: clean(record.antonyms),
+      examples: cleanExamples(record.examples),
+      book,
+      test
+    }));
     setSaving(true);
     try {
       const saved = await addContent(toSave);
@@ -345,7 +358,7 @@ function BulkVocabulary({ book, test }) {
     <section className="space-y-5 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 md:p-5">
       <div>
         <h3 className="font-extrabold text-slate-800">Reading · Bulk vocabulary</h3>
-        <p className="mt-1 text-xs leading-5 text-slate-500">Enter up to 200 words, separated by commas or new lines. In the preview, edit the Bangla meaning, synonyms, antonyms and four examples for each, then publish. Generate fills these in automatically (Gemini AI when it is set up, otherwise online dictionaries); check them before publishing.</p>
+        <p className="mt-1 text-xs leading-5 text-slate-500">Enter up to 200 words, separated by commas or new lines. In the preview, edit the Bangla meaning, up to 4 synonyms and antonyms, and two examples for the word and for each synonym and antonym, then publish. Generate fills these in automatically (Gemini AI when it is set up, otherwise online dictionaries); check them before publishing.</p>
       </div>
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <div className="space-y-3">
@@ -385,23 +398,34 @@ function BulkVocabulary({ book, test }) {
                     </label>
                   </div>
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                    {[['synonyms', 'synonymExamples', 'Synonym', 'Enter synonyms separated by commas', 'border-forest-100 bg-forest-50/40', 'text-forest-700'],
-                      ['antonyms', 'antonymExamples', 'Antonym', 'Enter antonyms separated by commas', 'border-slate-200 bg-slate-50', 'text-slate-600']]
-                      .map(([listField, examplesField, label, placeholder, boxClass, labelClass]) => (
+                    {[['synonyms', 'Synonyms', 'border-forest-100 bg-forest-50/40', 'text-forest-700'],
+                      ['antonyms', 'Antonyms', 'border-slate-200 bg-slate-50', 'text-slate-600']]
+                      .map(([listField, label, boxClass, labelClass]) => (
                         <div key={listField} className={`space-y-2 rounded-xl border p-3 ${boxClass}`}>
-                          <label className={`block text-[10px] font-extrabold ${labelClass}`}>{label}
-                            <input value={record[listField].join(', ')} onChange={event => update(index, { [listField]: event.target.value.split(',').map(value => value.trim()).filter(Boolean) })} className={small} placeholder={placeholder} />
-                          </label>
-                          <p className="text-[10px] font-bold text-slate-500">Example sentences (max 4)</p>
-                          {record[examplesField].map((example, exampleIndex) => (
-                            <input key={exampleIndex} value={example} onChange={event => updateExample(index, examplesField, exampleIndex, event.target.value)} className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-[11px]" placeholder={`${exampleIndex + 1}. Example sentence`} />
+                          <p className={`text-[10px] font-extrabold ${labelClass}`}>{label} (max {MAX_RELATED})</p>
+                          {record[listField].map((item, itemIndex) => (
+                            <div key={itemIndex} className="space-y-1 rounded-lg border border-white bg-white/70 p-2">
+                              <div className="flex items-center gap-1">
+                                <input value={item.text} onChange={event => updateItem(index, listField, itemIndex, { text: event.target.value })} className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold" placeholder="Word + বাংলা অর্থ" />
+                                <button type="button" onClick={() => removeItem(index, listField, itemIndex)} aria-label={`Remove ${label.toLowerCase().slice(0, -1)}`} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-400 hover:bg-rose-50 hover:text-rose-500"><i className="fa-solid fa-xmark"></i></button>
+                              </div>
+                              {item.examples.map((example, exampleIndex) => (
+                                <input key={exampleIndex} value={example} onChange={event => updateItem(index, listField, itemIndex, { examples: item.examples.map((value, i) => (i === exampleIndex ? event.target.value : value)) })} className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[11px]" placeholder={`Example ${exampleIndex + 1}`} />
+                              ))}
+                            </div>
                           ))}
+                          {record[listField].length < MAX_RELATED && (
+                            <button type="button" onClick={() => addItem(index, listField)} className={`text-[11px] font-bold ${labelClass} hover:underline`}><i className="fa-solid fa-plus mr-1"></i>Add {label.toLowerCase().slice(0, -1)}</button>
+                          )}
                         </div>
                       ))}
                   </div>
-                  <label className="block text-[10px] font-bold text-slate-500 md:col-start-2">Example for this word
-                    <input value={record.example} onChange={event => update(index, { example: event.target.value })} className={small} placeholder="Optional example sentence" />
-                  </label>
+                  <div className="space-y-1 md:col-start-2">
+                    <p className="text-[10px] font-bold text-slate-500">Examples for this word</p>
+                    {record.examples.map((example, exampleIndex) => (
+                      <input key={exampleIndex} value={example} onChange={event => update(index, { examples: record.examples.map((value, i) => (i === exampleIndex ? event.target.value : value)) })} className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs" placeholder={`Example ${exampleIndex + 1}`} />
+                    ))}
+                  </div>
                 </div>
               </article>
             ))}

@@ -100,17 +100,23 @@ For each English word below, return:
 - "word": the word exactly as given.
 - "partOfSpeech": its most common part of speech in IELTS texts (e.g. "adjective").
 - "meaning": its Bangla meaning in that sense, natural everyday Bangla (not a transliteration). Give one or two meanings separated by " / ".
-- "synonyms": up to 4 single-word synonyms with the SAME meaning and part of speech, most useful for IELTS first. Each has "word" (English) and "bangla" (its Bangla meaning in this sense).
-- "antonyms": up to 4 single-word antonyms (true opposites in this sense), each with "word" and "bangla". Give at least one whenever a sensible opposite exists.
-- "synonymExamples": one natural IELTS-level English sentence for each synonym, in the same order, using that synonym.
-- "antonymExamples": one natural IELTS-level English sentence for each antonym, in the same order, using that antonym.
-- "example": one natural IELTS-level English sentence using the word itself.
+- "examples": exactly 2 natural IELTS-level English sentences using the word itself.
+- "synonyms": up to 4 single-word synonyms with the SAME meaning and part of speech, most useful for IELTS first. Each has "word" (English), "bangla" (its Bangla meaning in this sense) and "examples" (exactly 2 natural IELTS-level English sentences using that synonym).
+- "antonyms": up to 4 single-word antonyms (true opposites in this sense), each with "word", "bangla" and "examples" (exactly 2 sentences using that antonym). Give at least one whenever a sensible opposite exists.
 Use correct Bangla spelling. Return the words in the same order as given.
 
 Words:
 `;
 
-const ITEM_LIST = { type: 'ARRAY', items: { type: 'OBJECT', properties: { word: { type: 'STRING' }, bangla: { type: 'STRING' } }, required: ['word', 'bangla'] } };
+const SENTENCES = { type: 'ARRAY', items: { type: 'STRING' } };
+const ITEM_LIST = {
+  type: 'ARRAY',
+  items: {
+    type: 'OBJECT',
+    properties: { word: { type: 'STRING' }, bangla: { type: 'STRING' }, examples: SENTENCES },
+    required: ['word', 'bangla', 'examples']
+  }
+};
 const RESPONSE_SCHEMA = {
   type: 'ARRAY',
   items: {
@@ -119,13 +125,11 @@ const RESPONSE_SCHEMA = {
       word: { type: 'STRING' },
       partOfSpeech: { type: 'STRING' },
       meaning: { type: 'STRING' },
+      examples: SENTENCES,
       synonyms: ITEM_LIST,
-      antonyms: ITEM_LIST,
-      synonymExamples: { type: 'ARRAY', items: { type: 'STRING' } },
-      antonymExamples: { type: 'ARRAY', items: { type: 'STRING' } },
-      example: { type: 'STRING' }
+      antonyms: ITEM_LIST
     },
-    required: ['word', 'partOfSpeech', 'meaning', 'synonyms', 'antonyms', 'synonymExamples', 'antonymExamples', 'example']
+    required: ['word', 'partOfSpeech', 'meaning', 'examples', 'synonyms', 'antonyms']
   }
 };
 
