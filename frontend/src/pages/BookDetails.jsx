@@ -6,9 +6,10 @@ import { useUI } from '../context/UIContext';
 import { MODULE_NAMES, TESTS } from '../lib/data';
 import useBookAccess from '../lib/useBookAccess';
 import useHideOnScroll from '../lib/useHideOnScroll';
-import { cleanExamples, itemExamples, itemText } from '../lib/vocabItems';
+import { cleanExamples, itemText } from '../lib/vocabItems';
+import SpeakButton from '../components/SpeakButton';
 
-// "Examples" label; the sentences stay hidden until it is clicked.
+// "Examples" label under the word; the sentences stay hidden until it is clicked.
 function ExampleToggle({ examples, className = 'text-forest-600' }) {
   const [open, setOpen] = useState(false);
   if (!examples.length) return null;
@@ -27,57 +28,39 @@ function ExampleToggle({ examples, className = 'text-forest-600' }) {
   );
 }
 
-function WordList({ items, toggleClass }) {
+function WordList({ items }) {
   return (
     <ul className="list-inside list-disc space-y-1.5 text-slate-700">
       {items.length
-        ? items.map((item, index) => (
-          <li key={`${itemText(item)}-${index}`} className="text-xs font-medium leading-relaxed text-slate-600">
-            {itemText(item)}
-            <ExampleToggle examples={itemExamples(item)} className={toggleClass} />
-          </li>
-        ))
+        ? items.map((item, index) => <li key={`${itemText(item)}-${index}`} className="text-xs font-medium leading-relaxed text-slate-600">{itemText(item)}</li>)
         : <li className="text-[11px] text-slate-400">None</li>}
     </ul>
   );
 }
 
-// Older words keep all their examples in one list under the synonyms or antonyms.
-function OlderExamples({ items, className }) {
-  const examples = cleanExamples(items);
-  if (!examples.length) return null;
-  return (
-    <div className={`mt-2 border-t pt-1 ${className}`}>
-      <ExampleToggle examples={examples} className={className} />
-    </div>
-  );
-}
-
 function WordCard({ word }) {
-  const synonyms = Array.isArray(word.synonyms) ? word.synonyms : [];
-  const antonyms = Array.isArray(word.antonyms) ? word.antonyms : [];
+  const synonyms = (Array.isArray(word.synonyms) ? word.synonyms : []).filter(itemText);
+  const antonyms = (Array.isArray(word.antonyms) ? word.antonyms : []).filter(itemText);
   const wordExamples = cleanExamples(Array.isArray(word.examples) ? word.examples : [word.example]);
   return (
     <div className="space-y-3.5 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm transition-shadow hover:shadow-md md:rounded-3xl">
       <div className="border-b border-slate-100 pb-3">
         <div className="flex items-center justify-between gap-2">
           <h3 className="text-base font-extrabold text-slate-800">
-            Word: <span className="font-black text-forest-600">{word.word}</span> — <span className="font-bold text-emerald-700">{word.meaning}</span>
+            <span className="font-black text-forest-600">{word.word}</span> — <span className="font-bold text-emerald-700">{word.meaning}</span>
           </h3>
-          <span className="shrink-0 rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">FREE UNLOCKED</span>
+          <SpeakButton word={word.word} />
         </div>
         <ExampleToggle examples={wordExamples} />
       </div>
       <div className="grid grid-cols-2 gap-3 pt-0.5">
         <div className="rounded-xl border border-forest-100 bg-forest-50/50 p-3">
           <h4 className="mb-2 border-b border-forest-200 pb-1 text-xs font-bold uppercase tracking-wider text-forest-700">Synonym:</h4>
-          <WordList items={synonyms} toggleClass="text-forest-600" />
-          <OlderExamples items={word.synonymExamples} className="border-forest-100 text-forest-700" />
+          <WordList items={synonyms} />
         </div>
         <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-3">
           <h4 className="mb-2 border-b border-slate-200 pb-1 text-xs font-bold uppercase tracking-wider text-slate-500">Antonym:</h4>
-          <WordList items={antonyms} toggleClass="text-slate-600" />
-          <OlderExamples items={word.antonymExamples} className="border-slate-200 text-slate-600" />
+          <WordList items={antonyms} />
         </div>
       </div>
     </div>

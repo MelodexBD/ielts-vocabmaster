@@ -104,17 +104,14 @@ async function datamuseFallback(word, synonyms) {
   return [...direct, ...prefixed, ...repeated];
 }
 
-// Bangla meaning and two example sentences for a synonym or antonym.
+// 'Word + বাংলা' for a synonym or antonym.
 async function describe(item, partOfSpeech) {
   try {
-    const data = await googleLookup(item, ['t', 'bd', 'ex']);
+    const data = await googleLookup(item, ['t', 'bd']);
     const bangla = banglaTerms(data, partOfSpeech)[0] || translationOf(data);
-    return {
-      text: bangla && bangla.toLowerCase() !== item.toLowerCase() ? `${capitalize(item)} + ${bangla}` : capitalize(item),
-      examples: examplePair(examplesOf(data))
-    };
+    return bangla && bangla.toLowerCase() !== item.toLowerCase() ? `${capitalize(item)} + ${bangla}` : capitalize(item);
   } catch {
-    return { text: capitalize(item), examples: examplePair([]) };
+    return capitalize(item);
   }
 }
 

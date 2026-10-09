@@ -9,15 +9,12 @@ export const AI_BATCH_SIZE = 20;
 
 const capitalize = text => text.charAt(0).toUpperCase() + text.slice(1);
 
-// Synonyms/antonyms as stored on the site: { text: 'Word + বাংলা', examples: [two sentences] }.
+// Synonyms/antonyms as stored on the site: 'Word + বাংলা'.
 function items(list) {
   return (Array.isArray(list) ? list : [])
     .filter(item => item && typeof item.word === 'string' && item.word.trim())
     .slice(0, 4)
-    .map(item => ({
-      text: item.bangla ? `${capitalize(item.word.trim())} + ${String(item.bangla).trim()}` : capitalize(item.word.trim()),
-      examples: examplePair(item.examples)
-    }));
+    .map(item => (item.bangla ? `${capitalize(item.word.trim())} + ${String(item.bangla).trim()}` : capitalize(item.word.trim())));
 }
 
 // Asks the AI worker about up to AI_BATCH_SIZE words. Returns a map from the lower-case word to
