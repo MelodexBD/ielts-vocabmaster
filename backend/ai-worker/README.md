@@ -12,7 +12,10 @@
 
 ফাইল:
 - [`worker.js`](worker.js): Worker-এর কোড
-- [`frontend/wrangler.jsonc`](../../frontend/wrangler.jsonc): Cloudflare-এর সেটিং
+- [`frontend/wrangler.jsonc`](../../frontend/wrangler.jsonc): Cloudflare Workers-এর সেটিং
+- [`frontend/functions/api/vocabulary.js`](../../frontend/functions/api/vocabulary.js): Cloudflare Pages-এ একই AI কোড চালায়
+
+> **Cloudflare Pages দিয়ে করলে** (ঠিকানা `*.pages.dev`): Build command `npm run build:cloudflare`, Build output directory `dist`, Root directory `frontend`। Deploy command লাগে না। Gemini key দিতে হয় Pages প্রজেক্টের **Settings** → **Variables and Secrets**-এ।
 
 ## সেটআপ (শুধু ব্রাউজার, কোনো সফটওয়্যার লাগবে না)
 
